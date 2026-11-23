@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab: แรงและทอร์กของกล้ามเนื้อหลังขณะก้มตัว </title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --back-muscle: #7c3aed;
+      --spine-force: #dc2626;
+      --body-wt: #d97706;
+      --success: #059669;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 20px 28px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 0.92rem;
+      opacity: 0.9;
+    }
+
+    .grid-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-top {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .diagrams-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .diagrams-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .diagram-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .diagram-box h3 {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    svg.sim-svg {
+      width: 100%;
+      height: 360px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      display: block;
+    }
+
+    /* Live Force vs Time Graph Box */
+    .chart-box {
+      margin-top: 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 12px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chart-header h3 {
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .chart-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+
+    svg.chart-svg {
+      width: 100%;
+      height: 215px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      display: block;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .control-group {
+      margin-bottom: 13px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .control-header span.val {
+      color: var(--primary);
+      font-family: monospace;
+      font-size: 0.98rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .presets-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preset-btn {
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      background: #e2e8f0;
+      color: #334155;
+      border-radius: 6px;
+    }
+    .preset-btn:hover {
+      background: #cbd5e1;
+    }
+
+    /* Animation Control Bar */
+    .anim-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+      border: 1px solid #cbd5e1;
+    }
+
+    .anim-status {
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .anim-status.bend {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .anim-status.rise {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .info-note {
+      background: #eff6ff;
+      border-left: 3px solid var(--primary);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #1e40af;
+      margin-bottom: 12px;
+    }
+
+    .results-panel {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .metric-card {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .metric-card.muscle { border-left-color: var(--back-muscle); }
+    .metric-card.spine { border-left-color: var(--spine-force); }
+    .metric-card.angle { border-left-color: #0284c7; }
+    .metric-card.ratio { border-left-color: var(--success); }
+
+    .metric-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .metric-value {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .equation-box {
+      background: #ffffff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px dashed #94a3b8;
+      font-size: 0.84rem;
+      color: #334155;
+    }
+
+    .equation-box code {
+      display: block;
+      font-family: 'Consolas', monospace;
+      color: #0f172a;
+      margin-top: 4px;
+      background: #f1f5f9;
+      padding: 6px 8px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button {
+      padding: 9px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    .btn-danger:hover { background: #fecaca; }
+
+    .btn-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .btn-success:hover { background: #a7f3d0; }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .badge-muscle {
+      background: #ede9fe;
+      color: #5b21b6;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-spine {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-angle {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Virtual Lab: แรงและทอร์กของกล้ามเนื้อหลังขณะก้มตัว </h1>
+      <p> วิเคราะห์แรงดึงกล้ามเนื้อหลัง (F<sub>B</sub>) และแรงกดที่ข้อต่อกระดูกสันหลังส่วนล่าง (F<sub>V</sub>) เมื่อลำตัวส่วนบนก้มทำมุมต่างๆ</p>
+    </header>
+
+    <div class="grid-top">
+      <!-- Left: Visual Simulations + Live Time Graph -->
+      <div class="card">
+        <div class="card-title">
+          <span>แบบจำลองท่าทางก้มตัวและแผนภาพวัตถุอิสระ (Free-Body Diagram)</span>
+          <span style="font-size: 0.82rem; font-weight: 500; color: var(--muted);">g = 9.80 m/s² | มุมก้มลำตัว θ<sub>bend</sub> = <span id="headerAngle">60.0°</span></span>
+        </div>
+
+        <div class="diagrams-wrapper">
+          <!-- Anatomical Posture SVG -->
+          <div class="diagram-box">
+            <h3>1. ท่าก้มตัวไปด้านหน้า (Bending Posture)</h3>
+            <svg id="postureSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+
+          <!-- Free-Body Lever Diagram SVG -->
+          <div class="diagram-box">
+            <h3>2. แผนภาพวัตถุอิสระของลำตัวส่วนบน </h3>
+            <svg id="fbdSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+        </div>
+
+        <!-- Live Force vs Time Graph -->
+        <div class="chart-box">
+          <div class="chart-header">
+            <h3>3. กราฟความสัมพันธ์ระหว่างแรงกับเวลา (Force vs. Time)</h3>
+            <div class="chart-meta">
+              <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" id="showSpineCurve" checked onchange="drawTimeChart()">
+                <span style="color:var(--spine-force); font-weight:600;">แสดงเส้นแรงกระดูกสันหลัง F<sub>V</sub></span>
+              </label>
+              <span>t = <strong id="simTimeOut" style="font-family:monospace; color:#0f172a;">0.0 s</strong></span>
+              <button type="button" class="btn-secondary" style="padding: 3px 9px; font-size: 0.78rem;" onclick="resetTimeGraph()">ล้างกราฟเวลา</button>
+            </div>
+          </div>
+          <svg id="timeChartSvg" class="chart-svg" viewBox="0 0 720 215"></svg>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><span class="dot" style="background: var(--back-muscle);"></span> <strong>F<sub>B</sub></strong>: แรงดึงของกล้ามเนื้อหลัง (Erector Spinae)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--spine-force);"></span> <strong>F<sub>V</sub></strong>: แรงปฏิกิริยาที่กระดูกสันหลังส่วนล่างกระทำที่จุดหมุน (Pivot)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--body-wt);"></span> <strong>w<sub>ub</sub></strong>: น้ำหนักลำตัวส่วนบน (m<sub>ub</sub>g) ที่จุด CG</div>
+        </div>
+      </div>
+
+      <!-- Right: Controls & Real-time Math -->
+      <div class="card">
+        <div class="card-title">
+          <span>แผงควบคุมตัวแปร (Parameters)</span>
+          <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="resetToProblem8()">คืนค่าเริ่มต้น</button>
+        </div>
+
+        <div class="info-note">
+          <strong>หลักฟิสิกส์ของโจทย์ข้อที่ 8:</strong> เมื่อก้มลำตัวส่วนบนไปด้านหน้าทำมุม <strong>θ<sub>bend</sub></strong> จากแนวดิ่ง น้ำหนักลำตัวส่วนบน <strong>w<sub>ub</sub></strong> สร้างทอร์กตามเข็มนาฬิกา (<strong>w<sub>ub</sub> · r<sub>cg</sub> sin θ<sub>bend</sub></strong>) รอบจุดหมุนสะโพก กล้ามเนื้อหลังต้องออกแรงดึง <strong>F<sub>B</sub></strong> (มีแขนโมเมนต์ตั้งฉากสั้นเพียง <strong>r<sub>B⊥</sub> ≈ 8.0 cm</strong> และทำมุม <strong>12°</strong> กับแนวกระดูกสันหลัง) ทำให้เกิดแรงดึงมหาศาลในกล้ามเนื้อและแรงกดอัดสูงที่หมอนรองกระดูกสันหลัง <strong>F<sub>V</sub></strong>
+        </div>
+
+        <!-- Animation Controls -->
+        <div class="anim-bar">
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: #334155;">จำลองการก้มตัว-ยืดตัวอัตโนมัติ (0° ↔ 90°):</span>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span class="anim-status" id="animStatusBadge">สถานะ: หยุดนิ่ง</span>
+              <label style="font-size:0.78rem; color:#475569;">ความเร็ว:
+                <select id="animSpeedSelect" style="padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; font-size:0.78rem;">
+                  <option value="0.30">ช้า (0.5x)</option>
+                  <option value="0.60" selected>ปกติ (1.0x)</option>
+                  <option value="1.20">เร็ว (2.0x)</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary" id="animBtn" style="padding: 7px 14px; font-size: 0.85rem;" onclick="toggleAnimation()">▶ เริ่มขยับก้ม-เงย</button>
+        </div>
+
+        <div class="presets-row">
+          <button type="button" class="preset-btn" onclick="resetToProblem8()">1. ค่ามาตรฐาน (ก้ม 60°)</button>
+          <button type="button" class="preset-btn" onclick="setUprightPosture()">2. ยืนหลังตรง (ก้ม 0°)</button>
+          <button type="button" class="preset-btn" onclick="setSlouchPosture()">3. นั่ง/ยืนหลังค่อมเล็กน้อย (ก้ม 25°)</button>
+          <button type="button" class="preset-btn" onclick="setDeepBendPosture()">4. ก้มตัวขนานพื้น (ก้ม 90°)</button>
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="bendAngleSlider">มุมก้มลำตัวจากแนวดิ่ง (θ<sub>bend</sub>)</label>
+            <span class="val" id="bendAngleVal">60.0° (ลำตัวทำมุม 30.0° กับแนวราบ)</span>
+          </div>
+          <input type="range" id="bendAngleSlider" min="0" max="90" step="0.5" value="60">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="massSlider">มวลลำตัวส่วนบน (m<sub>ub</sub>)</label>
+            <span class="val" id="massVal">55.0 kg</span>
+          </div>
+          <input type="range" id="massSlider" min="35" max="85" step="1" value="55.0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="rCgSlider">ระยะตามแนวกระดูกสันหลังจากสะโพกถึงจุด CG (L<sub>CG</sub>)</label>
+            <span class="val" id="rCgVal">0.40 m (r_CG⊥ = 0.35 m)</span>
+          </div>
+          <input type="range" id="rCgSlider" min="0.28" max="0.52" step="0.01" value="0.40">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="rBPerpSlider">แขนโมเมนต์ตั้งฉากของกล้ามเนื้อหลัง (r<sub>B⊥</sub>)</label>
+            <span class="val" id="rBPerpVal">0.080 m (8.0 cm)</span>
+          </div>
+          <input type="range" id="rBPerpSlider" min="0.050" max="0.110" step="0.005" value="0.080">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="insertAngleSlider">มุมดึงของกล้ามเนื้อหลังเทียบแนวกระดูกสันหลัง (α)</label>
+            <span class="val" id="insertAngleVal">12.0°</span>
+          </div>
+          <input type="range" id="insertAngleSlider" min="8" max="20" step="0.5" value="12.0">
+        </div>
+
+        <div class="results-panel">
+          <div class="results-grid">
+            <div class="metric-card muscle">
+              <div class="metric-label">แรงดึงกล้ามเนื้อหลัง (F<sub>B</sub>)</div>
+              <div class="metric-value" style="color: var(--back-muscle);" id="fBackOut">2,358 N</div>
+            </div>
+            <div class="metric-card spine">
+              <div class="metric-label">แรงที่กระดูกสันหลังส่วนล่าง (F<sub>V</sub>)</div>
+              <div class="metric-value" style="color: var(--spine-force);" id="fVertOut">2,649 N</div>
+            </div>
+            <div class="metric-card angle">
+              <div class="metric-label">ทิศทางของแรง F<sub>V</sub> (เทียบแนวราบ)</div>
+              <div class="metric-value" style="color: #0284c7;" id="dirVertOut">28.7°</div>
+            </div>
+            <div class="metric-card ratio">
+              <div class="metric-label">อัตราส่วนแรงเทียบน้ำหนักตัวบน (F<sub>B</sub> / w<sub>ub</sub>)</div>
+              <div class="metric-value" style="color: var(--success);" id="ratioOut">4.37 เท่า</div>
+            </div>
+          </div>
+
+          <div class="equation-box">
+            <strong>สมการสมดุล (Στ<sub>pivot</sub> = 0 และ ΣF = 0):</strong>
+            <code id="eqText1">F_B = (w_ub · r_CG⊥) / r_B⊥ = (539 N × 0.346 m) / 0.080 m = 2,334 N</code>
+            <code id="eqText2">F_Vx = 2,218 N, F_Vy = 1,458 N =&gt; F_V = 2,654 N (มุม 33.3° เหนือแนวราบ)</code>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-primary" onclick="recordExperiment()">+ บันทึกผลลงตาราง</button>
+          <button type="button" class="btn-danger" onclick="clearAllData()">ล้างข้อมูลทั้งหมด / เริ่มทดลองใหม่</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Data Table -->
+    <div class="card">
+      <div class="card-title">
+        <span>ตารางบันทึกผลการทดลอง (Experiment Data Log)</span>
+        <button type="button" class="btn-success" style="padding: 6px 12px; font-size: 0.85rem;" onclick="exportCSV()">ดาวน์โหลด CSV</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ครั้งที่</th>
+              <th>มุมก้ม θ<sub>bend</sub></th>
+              <th>มวลตัวบน m<sub>ub</sub> (kg)</th>
+              <th>น้ำหนัก w<sub>ub</sub> (N)</th>
+              <th>r<sub>CG⊥</sub> (m)</th>
+              <th>r<sub>B⊥</sub> (m)</th>
+              <th>แรงกล้ามเนื้อหลัง F<sub>B</sub> (N)</th>
+              <th>แรงกระดูกสันหลัง F<sub>V</sub> (N)</th>
+              <th>ทิศทาง F<sub>V</sub></th>
+              <th>อัตราส่วน F<sub>B</sub> / w<sub>ub</sub></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr id="emptyRow">
+              <td colspan="10" class="empty-state">ยังไม่มีข้อมูลการทดลอง — ปรับมุมก้มตัวหรือพารามิเตอร์ด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const G = 9.80;
+    let records = [];
+
+    // ตัวแปรสำหรับการขยับก้ม-เงยอัตโนมัติ (Animation)
+    let animId = null;
+    let animDir = 1; // 1 = ก้มลง (0° -> 90°), -1 = ยืดตัวขึ้น (90° -> 0°)
+    let animAngle = 60.0;
+    let pauseFrames = 0;
+
+    // ตัวแปรสำหรับกราฟแรงกับเวลา (Force vs Time)
+    let simTime = 0.0;
+    let lastTimestamp = null;
+    let timeHistory = [];
+    const MAX_WINDOW_SEC = 16.0;
+
+    const els = {
+      bendAngleSlider: document.getElementById('bendAngleSlider'),
+      massSlider: document.getElementById('massSlider'),
+      rCgSlider: document.getElementById('rCgSlider'),
+      rBPerpSlider: document.getElementById('rBPerpSlider'),
+      insertAngleSlider: document.getElementById('insertAngleSlider'),
+      headerAngle: document.getElementById('headerAngle'),
+      bendAngleVal: document.getElementById('bendAngleVal'),
+      massVal: document.getElementById('massVal'),
+      rCgVal: document.getElementById('rCgVal'),
+      rBPerpVal: document.getElementById('rBPerpVal'),
+      insertAngleVal: document.getElementById('insertAngleVal'),
+      fBackOut: document.getElementById('fBackOut'),
+      fVertOut: document.getElementById('fVertOut'),
+      dirVertOut: document.getElementById('dirVertOut'),
+      ratioOut: document.getElementById('ratioOut'),
+      eqText1: document.getElementById('eqText1'),
+      eqText2: document.getElementById('eqText2'),
+      postureSvg: document.getElementById('postureSvg'),
+      fbdSvg: document.getElementById('fbdSvg'),
+      timeChartSvg: document.getElementById('timeChartSvg'),
+      simTimeOut: document.getElementById('simTimeOut'),
+      showSpineCurve: document.getElementById('showSpineCurve'),
+      tableBody: document.getElementById('tableBody'),
+      animBtn: document.getElementById('animBtn'),
+      animStatusBadge: document.getElementById('animStatusBadge'),
+      animSpeedSelect: document.getElementById('animSpeedSelect')
+    };
+
+    function getParams() {
+      const bendDeg = parseFloat(els.bendAngleSlider.value); // มุมก้มลำตัววัดจากแนวดิ่ง (0° = ยืนตรง, 60° = ก้มทำมุม 30° กับพื้น)
+      const horizDeg = 90 - bendDeg; // มุมลำตัวเทียบแนวราบ (30° )
+      const massUb = parseFloat(els.massSlider.value);
+      const lCg = parseFloat(els.rCgSlider.value); // ระยะตามกระดูกสันหลังถึงจุด CG
+      const rBPerp = parseFloat(els.rBPerpSlider.value); // แขนโมเมนต์ตั้งฉากของกล้ามเนื้อหลัง (0.0800 m )
+      const alphaDeg = parseFloat(els.insertAngleSlider.value); // มุมระหว่างแนวแรง F_B กับแกนกระดูกสันหลัง (12.0° )
+
+      const weightUb = massUb * G;
+      const bendRad = bendDeg * Math.PI / 180;
+      const horizRad = horizDeg * Math.PI / 180;
+
+      // แขนโมเมนต์ตั้งฉากของน้ำหนักลำตัวส่วนบนรอบจุดหมุนสะโพก: r_CG⊥ = L_CG * sin(bendDeg)
+      const rCgPerp = lCg * Math.sin(bendRad);
+
+      // 1. สมดุลทอร์กรอบจุดหมุนสะโพก (Στ_pivot = 0):
+      const fBack = (weightUb * rCgPerp) / rBPerp;
+
+      // 2. ทิศทางของแรงกล้ามเนื้อหลัง F_B เทียบแนวราบ:
+      const fbAngleBelowHorizDeg = horizDeg - alphaDeg;
+      const fbAngleRad = fbAngleBelowHorizDeg * Math.PI / 180;
+
+      const fBx = -fBack * Math.cos(fbAngleRad);
+      const fBy = -fBack * Math.sin(fbAngleRad);
+
+      // 3. สมดุลแรงในแนวแกน x และ y (ΣFx = 0, ΣFy = 0) เพื่อหาแรงปฏิกิริยาที่กระดูกสันหลัง F_V:
+      const fVx = -fBx;
+      const fVy = weightUb - fBy;
+      const fVert = Math.hypot(fVx, fVy);
+      const fVertAngleDeg = Math.atan2(fVy, fVx) * 180 / Math.PI;
+
+      const ratio = fBack / weightUb;
+
+      return {
+        bendDeg, horizDeg, bendRad, horizRad, massUb, weightUb,
+        lCg, rCgPerp, rBPerp, alphaDeg, fbAngleBelowHorizDeg,
+        fBack, fVx, fVy, fVert, fVertAngleDeg, ratio
+      };
+    }
+
+    function pushTimeSample(t, p) {
+      if (timeHistory.length > 0 && Math.abs(timeHistory[timeHistory.length - 1].t - t) < 0.015) {
+        timeHistory[timeHistory.length - 1] = {
+          t: t,
+          fBack: p.fBack,
+          fVert: p.fVert,
+          angle: p.bendDeg
+        };
+      } else {
+        timeHistory.push({
+          t: t,
+          fBack: p.fBack,
+          fVert: p.fVert,
+          angle: p.bendDeg
+        });
+      }
+      const cutoff = t - (MAX_WINDOW_SEC + 2.0);
+      while (timeHistory.length > 2 && timeHistory[0].t < cutoff) {
+        timeHistory.shift();
+      }
+      els.simTimeOut.textContent = t.toFixed(1) + ' s';
+    }
+
+    function resetTimeGraph() {
+      simTime = 0.0;
+      lastTimestamp = null;
+      timeHistory = [];
+      const p = getParams();
+      pushTimeSample(0.0, p);
+      drawTimeChart();
+    }
+
+    function updateSimulation(fromAnimation) {
+      const p = getParams();
+
+      els.headerAngle.textContent = p.bendDeg.toFixed(1) + '°';
+      els.bendAngleVal.textContent = p.bendDeg.toFixed(1) + '° (ลำตัวทำมุม ' + p.horizDeg.toFixed(1) + '° กับแนวราบ)';
+      els.massVal.textContent = p.massUb.toFixed(1) + ' kg';
+      els.rCgVal.textContent = p.lCg.toFixed(2) + ' m (r_CG⊥ = ' + p.rCgPerp.toFixed(3) + ' m)';
+      els.rBPerpVal.textContent = p.rBPerp.toFixed(3) + ' m (' + (p.rBPerp * 100).toFixed(1) + ' cm)';
+      els.insertAngleVal.textContent = p.alphaDeg.toFixed(1) + '°';
+
+      els.fBackOut.textContent = p.fBack.toFixed(0) + ' N';
+      els.fVertOut.textContent = p.fVert.toFixed(0) + ' N';
+      els.dirVertOut.textContent = p.fVertAngleDeg.toFixed(1) + '°';
+      els.ratioOut.textContent = p.ratio.toFixed(2) + ' เท่า';
+
+      els.eqText1.textContent =
+        'F_B = (' + p.weightUb.toFixed(0) + ' × ' + p.rCgPerp.toFixed(3) + ') / ' + p.rBPerp.toFixed(3) +
+        ' = ' + p.fBack.toFixed(0) + ' N';
+
+      els.eqText2.textContent =
+        'F_Vx = ' + p.fVx.toFixed(0) + ' N, F_Vy = ' + p.fVy.toFixed(0) +
+        ' N => F_V = ' + p.fVert.toFixed(0) + ' N (มุม ' + p.fVertAngleDeg.toFixed(1) + '°)';
+
+      if (!fromAnimation) {
+        if (timeHistory.length === 0) {
+          pushTimeSample(0.0, p);
+        } else {
+          simTime += 0.15;
+          pushTimeSample(simTime, p);
+        }
+      }
+
+      drawDiagrams(p);
+      drawTimeChart();
+    }
+
+    function drawTimeChart() {
+      const W = 720;
+      const H = 215;
+      const padL = 62;
+      const padR = 24;
+      const padT = 20;
+      const padB = 36;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      const showSpine = els.showSpineCurve.checked;
+
+      const tEnd = Math.max(MAX_WINDOW_SEC, simTime);
+      const tStart = Math.max(0, tEnd - MAX_WINDOW_SEC);
+
+      let maxVal = 1500;
+      for (let i = 0; i < timeHistory.length; i++) {
+        const pt = timeHistory[i];
+        if (pt.t >= tStart) {
+          if (pt.fBack > maxVal) maxVal = pt.fBack;
+          if (showSpine && pt.fVert > maxVal) maxVal = pt.fVert;
+        }
+      }
+      const stepY = maxVal <= 3000 ? 500 : 1000;
+      const yMax = Math.ceil((maxVal * 1.12) / stepY) * stepY;
+
+      function mapX(t) {
+        return padL + ((t - tStart) / (tEnd - tStart)) * plotW;
+      }
+      function mapY(f) {
+        return padT + plotH - (f / yMax) * plotH;
+      }
+
+      let svgContent = '';
+
+      svgContent += '<rect x="' + padL + '" y="' + padT + '" width="' + plotW + '" height="' + plotH + '" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>';
+
+      const yTicks = Math.round(yMax / stepY);
+      for (let i = 0; i <= yTicks; i++) {
+        const val = i * stepY;
+        const y = mapY(val);
+        svgContent += '<line x1="' + padL + '" y1="' + y.toFixed(1) + '" x2="' + (padL + plotW) + '" y2="' + y.toFixed(1) + '" stroke="' + (i === 0 ? '#94a3b8' : '#e2e8f0') + '" stroke-width="1"' + (i > 0 ? ' stroke-dasharray="3,3"' : '') + '/>';
+        svgContent += '<text x="' + (padL - 8) + '" y="' + (y + 4).toFixed(1) + '" font-size="11" fill="#475569" text-anchor="end" font-family="monospace">' + val.toFixed(0) + '</text>';
+      }
+
+      const firstTick = Math.ceil(tStart / 2) * 2;
+      for (let tTick = firstTick; tTick <= tEnd + 0.001; tTick += 2) {
+        const x = mapX(tTick);
+        svgContent += '<line x1="' + x.toFixed(1) + '" y1="' + padT + '" x2="' + x.toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>';
+        svgContent += '<text x="' + x.toFixed(1) + '" y="' + (padT + plotH + 16) + '" font-size="11" fill="#475569" text-anchor="middle" font-family="monospace">' + tTick.toFixed(0) + 's</text>';
+      }
+
+      svgContent += '<text x="' + (padL + plotW / 2) + '" y="' + (H - 4) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle">เวลา t (วินาที)</text>';
+      svgContent += '<text x="16" y="' + (padT + plotH / 2) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle" transform="rotate(-90 16 ' + (padT + plotH / 2) + ')">ขนาดแรง F (นิวตัน, N)</text>';
+
+      const visiblePts = timeHistory.filter(function(pt) { return pt.t >= tStart; });
+
+      if (visiblePts.length >= 1) {
+        let pathBack = '';
+        let areaBack = '';
+        let pathVert = '';
+
+        visiblePts.forEach(function(pt, idx) {
+          const x = mapX(pt.t).toFixed(1);
+          const yB = mapY(pt.fBack).toFixed(1);
+          const yV = mapY(pt.fVert).toFixed(1);
+
+          if (idx === 0) {
+            pathBack += 'M ' + x + ' ' + yB;
+            areaBack += 'M ' + x + ' ' + (padT + plotH).toFixed(1) + ' L ' + x + ' ' + yB;
+            pathVert += 'M ' + x + ' ' + yV;
+          } else {
+            pathBack += ' L ' + x + ' ' + yB;
+            areaBack += ' L ' + x + ' ' + yB;
+            pathVert += ' L ' + x + ' ' + yV;
+          }
+        });
+
+        const lastPt = visiblePts[visiblePts.length - 1];
+        areaBack += ' L ' + mapX(lastPt.t).toFixed(1) + ' ' + (padT + plotH).toFixed(1) + ' Z';
+
+        svgContent += '<path d="' + areaBack + '" fill="rgba(124, 58, 237, 0.10)"/>';
+
+        if (showSpine) {
+          svgContent += '<path d="' + pathVert + '" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>';
+          svgContent += '<circle cx="' + mapX(lastPt.t).toFixed(1) + '" cy="' + mapY(lastPt.fVert).toFixed(1) + '" r="4" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>';
+        }
+
+        svgContent += '<path d="' + pathBack + '" fill="none" stroke="#7c3aed" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>';
+
+        const curX = mapX(lastPt.t);
+        const curYB = mapY(lastPt.fBack);
+        svgContent += '<circle cx="' + curX.toFixed(1) + '" cy="' + curYB.toFixed(1) + '" r="5" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/>';
+
+        const labelX = curX > (padL + plotW - 135) ? (curX - 10) : (curX + 10);
+        const labelAnchor = curX > (padL + plotW - 135) ? 'end' : 'start';
+        const labelY = Math.max(padT + 14, curYB - 8);
+        svgContent += '<text x="' + labelX.toFixed(1) + '" y="' + labelY.toFixed(1) + '" font-size="11" font-weight="bold" fill="#5b21b6" text-anchor="' + labelAnchor + '">F_B = ' + lastPt.fBack.toFixed(0) + ' N (θ=' + lastPt.angle.toFixed(0) + '°)</text>';
+      }
+
+      svgContent += '<rect x="' + (padL + 10) + '" y="' + (padT + 8) + '" width="245" height="' + (showSpine ? 40 : 22) + '" rx="6" fill="rgba(255,255,255,0.9)" stroke="#e2e8f0"/>';
+      svgContent += '<line x1="' + (padL + 18) + '" y1="' + (padT + 19) + '" x2="' + (padL + 38) + '" y2="' + (padT + 19) + '" stroke="#7c3aed" stroke-width="2.8"/>';
+      svgContent += '<text x="' + (padL + 44) + '" y="' + (padT + 23) + '" font-size="11" font-weight="bold" fill="#5b21b6">F_B: แรงดึงกล้ามเนื้อหลัง (N)</text>';
+      if (showSpine) {
+        svgContent += '<line x1="' + (padL + 18) + '" y1="' + (padT + 37) + '" x2="' + (padL + 38) + '" y2="' + (padT + 37) + '" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>';
+        svgContent += '<text x="' + (padL + 44) + '" y="' + (padT + 41) + '" font-size="11" font-weight="bold" fill="#b91c1c">F_V: แรงกดกระดูกสันหลัง (N)</text>';
+      }
+
+      els.timeChartSvg.innerHTML = svgContent;
+    }
+
+    function drawDiagrams(p) {
+      // =========================================================================
+      // 1. วาดภาพท่าก้มตัว (Anatomical Bending Posture SVG) — หันหน้าไปทางขวา
+      // =========================================================================
+      const floorY = 325;
+      const hipX = 125;
+      const hipY = 195;
+
+      // เวกเตอร์หนึ่งหน่วยตามแนวกระดูกสันหลัง (จากสะโพกขึ้นไปยังหัวไหล่)
+      const spineUx = Math.sin(p.bendRad);
+      const spineUy = -Math.cos(p.bendRad);
+
+      const torsoLen = 115;
+      const shoulderX = hipX + spineUx * torsoLen;
+      const shoulderY = hipY + spineUy * torsoLen;
+
+      // จุด CG ของลำตัวส่วนบน
+      const cgDist = (p.lCg / 0.55) * torsoLen;
+      const cgX = hipX + spineUx * cgDist;
+      const cgY = hipY + spineUy * cgDist;
+
+      // ศีรษะ
+      const headX = shoulderX + spineUx * 26;
+      const headY = shoulderY + spineUy * 26;
+
+      // แขนห้อยลงในแนวดิ่งเล็กน้อยเพื่อรักษาสมดุล
+      const handX = shoulderX + 12;
+      const handY = shoulderY + 75;
+
+      // ขาปรับเอียงไปด้านหลังเล็กน้อยเพื่อให้จุดศูนย์ถ่วงรวมอยู่เหนือฐานเท้า
+      const footX = hipX - Math.sin(p.bendRad) * 28;
+
+      // ความยาวลูกศรเวกเตอร์
+      const wLen = Math.min(72, Math.max(40, p.weightUb * 0.1));
+      const fBackLen = Math.min(95, Math.max(15, p.fBack * 0.032));
+      const fVertLen = Math.min(95, Math.max(40, p.fVert * 0.032));
+
+      // ทิศทางของแรง F_B (ชี้ไปทางซ้ายล่าง ทำมุม fbAngleBelowHorizDeg กับแนวระดับซ้าย)
+      const fbRad = p.fbAngleBelowHorizDeg * Math.PI / 180;
+      const fbUx = -Math.cos(fbRad);
+      const fbUy = Math.sin(fbRad);
+
+      // จุดยึดกล้ามเนื้อหลังบนกระดูกสันหลัง
+      const attachX = hipX + spineUx * (torsoLen * 0.62);
+      const attachY = hipY + spineUy * (torsoLen * 0.62);
+
+      // ทิศทางของแรง F_V (ชี้ไปทางขวาบน ทำมุม fVertAngleDeg เหนือแนวราบ)
+      const fvRad = p.fVertAngleDeg * Math.PI / 180;
+      const fvUx = Math.cos(fvRad);
+      const fvUy = -Math.sin(fvRad);
+
+      els.postureSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker>' +
+          '<marker id="arrRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#dc2626"/></marker>' +
+          '<marker id="arrAmber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#d97706"/></marker>' +
+        '</defs>' +
+
+        // พื้น
+        '<line x1="20" y1="' + floorY + '" x2="340" y2="' + floorY + '" stroke="#64748b" stroke-width="2.5"/>' +
+        '<rect x="20" y="' + floorY + '" width="320" height="8" fill="#e2e8f0"/>' +
+
+        // เส้นประแนวดิ่งอ้างอิงที่จุดหมุนสะโพก
+        '<line x1="' + hipX + '" y1="35" x2="' + hipX + '" y2="' + floorY + '" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+
+        // ขาและรองเท้า
+        '<line x1="' + footX + '" y1="' + (floorY - 6) + '" x2="' + hipX + '" y2="' + hipY + '" stroke="#94a3b8" stroke-width="18" stroke-linecap="round"/>' +
+        '<rect x="' + (footX - 8) + '" y="' + (floorY - 8) + '" width="26" height="8" rx="3" fill="#334155"/>' +
+
+        // ลำตัวส่วนบน
+        '<line x1="' + hipX + '" y1="' + hipY + '" x2="' + shoulderX + '" y2="' + shoulderY + '" stroke="#fde68a" stroke-width="28" stroke-linecap="round"/>' +
+        '<line x1="' + hipX + '" y1="' + hipY + '" x2="' + shoulderX + '" y2="' + shoulderY + '" stroke="#f59e0b" stroke-width="28" stroke-linecap="round" opacity="0.22"/>' +
+
+        // แนวกระดูกสันหลัง
+        '<line x1="' + hipX + '" y1="' + hipY + '" x2="' + shoulderX + '" y2="' + shoulderY + '" stroke="#64748b" stroke-width="2" stroke-dasharray="4,3"/>' +
+
+        // แขน
+        '<line x1="' + shoulderX + '" y1="' + shoulderY + '" x2="' + handX + '" y2="' + handY + '" stroke="#fed7aa" stroke-width="10" stroke-linecap="round"/>' +
+
+        // ศีรษะ
+        '<circle cx="' + headX + '" cy="' + headY + '" r="16" fill="#fed7aa" stroke="#d97706" stroke-width="1.5"/>' +
+        '<path d="M ' + (headX - 15) + ',' + (headY - 2) + ' A 16,16 0 0,1 ' + (headX + 10) + ',' + (headY - 12) + ' Z" fill="#334155"/>' +
+
+        // จุดหมุนสะโพก (Pivot)
+        '<circle cx="' + hipX + '" cy="' + hipY + '" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>' +
+
+        // เวกเตอร์แรง F_V ที่จุดหมุนกระดูกสันหลัง
+        '<line x1="' + hipX + '" y1="' + hipY + '" x2="' + (hipX + fvUx * fVertLen) + '" y2="' + (hipY + fvUy * fVertLen) + '" stroke="#dc2626" stroke-width="2.8" marker-end="url(#arrRed)"/>' +
+        '<text x="' + (hipX + fvUx * fVertLen + 5) + '" y="' + (hipY + fvUy * fVertLen - 4) + '" font-size="11" font-weight="bold" fill="#dc2626">F_V</text>' +
+
+        // เวกเตอร์น้ำหนัก w_ub ที่จุด CG
+        '<circle cx="' + cgX + '" cy="' + cgY + '" r="4.5" fill="#d97706" stroke="#ffffff" stroke-width="1"/>' +
+        '<line x1="' + cgX + '" y1="' + cgY + '" x2="' + cgX + '" y2="' + (cgY + wLen) + '" stroke="#d97706" stroke-width="2.6" marker-end="url(#arrAmber)"/>' +
+        '<text x="' + (cgX + 6) + '" y="' + (cgY + wLen) + '" font-size="11" font-weight="bold" fill="#b45309">w_ub</text>' +
+
+        // เวกเตอร์แรงกล้ามเนื้อหลัง F_B (แสดงเมื่อมุมก้ม > 0)
+        (p.fBack > 1
+          ? '<circle cx="' + attachX + '" cy="' + attachY + '" r="4" fill="#7c3aed"/>' +
+            '<line x1="' + attachX + '" y1="' + attachY + '" x2="' + (attachX + fbUx * fBackLen) + '" y2="' + (attachY + fbUy * fBackLen) + '" stroke="#7c3aed" stroke-width="2.8" marker-end="url(#arrPurple)"/>' +
+            '<text x="' + (attachX + fbUx * fBackLen - 6) + '" y="' + (attachY + fbUy * fBackLen + 10) + '" font-size="11" font-weight="bold" fill="#7c3aed" text-anchor="end">F_B</text>'
+          : '');
+
+      // =========================================================================
+      // 2. วาดแผนภาพวัตถุอิสระ (Free-Body Lever Diagram SVG)
+      // =========================================================================
+      const fbdPivotX = 115;
+      const fbdPivotY = 230;
+      const beamLen = 175;
+
+      const fbdEndX = fbdPivotX + spineUx * beamLen;
+      const fbdEndY = fbdPivotY + spineUy * beamLen;
+
+      const fbdCgDist = (p.lCg / 0.55) * beamLen;
+      const fbdCgX = fbdPivotX + spineUx * fbdCgDist;
+      const fbdCgY = fbdPivotY + spineUy * fbdCgDist;
+
+      const fbdAttachX = fbdPivotX + spineUx * (beamLen * 0.65);
+      const fbdAttachY = fbdPivotY + spineUy * (beamLen * 0.65);
+
+      els.fbdSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrPurple2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker>' +
+          '<marker id="arrRed2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#dc2626"/></marker>' +
+          '<marker id="arrAmber2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#d97706"/></marker>' +
+        '</defs>' +
+
+        // เส้นแกนอ้างอิงแนวระดับและแนวดิ่งที่จุดหมุน Pivot
+        '<line x1="20" y1="' + fbdPivotY + '" x2="345" y2="' + fbdPivotY + '" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+        '<line x1="' + fbdPivotX + '" y1="25" x2="' + fbdPivotX + '" y2="335" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+
+        // คานแข็งแทนกระดูกสันหลัง
+        '<line x1="' + fbdPivotX + '" y1="' + fbdPivotY + '" x2="' + fbdEndX + '" y2="' + fbdEndY + '" stroke="#475569" stroke-width="8" stroke-linecap="round"/>' +
+
+        // มุมลำตัวเทียบแนวราบ
+        '<text x="' + (fbdPivotX + 42) + '" y="' + (fbdPivotY - 6) + '" font-size="10" font-weight="bold" fill="#475569">มุมพื้น ' + p.horizDeg.toFixed(0) + '°</text>' +
+
+        // เส้นแสดงแขนโมเมนต์ตั้งฉากของน้ำหนัก r_CG⊥
+        (p.bendDeg > 3
+          ? '<line x1="' + fbdCgX + '" y1="' + fbdCgY + '" x2="' + fbdCgX + '" y2="298" stroke="#d97706" stroke-width="1" stroke-dasharray="3,3"/>' +
+            '<line x1="' + fbdPivotX + '" y1="294" x2="' + fbdCgX + '" y2="294" stroke="#d97706" stroke-width="1.6"/>' +
+            '<text x="' + ((fbdPivotX + fbdCgX) / 2) + '" y="288" font-size="10" font-weight="bold" fill="#b45309" text-anchor="middle">r_CG⊥=' + p.rCgPerp.toFixed(2) + 'm</text>'
+          : '') +
+
+        // จุดหมุน Pivot (กระดูกสันหลังส่วนล่าง)
+        '<circle cx="' + fbdPivotX + '" cy="' + fbdPivotY + '" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>' +
+        '<text x="' + (fbdPivotX - 8) + '" y="' + (fbdPivotY + 18) + '" font-size="10" font-weight="bold" fill="#b91c1c" text-anchor="end">Pivot</text>' +
+
+        // เวกเตอร์แรง F_V
+        '<line x1="' + fbdPivotX + '" y1="' + fbdPivotY + '" x2="' + (fbdPivotX + fvUx * fVertLen) + '" y2="' + (fbdPivotY + fvUy * fVertLen) + '" stroke="#dc2626" stroke-width="3" marker-end="url(#arrRed2)"/>' +
+        '<text x="' + (fbdPivotX + fvUx * fVertLen + 6) + '" y="' + (fbdPivotY + fvUy * fVertLen - 4) + '" font-size="10" font-weight="bold" fill="#dc2626">F_V (' + p.fVert.toFixed(0) + 'N)</text>' +
+
+        // เวกเตอร์น้ำหนัก w_ub
+        '<circle cx="' + fbdCgX + '" cy="' + fbdCgY + '" r="4.5" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/>' +
+        '<line x1="' + fbdCgX + '" y1="' + fbdCgY + '" x2="' + fbdCgX + '" y2="' + (fbdCgY + wLen) + '" stroke="#d97706" stroke-width="2.6" marker-end="url(#arrAmber2)"/>' +
+        '<text x="' + (fbdCgX + 6) + '" y="' + (fbdCgY + wLen) + '" font-size="10" font-weight="bold" fill="#b45309">w_ub (' + p.weightUb.toFixed(0) + 'N)</text>' +
+
+        // เวกเตอร์แรงกล้ามเนื้อหลัง F_B
+        (p.fBack > 1
+          ? '<circle cx="' + fbdAttachX + '" cy="' + fbdAttachY + '" r="4.5" fill="#7c3aed" stroke="#ffffff" stroke-width="1.2"/>' +
+            '<line x1="' + fbdAttachX + '" y1="' + fbdAttachY + '" x2="' + (fbdAttachX + fbUx * fBackLen) + '" y2="' + (fbdAttachY + fbUy * fBackLen) + '" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrPurple2)"/>' +
+            '<text x="' + (fbdAttachX + fbUx * fBackLen - 6) + '" y="' + (fbdAttachY + fbUy * fBackLen + 12) + '" font-size="10" font-weight="bold" fill="#7c3aed" text-anchor="end">F_B (' + p.fBack.toFixed(0) + 'N)</text>'
+          : '');
+    }
+
+    function updateAnimBadge() {
+      if (animId === null) {
+        els.animStatusBadge.textContent = 'สถานะ: หยุดนิ่ง';
+        els.animStatusBadge.className = 'anim-status';
+        return;
+      }
+      if (animDir === 1) {
+        els.animStatusBadge.textContent = '↓ กำลังก้มตัวลง (0° → 90°)';
+        els.animStatusBadge.className = 'anim-status bend';
+      } else {
+        els.animStatusBadge.textContent = '↑ กำลังยืดตัวขึ้น (90° → 0°)';
+        els.animStatusBadge.className = 'anim-status rise';
+      }
+    }
+
+    function toggleAnimation() {
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        lastTimestamp = null;
+        els.animBtn.textContent = '▶ เริ่มขยับก้ม-เงย';
+        els.animBtn.className = 'btn-primary';
+        updateAnimBadge();
+        return;
+      }
+
+      animAngle = parseFloat(els.bendAngleSlider.value);
+      if (animAngle <= 0) {
+        animDir = 1;
+      } else if (animAngle >= 90) {
+        animDir = -1;
+      }
+      pauseFrames = 0;
+      lastTimestamp = null;
+
+      els.animBtn.textContent = '⏸ หยุดการเคลื่อนไหว';
+      els.animBtn.className = 'btn-danger';
+      updateAnimBadge();
+
+      function step(timestamp) {
+        if (lastTimestamp === null) {
+          lastTimestamp = timestamp;
+        }
+        const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+        lastTimestamp = timestamp;
+        simTime += dt;
+
+        if (pauseFrames > 0) {
+          pauseFrames--;
+          const pPause = getParams();
+          pushTimeSample(simTime, pPause);
+          drawTimeChart();
+          animId = requestAnimationFrame(step);
+          return;
+        }
+
+        const speed = parseFloat(els.animSpeedSelect.value) || 0.60;
+        animAngle += animDir * speed;
+
+        if (animAngle >= 90) {
+          animAngle = 90;
+          animDir = -1;
+          pauseFrames = 18;
+          updateAnimBadge();
+        } else if (animAngle <= 0) {
+          animAngle = 0;
+          animDir = 1;
+          pauseFrames = 18;
+          updateAnimBadge();
+        }
+
+        els.bendAngleSlider.value = animAngle.toFixed(1);
+        updateSimulation(true);
+        pushTimeSample(simTime, getParams());
+        drawTimeChart();
+        animId = requestAnimationFrame(step);
+      }
+      animId = requestAnimationFrame(step);
+    }
+
+    function stopAnimIfRunning() {
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        lastTimestamp = null;
+        els.animBtn.textContent = '▶ เริ่มขยับก้ม-เงย';
+        els.animBtn.className = 'btn-primary';
+        updateAnimBadge();
+      }
+    }
+
+    function recordExperiment() {
+      const p = getParams();
+      records.push(p);
+      renderTable();
+    }
+
+    function renderTable() {
+      if (records.length === 0) {
+        els.tableBody.innerHTML =
+          '<tr id="emptyRow">' +
+            '<td colspan="10" class="empty-state">ยังไม่มีข้อมูลการทดลอง — ปรับมุมก้มตัวหรือพารามิเตอร์ด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>' +
+          '</tr>';
+        return;
+      }
+
+      els.tableBody.innerHTML = records.map(function(r, idx) {
+        return '<tr>' +
+          '<td><strong>' + (idx + 1) + '</strong></td>' +
+          '<td>' + r.bendDeg.toFixed(1) + '°</td>' +
+          '<td>' + r.massUb.toFixed(1) + '</td>' +
+          '<td>' + r.weightUb.toFixed(0) + '</td>' +
+          '<td>' + r.rCgPerp.toFixed(3) + '</td>' +
+          '<td>' + r.rBPerp.toFixed(3) + '</td>' +
+          '<td><span class="badge-muscle">' + r.fBack.toFixed(0) + '</span></td>' +
+          '<td><span class="badge-spine">' + r.fVert.toFixed(0) + '</span></td>' +
+          '<td><span class="badge-angle">' + r.fVertAngleDeg.toFixed(1) + '°</span></td>' +
+          '<td><strong>' + r.ratio.toFixed(2) + 'x</strong></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function resetToProblem8() {
+      stopAnimIfRunning();
+      els.bendAngleSlider.value = 60;
+      animAngle = 60;
+      els.massSlider.value = 55.0;
+      els.rCgSlider.value = 0.40;
+      els.rBPerpSlider.value = 0.080;
+      els.insertAngleSlider.value = 12.0;
+      updateSimulation(false);
+    }
+
+    function setUprightPosture() {
+      stopAnimIfRunning();
+      els.bendAngleSlider.value = 0;
+      animAngle = 0;
+      updateSimulation(false);
+    }
+
+    function setSlouchPosture() {
+      stopAnimIfRunning();
+      els.bendAngleSlider.value = 25;
+      animAngle = 25;
+      updateSimulation(false);
+    }
+
+    function setDeepBendPosture() {
+      stopAnimIfRunning();
+      els.bendAngleSlider.value = 90;
+      animAngle = 90;
+      updateSimulation(false);
+    }
+
+    function clearAllData() {
+      records = [];
+      renderTable();
+      resetTimeGraph();
+      resetToProblem8();
+    }
+
+    function exportCSV() {
+      if (records.length === 0) {
+        alert('กรุณาบันทึกผลการทดลองอย่างน้อย 1 รายการก่อนดาวน์โหลด CSV');
+        return;
+      }
+
+      const headers = ['Trial', 'Bend_Angle_deg', 'UpperBody_Mass_kg', 'UpperBody_Weight_N', 'r_CG_perp_m', 'r_B_perp_m', 'F_Back_Muscle_N', 'F_Vertebrae_N', 'F_V_Angle_deg', 'Ratio_FB_to_Weight'];
+      const rows = records.map(function(r, i) {
+        return [
+          i + 1,
+          r.bendDeg.toFixed(1),
+          r.massUb.toFixed(1),
+          r.weightUb.toFixed(1),
+          r.rCgPerp.toFixed(3),
+          r.rBPerp.toFixed(3),
+          r.fBack.toFixed(1),
+          r.fVert.toFixed(1),
+          r.fVertAngleDeg.toFixed(1),
+          r.ratio.toFixed(2)
+        ].join(',');
+      });
+
+      const csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'virtual_lab_problem8_back_muscles.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    ['bendAngleSlider', 'massSlider', 'rCgSlider', 'rBPerpSlider', 'insertAngleSlider'].forEach(function(id) {
+      const el = document.getElementById(id);
+      el.addEventListener('input', function() {
+        if (id === 'bendAngleSlider') {
+          stopAnimIfRunning();
+          animAngle = parseFloat(el.value);
+        }
+        updateSimulation(false);
+      });
+      el.addEventListener('change', function() { updateSimulation(false); });
+    });
+
+    pushTimeSample(0.0, getParams());
+    updateSimulation(true);
+  </script>
+</body>
+</html>

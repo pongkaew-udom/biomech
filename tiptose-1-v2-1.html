@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab: แรงและทอร์กขณะยืนเขย่งด้วยปลายเท้า (Standing on Tiptoe)</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --achilles: #7c3aed;
+      --ankle-force: #dc2626;
+      --normal-force: #0284c7;
+      --success: #059669;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 20px 28px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 0.92rem;
+      opacity: 0.9;
+    }
+
+    .grid-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-top {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .diagrams-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .diagrams-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .diagram-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .diagram-box h3 {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    svg.sim-svg {
+      width: 100%;
+      height: 360px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      display: block;
+    }
+
+    /* Live Force vs Time Graph Box */
+    .chart-box {
+      margin-top: 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 12px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chart-header h3 {
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .chart-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+
+    svg.chart-svg {
+      width: 100%;
+      height: 215px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      display: block;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .control-group {
+      margin-bottom: 13px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .control-header span.val {
+      color: var(--primary);
+      font-family: monospace;
+      font-size: 0.98rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .presets-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preset-btn {
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      background: #e2e8f0;
+      color: #334155;
+      border-radius: 6px;
+    }
+    .preset-btn:hover {
+      background: #cbd5e1;
+    }
+
+    /* Animation Control Bar */
+    .anim-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+      border: 1px solid #cbd5e1;
+    }
+
+    .anim-status {
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .anim-status.up {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .anim-status.down {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .info-note {
+      background: #eff6ff;
+      border-left: 3px solid var(--primary);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #1e40af;
+      margin-bottom: 12px;
+    }
+
+    .results-panel {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .metric-card {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .metric-card.achilles { border-left-color: var(--achilles); }
+    .metric-card.ankle { border-left-color: var(--ankle-force); }
+    .metric-card.normal { border-left-color: var(--normal-force); }
+    .metric-card.ratio { border-left-color: var(--success); }
+
+    .metric-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .metric-value {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .equation-box {
+      background: #ffffff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px dashed #94a3b8;
+      font-size: 0.84rem;
+      color: #334155;
+    }
+
+    .equation-box code {
+      display: block;
+      font-family: 'Consolas', monospace;
+      color: #0f172a;
+      margin-top: 4px;
+      background: #f1f5f9;
+      padding: 6px 8px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button {
+      padding: 9px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    .btn-danger:hover { background: #fecaca; }
+
+    .btn-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .btn-success:hover { background: #a7f3d0; }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .badge-achilles {
+      background: #ede9fe;
+      color: #5b21b6;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-ankle {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-normal {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Virtual Lab: แรงและทอร์กขณะยืนเขย่งด้วยปลายเท้า (Standing on Tiptoe )</h1>
+      <p> วิเคราะห์แรงดึงเส้นเอ็นร้อยหวาย (F<sub>A</sub>) และแรงกดอัดที่ข้อเท้า (F<sub>J</sub>) รอบจุดหมุนข้อต่อข้อเท้า</p>
+    </header>
+
+    <div class="grid-top">
+      <!-- Left: Visual Simulations + Live Time Graph -->
+      <div class="card">
+        <div class="card-title">
+          <span>แบบจำลองกายวิภาคเท้าและแผนภาพวัตถุอิสระ (Free-Body Diagram)</span>
+          <span style="font-size: 0.82rem; font-weight: 500; color: var(--muted);">g = 9.80 m/s² | มุมยกส้นเท้า θ<sub>foot</sub> = <span id="headerAngle">30.0°</span></span>
+        </div>
+
+        <div class="diagrams-wrapper">
+          <!-- Anatomical Foot Posture SVG -->
+          <div class="diagram-box">
+            <h3>1. กายวิภาคเท้าขณะยืนเขย่ง (Standing on Tiptoe)</h3>
+            <svg id="postureSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+
+          <!-- Free-Body Lever Diagram SVG -->
+          <div class="diagram-box">
+            <h3>2. แผนภาพวัตถุอิสระของเท้า </h3>
+            <svg id="fbdSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+        </div>
+
+        <!-- Live Force vs Time Graph -->
+        <div class="chart-box">
+          <div class="chart-header">
+            <h3>3. กราฟความสัมพันธ์ระหว่างแรงกับเวลา (Force vs. Time)</h3>
+            <div class="chart-meta">
+              <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" id="showJointCurve" checked onchange="drawTimeChart()">
+                <span style="color:var(--ankle-force); font-weight:600;">แสดงเส้นแรงกดข้อเท้า F<sub>J</sub></span>
+              </label>
+              <span>t = <strong id="simTimeOut" style="font-family:monospace; color:#0f172a;">0.0 s</strong></span>
+              <button type="button" class="btn-secondary" style="padding: 3px 9px; font-size: 0.78rem;" onclick="resetTimeGraph()">ล้างกราฟเวลา</button>
+            </div>
+          </div>
+          <svg id="timeChartSvg" class="chart-svg" viewBox="0 0 720 215"></svg>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><span class="dot" style="background: var(--normal-force);"></span> <strong>N</strong>: แรงปฏิกิริยาที่พื้นดันปลายเท้าขึ้น (N = mg เมื่อยืน 1 ข้าง)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--achilles);"></span> <strong>F<sub>A</sub></strong>: แรงดึงของเส้นเอ็นร้อยหวาย (Achilles Tendon)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--ankle-force);"></span> <strong>F<sub>J</sub></strong>: แรงกดที่กระดูกหน้าแข้งกระทำลงบนข้อเท้า (Pivot)</div>
+        </div>
+      </div>
+
+      <!-- Right: Controls & Real-time Math -->
+      <div class="card">
+        <div class="card-title">
+          <span>แผงควบคุมตัวแปร (Parameters)</span>
+          <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="resetToStandard()">คืนค่ามาตรฐาน (ยืนเขย่ง 1 ข้าง)</button>
+        </div>
+
+        <div class="info-note">
+          <strong>หลักฟิสิกส์ของการยืนเขย่งปลายเท้า:</strong> เลือกจุดหมุน (Pivot) ที่<strong>ข้อต่อข้อเท้า</strong> แรงปฏิกิริยาพื้น <strong>N</strong> ที่ปลายเท้าสร้างทอร์กทวนเข็มนาฬิกา (<strong>N · r<sub>N⊥</sub></strong>) ขณะที่เส้นเอ็นร้อยหวายออกแรงดึง <strong>F<sub>A</sub></strong> ที่ส้นเท้าสร้างทอร์กตามเข็มนาฬิกา (<strong>F<sub>A</sub> · r<sub>A⊥</sub></strong>) เนื่องจากระยะส้นเท้า <strong>r<sub>A</sub></strong> สั้นกว่าระยะปลายเท้า <strong>r<sub>N</sub></strong> ประมาณ 3–4 เท่า ทำให้แรงดึงเส้นเอ็นร้อยหวายและแรงกดอัดที่ข้อเท้าสูงกว่าน้ำหนักตัวหลายเท่า!
+        </div>
+
+        <!-- Animation Controls -->
+        <div class="anim-bar">
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: #334155;">จำลองการเขย่งขึ้น-ลงอัตโนมัติ (5° ↔ 50°):</span>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span class="anim-status" id="animStatusBadge">สถานะ: หยุดนิ่ง</span>
+              <label style="font-size:0.78rem; color:#475569;">ความเร็ว:
+                <select id="animSpeedSelect" style="padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; font-size:0.78rem;">
+                  <option value="0.25">ช้า (0.5x)</option>
+                  <option value="0.50" selected>ปกติ (1.0x)</option>
+                  <option value="1.00">เร็ว (2.0x)</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary" id="animBtn" style="padding: 7px 14px; font-size: 0.85rem;" onclick="toggleAnimation()">▶ เริ่มขยับขึ้น-ลง</button>
+        </div>
+
+        <div class="presets-row">
+          <button type="button" class="preset-btn" onclick="resetToStandard()">1. ยืนเขย่ง 1 ข้าง (ค่ามาตรฐาน 30°)</button>
+          <button type="button" class="preset-btn" onclick="setTwoFeetTiptoe()">2. ยืนเขย่ง 2 ข้างพร้อมกัน (50% ต่อข้าง)</button>
+          <button type="button" class="preset-btn" onclick="setLowHeelRaise()">3. เขย่งส้นเท้าต่ำ (θ = 15°)</button>
+          <button type="button" class="preset-btn" onclick="setHighBalletPointe()">4. เขย่งปลายเท้าสูง (θ = 50°)</button>
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="stanceSlider">รูปแบบการลงน้ำหนัก</label>
+            <span class="val" id="stanceVal">ยืนเขย่งด้วยเท้าข้างเดียว (100% mg)</span>
+          </div>
+          <input type="range" id="stanceSlider" min="1" max="2" step="1" value="1">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="massSlider">มวลร่างกายรวม (m)</label>
+            <span class="val" id="massVal">75.0 kg</span>
+          </div>
+          <input type="range" id="massSlider" min="40" max="110" step="1" value="75.0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="footAngleSlider">มุมยกส้นเท้าเทียบพื้นราบ (θ<sub>foot</sub>)</label>
+            <span class="val" id="footAngleVal">30.0°</span>
+          </div>
+          <input type="range" id="footAngleSlider" min="5" max="55" step="0.5" value="30">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="rToeSlider">ระยะตามแนวเท้าจากข้อเท้าถึงปลายเท้า (r<sub>N</sub>)</label>
+            <span class="val" id="rToeVal">14.0 cm (r_N⊥ = 12.1 cm)</span>
+          </div>
+          <input type="range" id="rToeSlider" min="10.0" max="18.0" step="0.5" value="14.0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="rHeelSlider">ระยะตามแนวเท้าจากข้อเท้าถึงส้นเท้า (r<sub>A</sub>)</label>
+            <span class="val" id="rHeelVal">4.0 cm (r_A⊥ = 3.5 cm)</span>
+          </div>
+          <input type="range" id="rHeelSlider" min="3.0" max="6.0" step="0.2" value="4.0">
+        </div>
+
+        <div class="results-panel">
+          <div class="results-grid">
+            <div class="metric-card achilles">
+              <div class="metric-label">แรงดึงเส้นเอ็นร้อยหวาย (F<sub>A</sub>)</div>
+              <div class="metric-value" style="color: var(--achilles);" id="fAchillesOut">2,573 N</div>
+            </div>
+            <div class="metric-card ankle">
+              <div class="metric-label">แรงกดอัดที่ข้อเท้า (F<sub>J</sub>)</div>
+              <div class="metric-value" style="color: var(--ankle-force);" id="fJointOut">3,308 N</div>
+            </div>
+            <div class="metric-card normal">
+              <div class="metric-label">แรงปฏิกิริยาพื้นต่อเท้าข้างนี้ (N)</div>
+              <div class="metric-value" style="color: var(--normal-force);" id="fNormalOut">735 N</div>
+            </div>
+            <div class="metric-card ratio">
+              <div class="metric-label">สัดส่วนแรงข้อเท้าเทียบน้ำหนักตัว (F<sub>J</sub> / w)</div>
+              <div class="metric-value" style="color: var(--success);" id="ratioOut">4.50 เท่า</div>
+            </div>
+          </div>
+
+          <div class="equation-box">
+            <strong>สมการสมดุล (Στ<sub>ankle</sub> = 0 และ ΣF = 0):</strong>
+            <code id="eqText1">F_A = (r_N⊥ / r_A⊥) · N = (0.121 / 0.035) × 735 N = 2,573 N</code>
+            <code id="eqText2">F_J = √(F_Jx² + F_Jy²) = 3,308 N (มุม 89.2° ลงล่าง) | แรงเอ็นร้อยหวาย = 3.50 เท่าของ N</code>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-primary" onclick="recordExperiment()">+ บันทึกผลลงตาราง</button>
+          <button type="button" class="btn-danger" onclick="clearAllData()">ล้างข้อมูลทั้งหมด / เริ่มทดลองใหม่</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Data Table -->
+    <div class="card">
+      <div class="card-title">
+        <span>ตารางบันทึกผลการทดลอง (Experiment Data Log)</span>
+        <button type="button" class="btn-success" style="padding: 6px 12px; font-size: 0.85rem;" onclick="exportCSV()">ดาวน์โหลด CSV</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ครั้งที่</th>
+              <th>การยืน</th>
+              <th>มวล m (kg)</th>
+              <th>มุมยกส้นเท้า θ</th>
+              <th>ระยะ r<sub>N</sub> / r<sub>A</sub> (cm)</th>
+              <th>แรงพื้นดันเท้า N (N)</th>
+              <th>แรงเอ็นร้อยหวาย F<sub>A</sub> (N)</th>
+              <th>แรงกดข้อเท้า F<sub>J</sub> (N)</th>
+              <th>ทิศทาง F<sub>J</sub></th>
+              <th>สัดส่วน F<sub>J</sub> / w</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr id="emptyRow">
+              <td colspan="10" class="empty-state">ยังไม่มีข้อมูลการทดลอง — ปรับตัวแปรด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const G = 9.80;
+    let records = [];
+
+    // ตัวแปรสำหรับการขยับขึ้นลงอัตโนมัติ (Animation)
+    let animId = null;
+    let animDir = 1; // 1 = เขย่งขึ้น (5° -> 50°), -1 = ลดส้นเท้าลง (50° -> 5°)
+    let animAngle = 30.0;
+    let pauseFrames = 0;
+
+    // ตัวแปรสำหรับกราฟแรงกับเวลา (Force vs Time)
+    let simTime = 0.0;
+    let lastTimestamp = null;
+    let timeHistory = [];
+    const MAX_WINDOW_SEC = 16.0;
+
+    const els = {
+      stanceSlider: document.getElementById('stanceSlider'),
+      massSlider: document.getElementById('massSlider'),
+      footAngleSlider: document.getElementById('footAngleSlider'),
+      rToeSlider: document.getElementById('rToeSlider'),
+      rHeelSlider: document.getElementById('rHeelSlider'),
+      headerAngle: document.getElementById('headerAngle'),
+      stanceVal: document.getElementById('stanceVal'),
+      massVal: document.getElementById('massVal'),
+      footAngleVal: document.getElementById('footAngleVal'),
+      rToeVal: document.getElementById('rToeVal'),
+      rHeelVal: document.getElementById('rHeelVal'),
+      fAchillesOut: document.getElementById('fAchillesOut'),
+      fJointOut: document.getElementById('fJointOut'),
+      fNormalOut: document.getElementById('fNormalOut'),
+      ratioOut: document.getElementById('ratioOut'),
+      eqText1: document.getElementById('eqText1'),
+      eqText2: document.getElementById('eqText2'),
+      postureSvg: document.getElementById('postureSvg'),
+      fbdSvg: document.getElementById('fbdSvg'),
+      timeChartSvg: document.getElementById('timeChartSvg'),
+      simTimeOut: document.getElementById('simTimeOut'),
+      showJointCurve: document.getElementById('showJointCurve'),
+      tableBody: document.getElementById('tableBody'),
+      animBtn: document.getElementById('animBtn'),
+      animStatusBadge: document.getElementById('animStatusBadge'),
+      animSpeedSelect: document.getElementById('animSpeedSelect')
+    };
+
+    function getParams() {
+      const feetCount = parseInt(els.stanceSlider.value, 10); // 1 = ยืนขาเดียว, 2 = ยืนสองขา
+      const mass = parseFloat(els.massSlider.value);
+      const footAngleDeg = parseFloat(els.footAngleSlider.value);
+      const rToeCm = parseFloat(els.rToeSlider.value);
+      const rHeelCm = parseFloat(els.rHeelSlider.value);
+
+      const weight = mass * G;
+      // แรงปฏิกิริยาที่พื้นดันปลายเท้าข้างที่พิจารณา (ไม่คิดมวลของเท้าซึ่งเบามาก ~1.4% ของน้ำหนักตัว)
+      const normalForce = weight / feetCount;
+
+      const footAngleRad = footAngleDeg * Math.PI / 180;
+      const cosTheta = Math.cos(footAngleRad);
+      const sinTheta = Math.sin(footAngleRad);
+
+      // แขนโมเมนต์ตั้งฉากรอบจุดหมุนข้อเท้า (Ankle Pivot):
+      // แรงพื้น N กระทำขึ้นในแนวดิ่งที่ปลายเท้า => แขนโมเมนต์ตั้งฉาก r_N⊥ = r_N * cos(theta)
+      const rToeM = rToeCm / 100;
+      const rHeelM = rHeelCm / 100;
+      const rNPerpM = rToeM * cosTheta;
+
+      // เส้นเอ็นร้อยหวาย (Achilles tendon) ดึงขึ้นเกือบในแนวดิ่ง (เอียงไปด้านหลังเล็กน้อย ~5° จากแนวดิ่งตามกายวิภาคจริง)
+      const tendonTiltDeg = 5.0;
+      const tendonTiltRad = tendonTiltDeg * Math.PI / 180;
+      // มุมระหว่างแนวเส้นเอ็นร้อยหวายกับแนวกระดูกส้นเท้า = 90° - footAngleDeg + tendonTiltDeg
+      const alphaRad = (90 - footAngleDeg + tendonTiltDeg) * Math.PI / 180;
+      const rAPerpM = rHeelM * Math.sin(alphaRad);
+
+      // 1. สมดุลทอร์กรอบข้อเท้า (Στ_ankle = 0):
+      // F_A * r_A⊥ = N * r_N⊥  =>  F_A = N * (r_N⊥ / r_A⊥)
+      const fAchilles = normalForce * (rNPerpM / rAPerpM);
+
+      // 2. สมดุลแรงในแนวแกน x และ y ของเท้า (ΣFx = 0, ΣFy = 0):
+      const fJx = fAchilles * Math.sin(tendonTiltRad);
+      const fJyDown = normalForce + fAchilles * Math.cos(tendonTiltRad);
+      const fJoint = Math.hypot(fJx, fJyDown);
+      const fJointAngleBelowHorizDeg = Math.atan2(fJyDown, fJx) * 180 / Math.PI;
+
+      const ratioToTotalWeight = fJoint / weight;
+      const ratioAchillesToN = fAchilles / normalForce;
+
+      return {
+        feetCount, mass, weight, normalForce, footAngleDeg, footAngleRad, cosTheta, sinTheta,
+        rToeCm, rHeelCm, rToeM, rHeelM, rNPerpM, rAPerpM, tendonTiltDeg,
+        fAchilles, fJx, fJyDown, fJoint, fJointAngleBelowHorizDeg,
+        ratioToTotalWeight, ratioAchillesToN
+      };
+    }
+
+    function pushTimeSample(t, p) {
+      if (timeHistory.length > 0 && Math.abs(timeHistory[timeHistory.length - 1].t - t) < 0.015) {
+        timeHistory[timeHistory.length - 1] = {
+          t: t,
+          fAchilles: p.fAchilles,
+          fJoint: p.fJoint,
+          angle: p.footAngleDeg
+        };
+      } else {
+        timeHistory.push({
+          t: t,
+          fAchilles: p.fAchilles,
+          fJoint: p.fJoint,
+          angle: p.footAngleDeg
+        });
+      }
+      const cutoff = t - (MAX_WINDOW_SEC + 2.0);
+      while (timeHistory.length > 2 && timeHistory[0].t < cutoff) {
+        timeHistory.shift();
+      }
+      els.simTimeOut.textContent = t.toFixed(1) + ' s';
+    }
+
+    function resetTimeGraph() {
+      simTime = 0.0;
+      lastTimestamp = null;
+      timeHistory = [];
+      const p = getParams();
+      pushTimeSample(0.0, p);
+      drawTimeChart();
+    }
+
+    function updateSimulation(fromAnimation) {
+      const p = getParams();
+
+      els.headerAngle.textContent = p.footAngleDeg.toFixed(1) + '°';
+      els.stanceVal.textContent = p.feetCount === 1
+        ? 'ยืนเขย่งด้วยเท้าข้างเดียว (100% mg)'
+        : 'ยืนเขย่งด้วยเท้า 2 ข้าง (50% mg ต่อข้าง)';
+      els.massVal.textContent = p.mass.toFixed(1) + ' kg';
+      els.footAngleVal.textContent = p.footAngleDeg.toFixed(1) + '°';
+      els.rToeVal.textContent = p.rToeCm.toFixed(1) + ' cm (r_N⊥ = ' + (p.rNPerpM * 100).toFixed(1) + ' cm)';
+      els.rHeelVal.textContent = p.rHeelCm.toFixed(1) + ' cm (r_A⊥ = ' + (p.rAPerpM * 100).toFixed(1) + ' cm)';
+
+      els.fAchillesOut.textContent = p.fAchilles.toFixed(0) + ' N';
+      els.fJointOut.textContent = p.fJoint.toFixed(0) + ' N';
+      els.fNormalOut.textContent = p.normalForce.toFixed(0) + ' N';
+      els.ratioOut.textContent = p.ratioToTotalWeight.toFixed(2) + ' เท่า';
+
+      els.eqText1.textContent =
+        'F_A = (' + p.rNPerpM.toFixed(3) + ' / ' + p.rAPerpM.toFixed(3) + ') × ' + p.normalForce.toFixed(0) +
+        ' N = ' + p.fAchilles.toFixed(0) + ' N';
+
+      els.eqText2.textContent =
+        'F_J = √(' + p.fJx.toFixed(0) + '² + ' + p.fJyDown.toFixed(0) + '²) = ' + p.fJoint.toFixed(0) +
+        ' N (มุม ' + p.fJointAngleBelowHorizDeg.toFixed(1) + '° ลงล่าง) | F_A = ' + p.ratioAchillesToN.toFixed(2) + '×N';
+
+      if (!fromAnimation) {
+        if (timeHistory.length === 0) {
+          pushTimeSample(0.0, p);
+        } else {
+          simTime += 0.15;
+          pushTimeSample(simTime, p);
+        }
+      }
+
+      drawDiagrams(p);
+      drawTimeChart();
+    }
+
+    function drawTimeChart() {
+      const W = 720;
+      const H = 215;
+      const padL = 62;
+      const padR = 24;
+      const padT = 20;
+      const padB = 36;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      const showJoint = els.showJointCurve.checked;
+
+      const tEnd = Math.max(MAX_WINDOW_SEC, simTime);
+      const tStart = Math.max(0, tEnd - MAX_WINDOW_SEC);
+
+      let maxVal = 1500;
+      for (let i = 0; i < timeHistory.length; i++) {
+        const pt = timeHistory[i];
+        if (pt.t >= tStart) {
+          if (pt.fAchilles > maxVal) maxVal = pt.fAchilles;
+          if (showJoint && pt.fJoint > maxVal) maxVal = pt.fJoint;
+        }
+      }
+      const stepY = maxVal <= 3000 ? 500 : 1000;
+      const yMax = Math.ceil((maxVal * 1.12) / stepY) * stepY;
+
+      function mapX(t) {
+        return padL + ((t - tStart) / (tEnd - tStart)) * plotW;
+      }
+      function mapY(f) {
+        return padT + plotH - (f / yMax) * plotH;
+      }
+
+      let svgContent = '';
+
+      svgContent += '<rect x="' + padL + '" y="' + padT + '" width="' + plotW + '" height="' + plotH + '" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>';
+
+      const yTicks = Math.round(yMax / stepY);
+      for (let i = 0; i <= yTicks; i++) {
+        const val = i * stepY;
+        const y = mapY(val);
+        svgContent += '<line x1="' + padL + '" y1="' + y.toFixed(1) + '" x2="' + (padL + plotW) + '" y2="' + y.toFixed(1) + '" stroke="' + (i === 0 ? '#94a3b8' : '#e2e8f0') + '" stroke-width="1"' + (i > 0 ? ' stroke-dasharray="3,3"' : '') + '/>';
+        svgContent += '<text x="' + (padL - 8) + '" y="' + (y + 4).toFixed(1) + '" font-size="11" fill="#475569" text-anchor="end" font-family="monospace">' + val.toFixed(0) + '</text>';
+      }
+
+      const firstTick = Math.ceil(tStart / 2) * 2;
+      for (let tTick = firstTick; tTick <= tEnd + 0.001; tTick += 2) {
+        const x = mapX(tTick);
+        svgContent += '<line x1="' + x.toFixed(1) + '" y1="' + padT + '" x2="' + x.toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>';
+        svgContent += '<text x="' + x.toFixed(1) + '" y="' + (padT + plotH + 16) + '" font-size="11" fill="#475569" text-anchor="middle" font-family="monospace">' + tTick.toFixed(0) + 's</text>';
+      }
+
+      svgContent += '<text x="' + (padL + plotW / 2) + '" y="' + (H - 4) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle">เวลา t (วินาที)</text>';
+      svgContent += '<text x="16" y="' + (padT + plotH / 2) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle" transform="rotate(-90 16 ' + (padT + plotH / 2) + ')">ขนาดแรง F (นิวตัน, N)</text>';
+
+      const visiblePts = timeHistory.filter(function(pt) { return pt.t >= tStart; });
+
+      if (visiblePts.length >= 1) {
+        let pathAchilles = '';
+        let areaAchilles = '';
+        let pathJoint = '';
+
+        visiblePts.forEach(function(pt, idx) {
+          const x = mapX(pt.t).toFixed(1);
+          const yA = mapY(pt.fAchilles).toFixed(1);
+          const yJ = mapY(pt.fJoint).toFixed(1);
+
+          if (idx === 0) {
+            pathAchilles += 'M ' + x + ' ' + yA;
+            areaAchilles += 'M ' + x + ' ' + (padT + plotH).toFixed(1) + ' L ' + x + ' ' + yA;
+            pathJoint += 'M ' + x + ' ' + yJ;
+          } else {
+            pathAchilles += ' L ' + x + ' ' + yA;
+            areaAchilles += ' L ' + x + ' ' + yA;
+            pathJoint += ' L ' + x + ' ' + yJ;
+          }
+        });
+
+        const lastPt = visiblePts[visiblePts.length - 1];
+        areaAchilles += ' L ' + mapX(lastPt.t).toFixed(1) + ' ' + (padT + plotH).toFixed(1) + ' Z';
+
+        svgContent += '<path d="' + areaAchilles + '" fill="rgba(124, 58, 237, 0.10)"/>';
+
+        if (showJoint) {
+          svgContent += '<path d="' + pathJoint + '" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>';
+          svgContent += '<circle cx="' + mapX(lastPt.t).toFixed(1) + '" cy="' + mapY(lastPt.fJoint).toFixed(1) + '" r="4" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>';
+        }
+
+        svgContent += '<path d="' + pathAchilles + '" fill="none" stroke="#7c3aed" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>';
+
+        const curX = mapX(lastPt.t);
+        const curYA = mapY(lastPt.fAchilles);
+        svgContent += '<circle cx="' + curX.toFixed(1) + '" cy="' + curYA.toFixed(1) + '" r="5" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/>';
+
+        const labelX = curX > (padL + plotW - 130) ? (curX - 10) : (curX + 10);
+        const labelAnchor = curX > (padL + plotW - 130) ? 'end' : 'start';
+        const labelY = Math.max(padT + 14, curYA - 8);
+        svgContent += '<text x="' + labelX.toFixed(1) + '" y="' + labelY.toFixed(1) + '" font-size="11" font-weight="bold" fill="#5b21b6" text-anchor="' + labelAnchor + '">F_A = ' + lastPt.fAchilles.toFixed(0) + ' N (θ=' + lastPt.angle.toFixed(0) + '°)</text>';
+      }
+
+      svgContent += '<rect x="' + (padL + 10) + '" y="' + (padT + 8) + '" width="235" height="' + (showJoint ? 40 : 22) + '" rx="6" fill="rgba(255,255,255,0.9)" stroke="#e2e8f0"/>';
+      svgContent += '<line x1="' + (padL + 18) + '" y1="' + (padT + 19) + '" x2="' + (padL + 38) + '" y2="' + (padT + 19) + '" stroke="#7c3aed" stroke-width="2.8"/>';
+      svgContent += '<text x="' + (padL + 44) + '" y="' + (padT + 23) + '" font-size="11" font-weight="bold" fill="#5b21b6">F_A: แรงดึงเส้นเอ็นร้อยหวาย (N)</text>';
+      if (showJoint) {
+        svgContent += '<line x1="' + (padL + 18) + '" y1="' + (padT + 37) + '" x2="' + (padL + 38) + '" y2="' + (padT + 37) + '" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>';
+        svgContent += '<text x="' + (padL + 44) + '" y="' + (padT + 41) + '" font-size="11" font-weight="bold" fill="#b91c1c">F_J: แรงกดอัดที่ข้อเท้า (N)</text>';
+      }
+
+      els.timeChartSvg.innerHTML = svgContent;
+    }
+
+    function drawDiagrams(p) {
+      // =========================================================================
+      // 1. วาดกายวิภาคเท้าขณะยืนเขย่งด้วยปลายเท้า (Anatomical Foot SVG) - คงเดิม
+      // =========================================================================
+      const floorY = 290;
+      const toeX = 255; // จุดสัมผัสของปลายเท้าบนพื้นอยู่ทางขวา
+
+      // สเกล: 1 cm = 9.5 พิกเซล
+      const scale = 9.5;
+      const rToePx = p.rToeCm * scale;
+      const rHeelPx = p.rHeelCm * scale;
+
+      // พิกัดข้อเท้า (Ankle Pivot) ยกสูงขึ้นตามมุม footAngleDeg
+      const ankleX = toeX - rToePx * p.cosTheta;
+      const ankleY = floorY - rToePx * p.sinTheta;
+
+      // พิกัดส้นเท้า (Heel) ยื่นไปทางซ้ายและสูงกว่าข้อเท้าตามแนวกระดูกส้นเท้า
+      const heelX = ankleX - rHeelPx * p.cosTheta;
+      const heelY = ankleY - rHeelPx * p.sinTheta;
+
+      // จุดปลายนิ้วเท้าด้านหน้า
+      const tipToeX = toeX + 26;
+
+      // ความยาวลูกศรเวกเตอร์
+      const nLen = Math.min(72, Math.max(28, p.normalForce * 0.065));
+      const fALen = Math.min(95, Math.max(36, p.fAchilles * 0.025));
+      const fJLen = Math.min(95, Math.max(40, p.fJoint * 0.025));
+
+      // ทิศทางของเส้นเอ็นร้อยหวาย F_A (ชี้ขึ้นและเอียงไปทางซ้าย 5° จากแนวดิ่ง)
+      const tiltRad = p.tendonTiltDeg * Math.PI / 180;
+      const faUx = -Math.sin(tiltRad);
+      const faUy = -Math.cos(tiltRad);
+
+      // ทิศทางของแรงกดข้อเท้า F_J (ชี้ลงและเอียงขวาเล็กน้อย)
+      const fjRad = p.fJointAngleBelowHorizDeg * Math.PI / 180;
+      const fjUx = Math.cos(fjRad);
+      const fjUy = Math.sin(fjRad);
+
+      els.postureSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker>' +
+          '<marker id="arrRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#dc2626"/></marker>' +
+          '<marker id="arrBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#0284c7"/></marker>' +
+        '</defs>' +
+
+        // พื้น
+        '<line x1="20" y1="' + floorY + '" x2="340" y2="' + floorY + '" stroke="#64748b" stroke-width="2.5"/>' +
+        '<rect x="20" y="' + floorY + '" width="320" height="8" fill="#e2e8f0"/>' +
+
+        // ขาส่วนล่าง (กระดูกหน้าแข้ง Tibia/Fibula เหนือข้อเท้า)
+        '<rect x="' + (ankleX - 20) + '" y="30" width="40" height="' + (ankleY - 30) + '" rx="8" fill="#fed7aa" stroke="#f59e0b" stroke-width="1"/>' +
+        // กระดูกหน้าแข้งภายใน
+        '<line x1="' + ankleX + '" y1="35" x2="' + ankleX + '" y2="' + ankleY + '" stroke="#f1f5f9" stroke-width="14" stroke-linecap="round"/>' +
+
+        // โครงร่างเท้า (จากส้นเท้า -> ข้อเท้า -> ปลายเท้า -> นิ้วเท้า)
+        '<path d="M ' + (heelX - 10) + ',' + (heelY + 6) +
+              ' Q ' + (heelX - 12) + ',' + (heelY - 14) + ' ' + (ankleX - 14) + ',' + (ankleY - 12) +
+              ' L ' + (ankleX + 18) + ',' + (ankleY - 8) +
+              ' L ' + (toeX + 6) + ',' + (floorY - 12) +
+              ' Q ' + (tipToeX + 8) + ',' + (floorY - 6) + ' ' + tipToeX + ',' + (floorY - 2) +
+              ' L ' + (toeX - 8) + ',' + (floorY - 2) +
+              ' L ' + (heelX - 4) + ',' + (heelY + 12) + ' Z"' +
+              ' fill="#fed7aa" stroke="#d97706" stroke-width="1.5"/>' +
+
+        // เส้นเอ็นร้อยหวาย (Achilles Tendon) เชื่อมจากกล้ามเนื้อน่องลงมาที่ส้นเท้า
+        '<line x1="' + (heelX - 4) + '" y1="' + heelY + '" x2="' + (heelX - 14) + '" y2="45" stroke="#ddd6fe" stroke-width="7" stroke-linecap="round"/>' +
+
+        // แกนกระดูกเท้าสมมูล (จากส้นเท้าผ่านข้อเท้าไปยังปลายเท้า)
+        '<line x1="' + heelX + '" y1="' + heelY + '" x2="' + toeX + '" y2="' + (floorY - 4) + '" stroke="#64748b" stroke-width="2" stroke-dasharray="4,3"/>' +
+
+        // จุดหมุนข้อเท้า (Ankle Pivot)
+        '<circle cx="' + ankleX + '" cy="' + ankleY + '" r="6.5" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>' +
+
+        // เวกเตอร์แรงดึงเส้นเอ็นร้อยหวาย F_A
+        '<circle cx="' + heelX + '" cy="' + heelY + '" r="4" fill="#7c3aed"/>' +
+        '<line x1="' + heelX + '" y1="' + heelY + '" x2="' + (heelX + faUx * fALen) + '" y2="' + (heelY + faUy * fALen) + '" stroke="#7c3aed" stroke-width="2.8" marker-end="url(#arrPurple)"/>' +
+        '<text x="' + (heelX + faUx * fALen - 6) + '" y="' + (heelY + faUy * fALen + 4) + '" font-size="11" font-weight="bold" fill="#7c3aed" text-anchor="end">F_A</text>' +
+
+        // เวกเตอร์แรงกดข้อเท้า F_J
+        '<line x1="' + ankleX + '" y1="' + ankleY + '" x2="' + (ankleX + fjUx * fJLen) + '" y2="' + (ankleY + fjUy * fJLen) + '" stroke="#dc2626" stroke-width="2.8" marker-end="url(#arrRed)"/>' +
+        '<text x="' + (ankleX + fjUx * fJLen + 6) + '" y="' + (ankleY + fjUy * fJLen + 4) + '" font-size="11" font-weight="bold" fill="#dc2626">F_J</text>' +
+
+        // เวกเตอร์แรงปฏิกิริยาพื้น N ที่ปลายเท้า
+        '<circle cx="' + toeX + '" cy="' + (floorY - 2) + '" r="4.5" fill="#0284c7"/>' +
+        '<line x1="' + toeX + '" y1="' + floorY + '" x2="' + toeX + '" y2="' + (floorY - nLen) + '" stroke="#0284c7" stroke-width="2.8" marker-end="url(#arrBlue)"/>' +
+        '<text x="' + (toeX + 7) + '" y="' + (floorY - nLen + 2) + '" font-size="11" font-weight="bold" fill="#0284c7">N</text>';
+
+      // =========================================================================
+      // 2. วาดแผนภาพวัตถุอิสระของเท้า (Free-Body Lever Diagram SVG) - คงเดิม
+      // =========================================================================
+      const fbdPivotX = 115;
+      const fbdPivotY = 175;
+      const fbdScale = 10.5;
+
+      const fbdToeX = fbdPivotX + (p.rToeCm * fbdScale) * p.cosTheta;
+      const fbdToeY = fbdPivotY + (p.rToeCm * fbdScale) * p.sinTheta;
+
+      const fbdHeelX = fbdPivotX - (p.rHeelCm * fbdScale) * p.cosTheta;
+      const fbdHeelY = fbdPivotY - (p.rHeelCm * fbdScale) * p.sinTheta;
+
+      els.fbdSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrPurple2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker>' +
+          '<marker id="arrRed2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#dc2626"/></marker>' +
+          '<marker id="arrBlue2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#0284c7"/></marker>' +
+        '</defs>' +
+
+        // เส้นแกนอ้างอิงแนวระดับและแนวดิ่งที่จุดหมุนข้อเท้า
+        '<line x1="20" y1="' + fbdPivotY + '" x2="345" y2="' + fbdPivotY + '" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+        '<line x1="' + fbdPivotX + '" y1="25" x2="' + fbdPivotX + '" y2="335" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+
+        // คานแข็งแทนกระดูกเท้า (จากส้นเท้าผ่านข้อเท้าไปยังปลายเท้า)
+        '<line x1="' + fbdHeelX + '" y1="' + fbdHeelY + '" x2="' + fbdToeX + '" y2="' + fbdToeY + '" stroke="#475569" stroke-width="8" stroke-linecap="round"/>' +
+
+        // เส้นบอกแขนโมเมนต์ตั้งฉาก r_A⊥ และ r_N⊥
+        '<line x1="' + fbdHeelX + '" y1="305" x2="' + fbdPivotX + '" y2="305" stroke="#7c3aed" stroke-width="1.6"/>' +
+        '<line x1="' + fbdHeelX + '" y1="' + fbdHeelY + '" x2="' + fbdHeelX + '" y2="310" stroke="#cbd5e1" stroke-dasharray="3,3"/>' +
+        '<text x="' + ((fbdHeelX + fbdPivotX) / 2) + '" y="299" font-size="10" font-weight="bold" fill="#5b21b6" text-anchor="middle">r_A⊥=' + (p.rAPerpM * 100).toFixed(1) + 'cm</text>' +
+
+        '<line x1="' + fbdPivotX + '" y1="326" x2="' + fbdToeX + '" y2="326" stroke="#0284c7" stroke-width="1.6"/>' +
+        '<line x1="' + fbdToeX + '" y1="' + fbdToeY + '" x2="' + fbdToeX + '" y2="331" stroke="#cbd5e1" stroke-dasharray="3,3"/>' +
+        '<text x="' + ((fbdPivotX + fbdToeX) / 2) + '" y="320" font-size="10" font-weight="bold" fill="#0369a1" text-anchor="middle">r_N⊥=' + (p.rNPerpM * 100).toFixed(1) + 'cm</text>' +
+
+        // มุมยกส้นเท้า
+        '<text x="' + (fbdPivotX + 46) + '" y="' + (fbdPivotY + 14) + '" font-size="10" font-weight="bold" fill="#475569">θ=' + p.footAngleDeg.toFixed(0) + '°</text>' +
+
+        // จุดหมุน Pivot (ข้อเท้า)
+        '<circle cx="' + fbdPivotX + '" cy="' + fbdPivotY + '" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>' +
+        '<text x="' + (fbdPivotX + 10) + '" y="' + (fbdPivotY - 6) + '" font-size="10" font-weight="bold" fill="#b91c1c">Ankle Pivot</text>' +
+
+        // เวกเตอร์แรงเส้นเอ็นร้อยหวาย F_A
+        '<circle cx="' + fbdHeelX + '" cy="' + fbdHeelY + '" r="4.5" fill="#7c3aed" stroke="#ffffff" stroke-width="1.2"/>' +
+        '<line x1="' + fbdHeelX + '" y1="' + fbdHeelY + '" x2="' + (fbdHeelX + faUx * fALen) + '" y2="' + (fbdHeelY + faUy * fALen) + '" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrPurple2)"/>' +
+        '<text x="' + (fbdHeelX + faUx * fALen) + '" y="' + (fbdHeelY + faUy * fALen - 6) + '" font-size="10" font-weight="bold" fill="#7c3aed" text-anchor="middle">F_A (' + p.fAchilles.toFixed(0) + 'N)</text>' +
+
+        // เวกเตอร์แรงกดข้อเท้า F_J
+        '<line x1="' + fbdPivotX + '" y1="' + fbdPivotY + '" x2="' + (fbdPivotX + fjUx * fJLen) + '" y2="' + (fbdPivotY + fjUy * fJLen) + '" stroke="#dc2626" stroke-width="3" marker-end="url(#arrRed2)"/>' +
+        '<text x="' + (fbdPivotX + fjUx * fJLen + 6) + '" y="' + (fbdPivotY + fjUy * fJLen) + '" font-size="10" font-weight="bold" fill="#dc2626">F_J (' + p.fJoint.toFixed(0) + 'N)</text>' +
+
+        // เวกเตอร์แรงปฏิกิริยาพื้น N
+        '<circle cx="' + fbdToeX + '" cy="' + fbdToeY + '" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="1.2"/>' +
+        '<line x1="' + fbdToeX + '" y1="' + fbdToeY + '" x2="' + fbdToeX + '" y2="' + (fbdToeY - nLen) + '" stroke="#0284c7" stroke-width="3" marker-end="url(#arrBlue2)"/>' +
+        '<text x="' + (fbdToeX + 6) + '" y="' + (fbdToeY - nLen + 2) + '" font-size="10" font-weight="bold" fill="#0284c7">N (' + p.normalForce.toFixed(0) + 'N)</text>';
+    }
+
+    function updateAnimBadge() {
+      if (animId === null) {
+        els.animStatusBadge.textContent = 'สถานะ: หยุดนิ่ง';
+        els.animStatusBadge.className = 'anim-status';
+        return;
+      }
+      if (animDir === 1) {
+        els.animStatusBadge.textContent = '↑ กำลังเขย่งขึ้น (5° → 50°)';
+        els.animStatusBadge.className = 'anim-status up';
+      } else {
+        els.animStatusBadge.textContent = '↓ กำลังลดส้นเท้าลง (50° → 5°)';
+        els.animStatusBadge.className = 'anim-status down';
+      }
+    }
+
+    function toggleAnimation() {
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        lastTimestamp = null;
+        els.animBtn.textContent = '▶ เริ่มขยับขึ้น-ลง';
+        els.animBtn.className = 'btn-primary';
+        updateAnimBadge();
+        return;
+      }
+
+      animAngle = parseFloat(els.footAngleSlider.value);
+      if (animAngle <= 5) {
+        animDir = 1;
+      } else if (animAngle >= 50) {
+        animDir = -1;
+      }
+      pauseFrames = 0;
+      lastTimestamp = null;
+
+      els.animBtn.textContent = '⏸ หยุดการเคลื่อนไหว';
+      els.animBtn.className = 'btn-danger';
+      updateAnimBadge();
+
+      function step(timestamp) {
+        if (lastTimestamp === null) {
+          lastTimestamp = timestamp;
+        }
+        const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+        lastTimestamp = timestamp;
+        simTime += dt;
+
+        if (pauseFrames > 0) {
+          pauseFrames--;
+          const pPause = getParams();
+          pushTimeSample(simTime, pPause);
+          drawTimeChart();
+          animId = requestAnimationFrame(step);
+          return;
+        }
+
+        const speed = parseFloat(els.animSpeedSelect.value) || 0.50;
+        animAngle += animDir * speed;
+
+        if (animAngle >= 50) {
+          animAngle = 50;
+          animDir = -1;
+          pauseFrames = 18;
+          updateAnimBadge();
+        } else if (animAngle <= 5) {
+          animAngle = 5;
+          animDir = 1;
+          pauseFrames = 18;
+          updateAnimBadge();
+        }
+
+        els.footAngleSlider.value = animAngle.toFixed(1);
+        updateSimulation(true);
+        pushTimeSample(simTime, getParams());
+        drawTimeChart();
+        animId = requestAnimationFrame(step);
+      }
+      animId = requestAnimationFrame(step);
+    }
+
+    function stopAnimIfRunning() {
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        lastTimestamp = null;
+        els.animBtn.textContent = '▶ เริ่มขยับขึ้น-ลง';
+        els.animBtn.className = 'btn-primary';
+        updateAnimBadge();
+      }
+    }
+
+    function recordExperiment() {
+      const p = getParams();
+      records.push(p);
+      renderTable();
+    }
+
+    function renderTable() {
+      if (records.length === 0) {
+        els.tableBody.innerHTML =
+          '<tr id="emptyRow">' +
+            '<td colspan="10" class="empty-state">ยังไม่มีข้อมูลการทดลอง — ปรับตัวแปรด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>' +
+          '</tr>';
+        return;
+      }
+
+      els.tableBody.innerHTML = records.map(function(r, idx) {
+        const stanceLabel = r.feetCount === 1 ? '1 ข้าง' : '2 ข้าง';
+        return '<tr>' +
+          '<td><strong>' + (idx + 1) + '</strong></td>' +
+          '<td>' + stanceLabel + '</td>' +
+          '<td>' + r.mass.toFixed(1) + '</td>' +
+          '<td>' + r.footAngleDeg.toFixed(1) + '°</td>' +
+          '<td>' + r.rToeCm.toFixed(1) + ' / ' + r.rHeelCm.toFixed(1) + '</td>' +
+          '<td><span class="badge-normal">' + r.normalForce.toFixed(0) + '</span></td>' +
+          '<td><span class="badge-achilles">' + r.fAchilles.toFixed(0) + '</span></td>' +
+          '<td><span class="badge-ankle">' + r.fJoint.toFixed(0) + '</span></td>' +
+          '<td>' + r.fJointAngleBelowHorizDeg.toFixed(1) + '°</td>' +
+          '<td><strong>' + r.ratioToTotalWeight.toFixed(2) + 'x</strong></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function resetToStandard() {
+      stopAnimIfRunning();
+      els.stanceSlider.value = 1;
+      els.massSlider.value = 75.0;
+      els.footAngleSlider.value = 30;
+      animAngle = 30;
+      els.rToeSlider.value = 14.0;
+      els.rHeelSlider.value = 4.0;
+      updateSimulation(false);
+    }
+
+    function setTwoFeetTiptoe() {
+      stopAnimIfRunning();
+      els.stanceSlider.value = 2;
+      updateSimulation(false);
+    }
+
+    function setLowHeelRaise() {
+      stopAnimIfRunning();
+      els.footAngleSlider.value = 15;
+      animAngle = 15;
+      updateSimulation(false);
+    }
+
+    function setHighBalletPointe() {
+      stopAnimIfRunning();
+      els.footAngleSlider.value = 50;
+      animAngle = 50;
+      updateSimulation(false);
+    }
+
+    function clearAllData() {
+      records = [];
+      renderTable();
+      resetTimeGraph();
+      resetToStandard();
+    }
+
+    function exportCSV() {
+      if (records.length === 0) {
+        alert('กรุณาบันทึกผลการทดลองอย่างน้อย 1 รายการก่อนดาวน์โหลด CSV');
+        return;
+      }
+
+      const headers = ['Trial', 'Feet_Count', 'Mass_kg', 'Foot_Angle_deg', 'r_Toe_cm', 'r_Heel_cm', 'Normal_Force_N', 'Achilles_Force_N', 'Ankle_Joint_Force_N', 'Joint_Force_Angle_deg', 'Ratio_FJ_to_BodyWeight'];
+      const rows = records.map(function(r, i) {
+        return [
+          i + 1,
+          r.feetCount,
+          r.mass.toFixed(1),
+          r.footAngleDeg.toFixed(1),
+          r.rToeCm.toFixed(1),
+          r.rHeelCm.toFixed(1),
+          r.normalForce.toFixed(1),
+          r.fAchilles.toFixed(1),
+          r.fJoint.toFixed(1),
+          r.fJointAngleBelowHorizDeg.toFixed(1),
+          r.ratioToTotalWeight.toFixed(2)
+        ].join(',');
+      });
+
+      const csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'virtual_lab_standing_on_tiptoe.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    ['stanceSlider', 'massSlider', 'footAngleSlider', 'rToeSlider', 'rHeelSlider'].forEach(function(id) {
+      const el = document.getElementById(id);
+      el.addEventListener('input', function() {
+        if (id === 'footAngleSlider') {
+          stopAnimIfRunning();
+          animAngle = parseFloat(el.value);
+        }
+        updateSimulation(false);
+      });
+      el.addEventListener('change', function() { updateSimulation(false); });
+    });
+
+    pushTimeSample(0.0, getParams());
+    updateSimulation(true);
+  </script>
+</body>
+</html>

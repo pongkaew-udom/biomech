@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab: แรงและทอร์กขณะยกน้ำหนักท่า Deadlift (Conventional Deadlift )</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --erector: #7c3aed;
+      --l5s1: #dc2626;
+      --load-wt: #d97706;
+      --torso-wt: #0284c7;
+      --success: #059669;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 20px 28px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 0.92rem;
+      opacity: 0.9;
+    }
+
+    .grid-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-top {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .diagrams-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .diagrams-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .diagram-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .diagram-box h3 {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    svg.sim-svg {
+      width: 100%;
+      height: 360px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      display: block;
+    }
+
+    /* Live Force vs Time Graph Box */
+    .chart-box {
+      margin-top: 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 12px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chart-header h3 {
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .chart-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: #475569;
+      flex-wrap: wrap;
+    }
+
+    svg.chart-svg {
+      width: 100%;
+      height: 245px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      display: block;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .control-group {
+      margin-bottom: 12px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .control-header span.val {
+      color: var(--primary);
+      font-family: monospace;
+      font-size: 0.98rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .presets-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preset-btn {
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      background: #e2e8f0;
+      color: #334155;
+      border-radius: 6px;
+    }
+    .preset-btn:hover {
+      background: #cbd5e1;
+    }
+
+    .anim-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+      border: 1px solid #cbd5e1;
+    }
+
+    .anim-status {
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .anim-status.up {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .anim-status.down {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .info-note {
+      background: #eff6ff;
+      border-left: 3px solid var(--primary);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #1e40af;
+      margin-bottom: 12px;
+    }
+
+    .results-panel {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .metric-card {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .metric-card.erector { border-left-color: var(--erector); }
+    .metric-card.l5s1 { border-left-color: var(--l5s1); }
+    .metric-card.angle { border-left-color: var(--torso-wt); }
+    .metric-card.ratio { border-left-color: var(--success); }
+
+    .metric-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .metric-value {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .equation-box {
+      background: #ffffff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px dashed #94a3b8;
+      font-size: 0.84rem;
+      color: #334155;
+    }
+
+    .equation-box code {
+      display: block;
+      font-family: 'Consolas', monospace;
+      color: #0f172a;
+      margin-top: 4px;
+      background: #f1f5f9;
+      padding: 6px 8px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button {
+      padding: 9px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    .btn-danger:hover { background: #fecaca; }
+
+    .btn-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .btn-success:hover { background: #a7f3d0; }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .badge-erector {
+      background: #ede9fe;
+      color: #5b21b6;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-l5s1 {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-angle {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Virtual Lab: แรงและทอร์กขณะยกน้ำหนักท่า Deadlift (Conventional Deadlift )</h1>
+      <p> กล้ามเนื้อหลังส่วนล่าง Erector Spinae และหมอนรองกระดูกสันหลังข้อ L5-S1) —ท่ายก Deadlift หลังตรงดึงบาร์ชิดลำตัว (ถูกหลักฟิสิกส์) </p>
+    </header>
+
+    <div class="grid-top">
+      <!-- Left: Visual Simulations + Live Force vs Time Graph -->
+      <div class="card">
+        <div class="card-title">
+          <span>แบบจำลองท่ายก Deadlift และแผนภาพวัตถุอิสระ (Free-Body Diagram)</span>
+          <span style="font-size: 0.82rem; font-weight: 500; color: var(--muted);">g = 9.80 m/s² | มุมลำตัวเทียบแนวราบ θ<sub>back</sub> = <span id="headerAngle">45.0°</span></span>
+        </div>
+
+        <div class="diagrams-wrapper">
+          <!-- Anatomical Deadlift SVG -->
+          <div class="diagram-box">
+            <h3>1. ท่ายก Deadlift (ดึงบาร์เบลชิดหน้าแข้ง/ต้นขา)</h3>
+            <svg id="postureSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+
+          <!-- Free-Body Lever Diagram SVG -->
+          <div class="diagram-box">
+            <h3>2. แผนภาพวัตถุอิสระของลำตัวส่วนบน (FBD รอบจุดหมุน L5-S1)</h3>
+            <svg id="fbdSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+        </div>
+
+        <!-- Live Force vs Time Graph -->
+        <div class="chart-box">
+          <div class="chart-header">
+            <h3>3. กราฟความสัมพันธ์ระหว่างแรงกับเวลา (Force vs. Time)</h3>
+            <div class="chart-meta">
+              <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" id="showJointCurve" checked onchange="drawTimeChart()">
+                <span style="color:var(--l5s1); font-weight:600;">แรงอัดข้อ L5-S1 (F<sub>V</sub>)</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" id="showAngleCurve" checked onchange="drawTimeChart()">
+                <span style="color:#0284c7; font-weight:600;">มุมลำตัว (θ<sub>back</sub>)</span>
+              </label>
+              <span>t = <strong id="simTimeOut" style="font-family:monospace; color:#0f172a;">0.0 s</strong></span>
+              <button type="button" class="btn-secondary" style="padding: 3px 9px; font-size: 0.78rem;" onclick="resetTimeGraph()">ล้างกราฟเวลา</button>
+            </div>
+          </div>
+          <svg id="timeChartSvg" class="chart-svg" viewBox="0 0 720 245"></svg>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><span class="dot" style="background: var(--erector);"></span> <strong>F<sub>M</sub></strong>: แรงดึงกล้ามเนื้อหลังส่วนล่าง (Erector Spinae)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--l5s1);"></span> <strong>F<sub>V</sub></strong>: แรงกดอัดที่หมอนรองกระดูกสันหลัง (L5-S1 Pivot)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--torso-wt);"></span> <strong>w<sub>ub</sub></strong>: น้ำหนักลำตัวส่วนบน ศีรษะ และแขน (m<sub>ub</sub>g)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--load-wt);"></span> <strong>w<sub>bar</sub></strong>: น้ำหนักบาร์เบลที่มือดึงขึ้นในแนวดิ่ง (m<sub>bar</sub>g)</div>
+        </div>
+      </div>
+
+      <!-- Right: Controls & Real-time Math -->
+      <div class="card">
+        <div class="card-title">
+          <span>แผงควบคุมตัวแปร (Parameters)</span>
+          <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="resetToStandard()">คืนค่ามาตรฐาน (จังหวะดึงกลางทาง 45°)</button>
+        </div>
+
+        <div class="info-note">
+          <strong>หลักฟิสิกส์ของท่า Deadlift ที่ถูกต้อง:</strong> เลือกจุดหมุน (Pivot) ที่<strong>ข้อต่อกระดูกสันหลังส่วนเอว L5-S1</strong> ในท่า Deadlift ที่ถูกหลักฟิสิกส์ ผู้ยกจะย่อสะโพกและงอเข่าเพื่อให้<strong>หลังตรง</strong> (ทำมุม <strong>θ<sub>back</sub></strong> กับแนวราบ) และดึง<strong>บาร์เบลแนบชิดลำตัว</strong>ในแนวดิ่ง (แขนห้อยดิ่งตรงใต้หัวไหล่เสมอ) ทำให้แขนโมเมนต์ของบาร์เบลมีค่าเพียง <strong>x<sub>bar</sub> = r<sub>sh</sub> cos θ<sub>back</sub></strong> (สั้นกว่าการยื่นบาร์ออกไปข้างหน้า) ช่วยลดแรงดึงกล้ามเนื้อหลัง <strong>F<sub>M</sub></strong> และแรงอัดหมอนรองกระดูก <strong>F<sub>V</sub></strong> ได้อย่างมหาศาล
+        </div>
+
+        <div class="anim-bar">
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: #334155;">จำลองการยกขึ้น-วางลงอัตโนมัติ (30° ↔ 90°):</span>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span class="anim-status" id="animStatusBadge">สถานะ: หยุดนิ่ง</span>
+              <label style="font-size:0.78rem; color:#475569;">ความเร็ว:
+                <select id="animSpeedSelect" style="padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; font-size:0.78rem;">
+                  <option value="0.50">ช้า (0.5x)</option>
+                  <option value="1.00" selected>ปกติ (1.0x)</option>
+                  <option value="2.00">เร็ว (2.0x)</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary" id="animBtn" style="padding: 7px 14px; font-size: 0.85rem;" onclick="toggleAnimation()">▶ เริ่มยกขึ้น-ลงอัตโนมัติ</button>
+        </div>
+
+        <div class="presets-row">
+          <button type="button" class="preset-btn" onclick="setStartSetup()">1. ท่าเริ่มต้นเซ็ตตัว (30°)</button>
+          <button type="button" class="preset-btn" onclick="resetToStandard()">2. ดึงผ่านเข่า (45°)</button>
+          <button type="button" class="preset-btn" onclick="setTopLockout()">3. ยืนล็อกเอาท์ตัวตรง (90°)</button>
+          <button type="button" class="preset-btn" style="background:#fee2e2; color:#991b1b;" onclick="setBadFormComparison()">4. เปรียบเทียบ: ก้มหลังยื่นบาร์ห่างตัว!</button>
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="backAngleSlider">มุมลำตัว/หลังตรงเทียบแนวราบ (θ<sub>back</sub>)</label>
+            <span class="val" id="backAngleVal">45.0° (จังหวะดึงผ่านเข่า)</span>
+          </div>
+          <input type="range" id="backAngleSlider" min="25" max="90" step="0.1" value="45">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="barMassSlider">มวลบาร์เบลและแผ่นน้ำหนักรวม (m<sub>bar</sub>)</label>
+            <span class="val" id="barMassVal">60.0 kg</span>
+          </div>
+          <input type="range" id="barMassSlider" min="0" max="180" step="5" value="60.0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="ubMassSlider">มวลลำตัวส่วนบน ศีรษะ และแขน (m<sub>ub</sub>)</label>
+            <span class="val" id="ubMassVal">45.0 kg</span>
+          </div>
+          <input type="range" id="ubMassSlider" min="30" max="65" step="1" value="45.0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="barReachSlider">ระยะยื่นบาร์เบลไปข้างหน้าจากแนวดิ่งหัวไหล่ (Δx<sub>forward</sub>)</label>
+            <span class="val" id="barReachVal">0.00 m (0.0 cm — ชิดลำตัว)</span>
+          </div>
+          <input type="range" id="barReachSlider" min="0.00" max="0.30" step="0.01" value="0.00">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="rMuscleSlider">แขนโมเมนต์ของกล้ามเนื้อหลัง Erector Spinae (r<sub>M</sub>)</label>
+            <span class="val" id="rMuscleVal">0.055 m (5.5 cm)</span>
+          </div>
+          <input type="range" id="rMuscleSlider" min="0.045" max="0.070" step="0.005" value="0.055">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="muscleAngleSlider">มุมดึงของกล้ามเนื้อหลังเทียบแนวกระดูกสันหลัง (α)</label>
+            <span class="val" id="muscleAngleVal">12.0°</span>
+          </div>
+          <input type="range" id="muscleAngleSlider" min="10" max="16" step="0.5" value="12.0">
+        </div>
+
+        <div class="results-panel">
+          <div class="results-grid">
+            <div class="metric-card erector">
+              <div class="metric-label">แรงดึงกล้ามเนื้อหลังส่วนล่าง (F<sub>M</sub>)</div>
+              <div class="metric-value" style="color: var(--erector);" id="fMuscleOut">19,426 N</div>
+            </div>
+            <div class="metric-card l5s1">
+              <div class="metric-label">แรงกดอัดหมอนรองกระดูก L5-S1 (F<sub>V</sub>)</div>
+              <div class="metric-value" style="color: var(--l5s1);" id="fJointOut">20,031 N</div>
+            </div>
+            <div class="metric-card angle">
+              <div class="metric-label">ระยะห่างบาร์เบลในแนวราบจาก L5-S1 (x<sub>bar</sub>)</div>
+              <div class="metric-value" style="color: var(--torso-wt);" id="xBarOut">0.39 m (38.9 cm)</div>
+            </div>
+            <div class="metric-card ratio">
+              <div class="metric-label">แรงอัดที่หมอนรองกระดูก / น้ำหนักบาร์เบล</div>
+              <div class="metric-value" style="color: var(--success);" id="ratioOut">34.1 เท่า</div>
+            </div>
+          </div>
+
+          <div class="equation-box">
+            <strong>สมการสมดุลรอบข้อ L5-S1 (Στ<sub>L5-S1</sub> = 0 และ ΣF = 0):</strong>
+            <code id="eqText1">F_M = (x_cg·w_ub + x_bar·w_bar) / (r_M·sin α) = 19,426 N</code>
+            <code id="eqText2">F_Vx = 16,292 N, F_Vy = 11,611 N =&gt; F_V = 20,031 N (มุม 35.5°)</code>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-primary" onclick="recordExperiment()">+ บันทึกผลลงตาราง</button>
+          <button type="button" class="btn-danger" onclick="clearAllData()">ล้างข้อมูลทั้งหมด / เริ่มทดลองใหม่</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Data Table -->
+    <div class="card">
+      <div class="card-title">
+        <span>ตารางบันทึกผลการทดลอง (Experiment Data Log)</span>
+        <button type="button" class="btn-success" style="padding: 6px 12px; font-size: 0.85rem;" onclick="exportCSV()">ดาวน์โหลด CSV</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ครั้งที่</th>
+              <th>มุมลำตัว θ<sub>back</sub></th>
+              <th>มวลบาร์เบล m<sub>bar</sub> (kg)</th>
+              <th>ระยะยื่นบาร์ Δx (cm)</th>
+              <th>แขนโมเมนต์บาร์ x<sub>bar</sub> (cm)</th>
+              <th>แรงกล้ามเนื้อหลัง F<sub>M</sub> (N)</th>
+              <th>แรงอัดข้อ L5-S1 F<sub>V</sub> (N)</th>
+              <th>แรงอัดในหน่วย kgf</th>
+              <th>สัดส่วน F<sub>V</sub> / w<sub>bar</sub></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr id="emptyRow">
+              <td colspan="9" class="empty-state">ยังไม่มีข้อมูลการทดลอง — ปรับมุมลำตัวหรือน้ำหนักบาร์เบลด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const G = 9.80;
+    let records = [];
+
+    // ตัวแปรสำหรับการขยับยกขึ้น-วางลงอัตโนมัติ (Smooth Sinusoidal Motion 30° <-> 90°)
+    let animId = null;
+    let animDir = 1; // 1 = ยกขึ้น (30° -> 90°), -1 = วางลง (90° -> 30°)
+    let animAngle = 45.0;
+    let animPhase = Math.acos(1 - (2 * (45.0 - 30.0) / 60.0));
+
+    // ตัวแปรสำหรับกราฟแรงกับเวลา (Force vs Time)
+    let simTime = 0.0;
+    let lastTimestamp = null;
+    let timeHistory = [];
+    const MAX_WINDOW_SEC = 16.0;
+
+    const els = {
+      backAngleSlider: document.getElementById('backAngleSlider'),
+      barMassSlider: document.getElementById('barMassSlider'),
+      ubMassSlider: document.getElementById('ubMassSlider'),
+      barReachSlider: document.getElementById('barReachSlider'),
+      rMuscleSlider: document.getElementById('rMuscleSlider'),
+      muscleAngleSlider: document.getElementById('muscleAngleSlider'),
+      headerAngle: document.getElementById('headerAngle'),
+      backAngleVal: document.getElementById('backAngleVal'),
+      barMassVal: document.getElementById('barMassVal'),
+      ubMassVal: document.getElementById('ubMassVal'),
+      barReachVal: document.getElementById('barReachVal'),
+      rMuscleVal: document.getElementById('rMuscleVal'),
+      muscleAngleVal: document.getElementById('muscleAngleVal'),
+      fMuscleOut: document.getElementById('fMuscleOut'),
+      fJointOut: document.getElementById('fJointOut'),
+      xBarOut: document.getElementById('xBarOut'),
+      ratioOut: document.getElementById('ratioOut'),
+      eqText1: document.getElementById('eqText1'),
+      eqText2: document.getElementById('eqText2'),
+      postureSvg: document.getElementById('postureSvg'),
+      fbdSvg: document.getElementById('fbdSvg'),
+      timeChartSvg: document.getElementById('timeChartSvg'),
+      simTimeOut: document.getElementById('simTimeOut'),
+      showJointCurve: document.getElementById('showJointCurve'),
+      showAngleCurve: document.getElementById('showAngleCurve'),
+      tableBody: document.getElementById('tableBody'),
+      animBtn: document.getElementById('animBtn'),
+      animStatusBadge: document.getElementById('animStatusBadge'),
+      animSpeedSelect: document.getElementById('animSpeedSelect')
+    };
+
+    function getParams() {
+      const backAngleDeg = parseFloat(els.backAngleSlider.value);
+      const barMass = parseFloat(els.barMassSlider.value);
+      const ubMass = parseFloat(els.ubMassSlider.value);
+      const deltaXForward = parseFloat(els.barReachSlider.value);
+      const rMuscle = parseFloat(els.rMuscleSlider.value);
+      const alphaDeg = parseFloat(els.muscleAngleSlider.value);
+
+      const rShoulder = 0.55;
+      const rCg = 0.30;
+
+      const weightUb = ubMass * G;
+      const weightBar = barMass * G;
+
+      const backAngleRad = backAngleDeg * Math.PI / 180;
+      const alphaRad = alphaDeg * Math.PI / 180;
+
+      const xCg = rCg * Math.cos(backAngleRad);
+      const xBar = rShoulder * Math.cos(backAngleRad) + deltaXForward;
+
+      const torqueLoad = xCg * weightUb + xBar * weightBar;
+      const rMusclePerp = rMuscle * Math.sin(alphaRad);
+      const fMuscle = torqueLoad / rMusclePerp;
+
+      const fmPullAngleDeg = backAngleDeg - alphaDeg;
+      const fmPullRad = fmPullAngleDeg * Math.PI / 180;
+
+      const fMx = -fMuscle * Math.cos(fmPullRad);
+      const fMy = -fMuscle * Math.sin(fmPullRad);
+
+      const fVx = -fMx;
+      const fVy = (weightUb + weightBar) - fMy;
+      const fJoint = Math.hypot(fVx, fVy);
+      const fJointAngleDeg = Math.atan2(fVy, fVx) * 180 / Math.PI;
+
+      const ratioToBar = weightBar > 0 ? (fJoint / weightBar) : 0;
+
+      return {
+        backAngleDeg, backAngleRad, barMass, ubMass, weightUb, weightBar,
+        rShoulder, rCg, xCg, xBar, deltaXForward, rMuscle, alphaDeg,
+        fmPullAngleDeg, fMuscle, fMx, fMy, fVx, fVy, fJoint, fJointAngleDeg, ratioToBar
+      };
+    }
+
+    function pushTimeSample(t, p) {
+      if (timeHistory.length > 0 && Math.abs(timeHistory[timeHistory.length - 1].t - t) < 0.015) {
+        timeHistory[timeHistory.length - 1] = {
+          t: t,
+          fMuscle: p.fMuscle,
+          fJoint: p.fJoint,
+          angle: p.backAngleDeg
+        };
+      } else {
+        timeHistory.push({
+          t: t,
+          fMuscle: p.fMuscle,
+          fJoint: p.fJoint,
+          angle: p.backAngleDeg
+        });
+      }
+      const cutoff = t - (MAX_WINDOW_SEC + 2.0);
+      while (timeHistory.length > 2 && timeHistory[0].t < cutoff) {
+        timeHistory.shift();
+      }
+      els.simTimeOut.textContent = t.toFixed(1) + ' s';
+    }
+
+    function resetTimeGraph() {
+      simTime = 0.0;
+      lastTimestamp = null;
+      timeHistory = [];
+      const p = getParams();
+      pushTimeSample(0.0, p);
+      drawTimeChart();
+    }
+
+    function updateSimulation(fromAnimation) {
+      const p = getParams();
+
+      let phaseDesc = '';
+      if (p.backAngleDeg <= 35) phaseDesc = ' (จังหวะเริ่มดึงจากพื้น — ทอร์กสูงสุด)';
+      else if (p.backAngleDeg >= 88) phaseDesc = ' (ยืนล็อกเอาท์ตัวตรง)';
+      else phaseDesc = ' (จังหวะดึงผ่านเข่า)';
+
+      els.headerAngle.textContent = p.backAngleDeg.toFixed(1) + '°';
+      els.backAngleVal.textContent = p.backAngleDeg.toFixed(1) + '°' + phaseDesc;
+      els.barMassVal.textContent = p.barMass.toFixed(1) + ' kg (' + p.weightBar.toFixed(0) + ' N)';
+      els.ubMassVal.textContent = p.ubMass.toFixed(1) + ' kg (' + p.weightUb.toFixed(0) + ' N)';
+      els.barReachVal.textContent = p.deltaXForward.toFixed(2) + ' m (' + (p.deltaXForward * 100).toFixed(1) + ' cm' +
+        (p.deltaXForward === 0 ? ' — ชิดลำตัว)' : ' — ยื่นห่างตัว!)');
+      els.rMuscleVal.textContent = p.rMuscle.toFixed(3) + ' m (' + (p.rMuscle * 100).toFixed(1) + ' cm)';
+      els.muscleAngleVal.textContent = p.alphaDeg.toFixed(1) + '°';
+
+      els.fMuscleOut.textContent = p.fMuscle.toFixed(0) + ' N';
+      els.fJointOut.textContent = p.fJoint.toFixed(0) + ' N';
+      els.xBarOut.textContent = p.xBar.toFixed(2) + ' m (' + (p.xBar * 100).toFixed(1) + ' cm)';
+      els.ratioOut.textContent = p.weightBar > 0 ? (p.ratioToBar.toFixed(1) + ' เท่า') : '— (ตัวเปล่า)';
+
+      els.eqText1.textContent =
+        'F_M = (' + p.xCg.toFixed(2) + '×' + p.weightUb.toFixed(0) + ' + ' + p.xBar.toFixed(2) + '×' + p.weightBar.toFixed(0) +
+        ') / (' + p.rMuscle.toFixed(3) + '×sin ' + p.alphaDeg.toFixed(0) + '°) = ' + p.fMuscle.toFixed(0) + ' N';
+
+      els.eqText2.textContent =
+        'F_Vx = ' + p.fVx.toFixed(0) + ' N, F_Vy = ' + p.fVy.toFixed(0) +
+        ' N => F_V = ' + p.fJoint.toFixed(0) + ' N (มุม ' + p.fJointAngleDeg.toFixed(1) + '°)';
+
+      if (!fromAnimation) {
+        if (timeHistory.length === 0) {
+          pushTimeSample(0.0, p);
+        } else {
+          simTime += 0.15;
+          pushTimeSample(simTime, p);
+        }
+      }
+
+      drawDiagrams(p);
+      drawTimeChart();
+    }
+
+    function drawTimeChart() {
+      const W = 720;
+      const H = 245;
+      const padL = 68;
+      const padR = 54;
+      const padT = 22;
+      const padB = 38;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      const showJoint = els.showJointCurve.checked;
+      const showAngle = els.showAngleCurve.checked;
+
+      const tEnd = Math.max(MAX_WINDOW_SEC, simTime);
+      const tStart = Math.max(0, tEnd - MAX_WINDOW_SEC);
+
+      // หาค่าสูงสุดของแกนตั้งซ้าย (Force N)
+      let maxVal = 25000;
+      for (let i = 0; i < timeHistory.length; i++) {
+        const pt = timeHistory[i];
+        if (pt.t >= tStart) {
+          if (pt.fMuscle > maxVal) maxVal = pt.fMuscle;
+          if (showJoint && pt.fJoint > maxVal) maxVal = pt.fJoint;
+        }
+      }
+      const stepY = maxVal <= 28000 ? 5000 : (maxVal <= 55000 ? 10000 : 20000);
+      const yMax = Math.ceil((maxVal * 1.12) / stepY) * stepY;
+      const angleMin = 20;
+      const angleMax = 90;
+
+      function mapX(t) {
+        return padL + ((t - tStart) / (tEnd - tStart)) * plotW;
+      }
+      function mapY(f) {
+        return padT + plotH - (f / yMax) * plotH;
+      }
+      function mapAngleY(deg) {
+        const clamped = Math.max(angleMin, Math.min(angleMax, deg));
+        return padT + plotH - ((clamped - angleMin) / (angleMax - angleMin)) * plotH;
+      }
+
+      let svgContent = '';
+
+      // พื้นหลังพื้นที่กราฟ
+      svgContent += '<rect x="' + padL + '" y="' + padT + '" width="' + plotW + '" height="' + plotH + '" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>';
+
+      // เส้นกริดแนวนอนและตัวเลขแกน Y ซ้าย (แรง N)
+      const yTicks = Math.round(yMax / stepY);
+      for (let i = 0; i <= yTicks; i++) {
+        const val = i * stepY;
+        const y = mapY(val);
+        svgContent += '<line x1="' + padL + '" y1="' + y.toFixed(1) + '" x2="' + (padL + plotW) + '" y2="' + y.toFixed(1) + '" stroke="' + (i === 0 ? '#94a3b8' : '#e2e8f0') + '" stroke-width="1"' + (i > 0 ? ' stroke-dasharray="3,3"' : '') + '/>';
+        svgContent += '<text x="' + (padL - 8) + '" y="' + (y + 4).toFixed(1) + '" font-size="11" fill="#475569" text-anchor="end" font-family="monospace">' + val.toLocaleString('en-US') + '</text>';
+      }
+
+      // ตัวเลขแกน Y ขวา (มุมลำตัว θ_back: 20° - 90°)
+      if (showAngle) {
+        [30, 45, 60, 75, 90].forEach(function(deg) {
+          const yA = mapAngleY(deg);
+          svgContent += '<text x="' + (padL + plotW + 6) + '" y="' + (yA + 4).toFixed(1) + '" font-size="10" fill="#0284c7" text-anchor="start" font-family="monospace">' + deg + '°</text>';
+        });
+        svgContent += '<text x="' + (W - 12) + '" y="' + (padT + plotH / 2) + '" font-size="11" font-weight="bold" fill="#0284c7" text-anchor="middle" transform="rotate(90 ' + (W - 12) + ' ' + (padT + plotH / 2) + ')">มุมลำตัว θ_back (°)</text>';
+      }
+
+      // เส้นกริดแนวตั้งและตัวเลขแกน X (เวลา s)
+      const firstTick = Math.ceil(tStart / 2) * 2;
+      for (let tTick = firstTick; tTick <= tEnd + 0.001; tTick += 2) {
+        const x = mapX(tTick);
+        svgContent += '<line x1="' + x.toFixed(1) + '" y1="' + padT + '" x2="' + x.toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>';
+        svgContent += '<text x="' + x.toFixed(1) + '" y="' + (padT + plotH + 16) + '" font-size="11" fill="#475569" text-anchor="middle" font-family="monospace">' + tTick.toFixed(0) + 's</text>';
+      }
+
+      // ชื่อแกน X และแกน Y ซ้าย
+      svgContent += '<text x="' + (padL + plotW / 2) + '" y="' + (H - 5) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle">เวลา t (วินาที)</text>';
+      svgContent += '<text x="15" y="' + (padT + plotH / 2) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle" transform="rotate(-90 15 ' + (padT + plotH / 2) + ')">ขนาดแรง F (นิวตัน, N)</text>';
+
+      const visiblePts = timeHistory.filter(function(pt) { return pt.t >= tStart; });
+
+      if (visiblePts.length >= 1) {
+        let pathMuscle = '';
+        let areaMuscle = '';
+        let pathJoint = '';
+        let pathAngle = '';
+
+        visiblePts.forEach(function(pt, idx) {
+          const x = mapX(pt.t).toFixed(1);
+          const yM = mapY(pt.fMuscle).toFixed(1);
+          const yJ = mapY(pt.fJoint).toFixed(1);
+          const yA = mapAngleY(pt.angle).toFixed(1);
+
+          if (idx === 0) {
+            pathMuscle += 'M ' + x + ' ' + yM;
+            areaMuscle += 'M ' + x + ' ' + (padT + plotH).toFixed(1) + ' L ' + x + ' ' + yM;
+            pathJoint += 'M ' + x + ' ' + yJ;
+            pathAngle += 'M ' + x + ' ' + yA;
+          } else {
+            pathMuscle += ' L ' + x + ' ' + yM;
+            areaMuscle += ' L ' + x + ' ' + yM;
+            pathJoint += ' L ' + x + ' ' + yJ;
+            pathAngle += ' L ' + x + ' ' + yA;
+          }
+        });
+
+        const lastPt = visiblePts[visiblePts.length - 1];
+        areaMuscle += ' L ' + mapX(lastPt.t).toFixed(1) + ' ' + (padT + plotH).toFixed(1) + ' Z';
+
+        // แรเงาใต้กราฟ F_M
+        svgContent += '<path d="' + areaMuscle + '" fill="rgba(124, 58, 237, 0.08)"/>';
+
+        // เส้นมุมลำตัว θ_back (สีฟ้าเส้นประ)
+        if (showAngle) {
+          svgContent += '<path d="' + pathAngle + '" fill="none" stroke="#0284c7" stroke-width="1.9" stroke-dasharray="4,3"/>';
+          svgContent += '<circle cx="' + mapX(lastPt.t).toFixed(1) + '" cy="' + mapAngleY(lastPt.angle).toFixed(1) + '" r="3.5" fill="#0284c7" stroke="#ffffff" stroke-width="1.2"/>';
+        }
+
+        // เส้นแรงกดอัดหมอนรองกระดูก L5-S1 F_V (สีแดงเส้นประ)
+        if (showJoint) {
+          svgContent += '<path d="' + pathJoint + '" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-dasharray="5,3"/>';
+          svgContent += '<circle cx="' + mapX(lastPt.t).toFixed(1) + '" cy="' + mapY(lastPt.fJoint).toFixed(1) + '" r="4" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>';
+        }
+
+        // เส้นแรงดึงกล้ามเนื้อหลัง F_M (สีม่วงหลัก)
+        svgContent += '<path d="' + pathMuscle + '" fill="none" stroke="#7c3aed" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>';
+        const curX = mapX(lastPt.t);
+        const curYM = mapY(lastPt.fMuscle);
+        svgContent += '<circle cx="' + curX.toFixed(1) + '" cy="' + curYM.toFixed(1) + '" r="5" fill="#7c3aed" stroke="#ffffff" stroke-width="2"/>';
+
+        // ป้ายกำกับค่าปัจจุบันตรงปลายกราฟ
+        const labelX = curX > (padL + plotW - 195) ? (curX - 10) : (curX + 10);
+        const labelAnchor = curX > (padL + plotW - 195) ? 'end' : 'start';
+        const labelY = Math.max(padT + 14, curYM - 8);
+        svgContent += '<text x="' + labelX.toFixed(1) + '" y="' + labelY.toFixed(1) + '" font-size="11" font-weight="bold" fill="#5b21b6" text-anchor="' + labelAnchor + '">F_M = ' + lastPt.fMuscle.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' N (θ=' + lastPt.angle.toFixed(0) + '°)</text>';
+      }
+
+      // กล่องคำอธิบายเส้นกราฟ
+      const legendLines = 1 + (showJoint ? 1 : 0) + (showAngle ? 1 : 0);
+      const legendH = 10 + legendLines * 17;
+      svgContent += '<rect x="' + (padL + 10) + '" y="' + (padT + 8) + '" width="302" height="' + legendH + '" rx="6" fill="rgba(255,255,255,0.94)" stroke="#e2e8f0"/>';
+      let lineY = padT + 20;
+      svgContent += '<line x1="' + (padL + 18) + '" y1="' + lineY + '" x2="' + (padL + 38) + '" y2="' + lineY + '" stroke="#7c3aed" stroke-width="2.8"/>';
+      svgContent += '<text x="' + (padL + 44) + '" y="' + (lineY + 4) + '" font-size="11" font-weight="bold" fill="#5b21b6">F_M: แรงดึงกล้ามเนื้อหลัง Erector Spinae (N)</text>';
+      if (showJoint) {
+        lineY += 17;
+        svgContent += '<line x1="' + (padL + 18) + '" y1="' + lineY + '" x2="' + (padL + 38) + '" y2="' + lineY + '" stroke="#dc2626" stroke-width="2.2" stroke-dasharray="5,3"/>';
+        svgContent += '<text x="' + (padL + 44) + '" y="' + (lineY + 4) + '" font-size="11" font-weight="bold" fill="#b91c1c">F_V: แรงกดอัดที่หมอนรองกระดูก L5-S1 (N)</text>';
+      }
+      if (showAngle) {
+        lineY += 17;
+        svgContent += '<line x1="' + (padL + 18) + '" y1="' + lineY + '" x2="' + (padL + 38) + '" y2="' + lineY + '" stroke="#0284c7" stroke-width="1.9" stroke-dasharray="4,3"/>';
+        svgContent += '<text x="' + (padL + 44) + '" y="' + (lineY + 4) + '" font-size="11" font-weight="bold" fill="#0369a1">θ_back: มุมลำตัวเทียบแนวราบ (30° ↔ 90°)</text>';
+      }
+
+      els.timeChartSvg.innerHTML = svgContent;
+    }
+
+    function drawDiagrams(p) {
+      // =========================================================================
+      // 1. วาดท่ายก Deadlift ด้านข้าง (Sagittal Plane Deadlift SVG)
+      // =========================================================================
+      const floorY = 330;
+      const ankleX = 185;
+      const ankleY = floorY - 12;
+
+      const liftRatio = (p.backAngleDeg - 25) / (90 - 25);
+      const kneeX = ankleX + 34 * (1 - liftRatio * 0.85);
+      const kneeY = ankleY - 76 - 10 * liftRatio;
+
+      const hipX = kneeX - 68 * (1 - liftRatio * 0.92);
+      const hipY = kneeY - 46 - 42 * liftRatio;
+
+      const spineLen = 112;
+      const shX = hipX + spineLen * Math.cos(p.backAngleRad);
+      const shY = hipY - spineLen * Math.sin(p.backAngleRad);
+
+      const headX = shX + 24 * Math.cos(p.backAngleRad);
+      const headY = shY - 24 * Math.sin(p.backAngleRad);
+
+      const armLen = 96;
+      const reachPx = p.deltaXForward * 140;
+      const handX = shX + reachPx;
+      const handY = shY + Math.sqrt(Math.max(100, armLen * armLen - reachPx * reachPx));
+
+      const cgX = hipX + (spineLen * 0.54) * Math.cos(p.backAngleRad);
+      const cgY = hipY - (spineLen * 0.54) * Math.sin(p.backAngleRad);
+
+      const mAttachX = hipX + (spineLen * 0.42) * Math.cos(p.backAngleRad);
+      const mAttachY = hipY - (spineLen * 0.42) * Math.sin(p.backAngleRad);
+
+      const fmRad = p.fmPullAngleDeg * Math.PI / 180;
+      const fmUx = -Math.cos(fmRad);
+      const fmUy = Math.sin(fmRad);
+
+      const fvRad = p.fJointAngleDeg * Math.PI / 180;
+      const fvUx = Math.cos(fvRad);
+      const fvUy = -Math.sin(fvRad);
+
+      const wUbLen = 34;
+      const wBarLen = Math.min(62, Math.max(22, p.weightBar * 0.045));
+      const fMLen = Math.min(82, Math.max(20, p.fMuscle * 0.0042));
+      const fVLen = Math.min(82, Math.max(22, p.fJoint * 0.0042));
+
+      els.postureSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrPurple" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#7c3aed"/></marker>' +
+          '<marker id="arrRed" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#dc2626"/></marker>' +
+          '<marker id="arrAmber" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#d97706"/></marker>' +
+          '<marker id="arrBlue" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#0284c7"/></marker>' +
+        '</defs>' +
+
+        '<line x1="20" y1="' + floorY + '" x2="340" y2="' + floorY + '" stroke="#64748b" stroke-width="2.5"/>' +
+        '<rect x="20" y="' + floorY + '" width="320" height="8" fill="#e2e8f0"/>' +
+
+        '<line x1="' + handX + '" y1="45" x2="' + handX + '" y2="' + floorY + '" stroke="#fed7aa" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+
+        '<line x1="' + (ankleX - 8) + '" y1="' + (floorY - 5) + '" x2="' + (ankleX + 26) + '" y2="' + (floorY - 5) + '" stroke="#64748b" stroke-width="10" stroke-linecap="round"/>' +
+        '<line x1="' + ankleX + '" y1="' + ankleY + '" x2="' + kneeX + '" y2="' + kneeY + '" stroke="#94a3b8" stroke-width="16" stroke-linecap="round"/>' +
+        '<line x1="' + kneeX + '" y1="' + kneeY + '" x2="' + hipX + '" y2="' + hipY + '" stroke="#94a3b8" stroke-width="19" stroke-linecap="round"/>' +
+
+        '<line x1="' + hipX + '" y1="' + hipY + '" x2="' + shX + '" y2="' + shY + '" stroke="#fde68a" stroke-width="24" stroke-linecap="round"/>' +
+        '<line x1="' + hipX + '" y1="' + hipY + '" x2="' + shX + '" y2="' + shY + '" stroke="#64748b" stroke-width="2" stroke-dasharray="4,3"/>' +
+
+        '<circle cx="' + headX + '" cy="' + headY + '" r="15" fill="#fed7aa" stroke="#d97706" stroke-width="1.5"/>' +
+
+        '<line x1="' + shX + '" y1="' + shY + '" x2="' + handX + '" y2="' + handY + '" stroke="#fed7aa" stroke-width="12" stroke-linecap="round"/>' +
+
+        '<circle cx="' + handX + '" cy="' + handY + '" r="24" fill="rgba(71, 85, 105, 0.22)" stroke="#334155" stroke-width="2.5"/>' +
+        '<circle cx="' + handX + '" cy="' + handY + '" r="5" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>' +
+
+        (p.barMass > 0
+          ? '<line x1="' + handX + '" y1="' + handY + '" x2="' + handX + '" y2="' + (handY + wBarLen) + '" stroke="#d97706" stroke-width="2.6" marker-end="url(#arrAmber)"/>' +
+            '<text x="' + (handX + 6) + '" y="' + (handY + wBarLen) + '" font-size="10" font-weight="bold" fill="#b45309">w_bar</text>'
+          : '') +
+
+        '<circle cx="' + cgX + '" cy="' + cgY + '" r="3.8" fill="#0284c7"/>' +
+        '<line x1="' + cgX + '" y1="' + cgY + '" x2="' + cgX + '" y2="' + (cgY + wUbLen) + '" stroke="#0284c7" stroke-width="2.4" marker-end="url(#arrBlue)"/>' +
+        '<text x="' + (cgX + 5) + '" y="' + (cgY + wUbLen) + '" font-size="10" font-weight="bold" fill="#0369a1">w_ub</text>' +
+
+        '<circle cx="' + hipX + '" cy="' + hipY + '" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>' +
+
+        '<line x1="' + hipX + '" y1="' + hipY + '" x2="' + (hipX + fvUx * fVLen) + '" y2="' + (hipY + fvUy * fVLen) + '" stroke="#dc2626" stroke-width="2.6" marker-end="url(#arrRed)"/>' +
+        '<text x="' + (hipX + fvUx * fVLen + 4) + '" y="' + (hipY + fvUy * fVLen - 4) + '" font-size="10" font-weight="bold" fill="#dc2626">F_V</text>' +
+
+        (p.fMuscle > 1
+          ? '<circle cx="' + mAttachX + '" cy="' + mAttachY + '" r="3.8" fill="#7c3aed"/>' +
+            '<line x1="' + mAttachX + '" y1="' + mAttachY + '" x2="' + (mAttachX + fmUx * fMLen) + '" y2="' + (mAttachY + fmUy * fMLen) + '" stroke="#7c3aed" stroke-width="2.6" marker-end="url(#arrPurple)"/>' +
+            '<text x="' + (mAttachX + fmUx * fMLen - 4) + '" y="' + (mAttachY + fmUy * fMLen + 11) + '" font-size="10" font-weight="bold" fill="#7c3aed" text-anchor="end">F_M</text>'
+          : '');
+
+      // =========================================================================
+      // 2. วาดแผนภาพวัตถุอิสระของลำตัวส่วนบน (Free-Body Lever Diagram SVG)
+      // =========================================================================
+      const fbdPivotX = 115;
+      const fbdPivotY = 235;
+      const beamLen = 175;
+
+      const fbdShX = fbdPivotX + beamLen * Math.cos(p.backAngleRad);
+      const fbdShY = fbdPivotY - beamLen * Math.sin(p.backAngleRad);
+
+      const fbdCgX = fbdPivotX + (beamLen * 0.54) * Math.cos(p.backAngleRad);
+      const fbdCgY = fbdPivotY - (beamLen * 0.54) * Math.sin(p.backAngleRad);
+
+      const fbdAttachX = fbdPivotX + (beamLen * 0.42) * Math.cos(p.backAngleRad);
+      const fbdAttachY = fbdPivotY - (beamLen * 0.42) * Math.sin(p.backAngleRad);
+
+      const fbdBarX = fbdShX + p.deltaXForward * 160;
+      const fbdBarY = fbdShY + 35;
+
+      const fbdFmLen = Math.min(88, Math.max(20, p.fMuscle * 0.0046));
+      const fbdFvLen = Math.min(88, Math.max(22, p.fJoint * 0.0046));
+
+      els.fbdSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrPurple2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker>' +
+          '<marker id="arrRed2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#dc2626"/></marker>' +
+          '<marker id="arrAmber2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#d97706"/></marker>' +
+          '<marker id="arrBlue2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#0284c7"/></marker>' +
+        '</defs>' +
+
+        '<line x1="20" y1="' + fbdPivotY + '" x2="345" y2="' + fbdPivotY + '" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+        '<line x1="' + fbdPivotX + '" y1="25" x2="' + fbdPivotX + '" y2="335" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+
+        '<line x1="' + fbdPivotX + '" y1="' + fbdPivotY + '" x2="' + fbdShX + '" y2="' + fbdShY + '" stroke="#475569" stroke-width="8" stroke-linecap="round"/>' +
+        '<line x1="' + fbdShX + '" y1="' + fbdShY + '" x2="' + fbdBarX + '" y2="' + fbdBarY + '" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>' +
+
+        '<text x="' + (fbdPivotX + 34) + '" y="' + (fbdPivotY - 8) + '" font-size="10" font-weight="bold" fill="#475569">θ_back=' + p.backAngleDeg.toFixed(0) + '°</text>' +
+
+        '<circle cx="' + fbdPivotX + '" cy="' + fbdPivotY + '" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>' +
+        '<text x="' + (fbdPivotX - 8) + '" y="' + (fbdPivotY + 18) + '" font-size="10" font-weight="bold" fill="#b91c1c" text-anchor="end">L5-S1 Pivot</text>' +
+
+        '<line x1="' + fbdPivotX + '" y1="' + fbdPivotY + '" x2="' + (fbdPivotX + fvUx * fbdFvLen) + '" y2="' + (fbdPivotY + fvUy * fbdFvLen) + '" stroke="#dc2626" stroke-width="3" marker-end="url(#arrRed2)"/>' +
+        '<text x="' + (fbdPivotX + fvUx * fbdFvLen + 6) + '" y="' + (fbdPivotY + fvUy * fbdFvLen - 4) + '" font-size="10" font-weight="bold" fill="#dc2626">F_V (' + p.fJoint.toFixed(0) + 'N)</text>' +
+
+        '<circle cx="' + fbdCgX + '" cy="' + fbdCgY + '" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="1.2"/>' +
+        '<line x1="' + fbdCgX + '" y1="' + fbdCgY + '" x2="' + fbdCgX + '" y2="' + (fbdCgY + wUbLen + 8) + '" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arrBlue2)"/>' +
+        '<text x="' + (fbdCgX + 6) + '" y="' + (fbdCgY + wUbLen + 8) + '" font-size="10" font-weight="bold" fill="#0369a1">w_ub (' + p.weightUb.toFixed(0) + 'N)</text>' +
+
+        (p.barMass > 0
+          ? '<circle cx="' + fbdBarX + '" cy="' + fbdBarY + '" r="4.5" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/>' +
+            '<line x1="' + fbdBarX + '" y1="' + fbdBarY + '" x2="' + fbdBarX + '" y2="' + (fbdBarY + wBarLen + 8) + '" stroke="#d97706" stroke-width="2.6" marker-end="url(#arrAmber2)"/>' +
+            '<text x="' + (fbdBarX + 6) + '" y="' + (fbdBarY + wBarLen + 8) + '" font-size="10" font-weight="bold" fill="#b45309">w_bar (' + p.weightBar.toFixed(0) + 'N)</text>'
+          : '') +
+
+        (p.fMuscle > 1
+          ? '<circle cx="' + fbdAttachX + '" cy="' + fbdAttachY + '" r="4.5" fill="#7c3aed" stroke="#ffffff" stroke-width="1.2"/>' +
+            '<line x1="' + fbdAttachX + '" y1="' + fbdAttachY + '" x2="' + (fbdAttachX + fmUx * fbdFmLen) + '" y2="' + (fbdAttachY + fmUy * fbdFmLen) + '" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrPurple2)"/>' +
+            '<text x="' + (fbdAttachX + fmUx * fbdFmLen - 5) + '" y="' + (fbdAttachY + fmUy * fbdFmLen + 12) + '" font-size="10" font-weight="bold" fill="#7c3aed" text-anchor="end">F_M (' + p.fMuscle.toFixed(0) + 'N)</text>'
+          : '');
+    }
+
+    function updateAnimBadge() {
+      if (animId === null) {
+        els.animStatusBadge.textContent = 'สถานะ: หยุดนิ่ง';
+        els.animStatusBadge.className = 'anim-status';
+        return;
+      }
+      if (animDir === 1) {
+        els.animStatusBadge.textContent = '↑ กำลังยกขึ้น (30° → 90°)';
+        els.animStatusBadge.className = 'anim-status up';
+      } else {
+        els.animStatusBadge.textContent = '↓ กำลังวางลง (90° → 30°)';
+        els.animStatusBadge.className = 'anim-status down';
+      }
+    }
+
+    function syncPhaseFromAngle(deg, preferUp) {
+      const clamped = Math.max(30, Math.min(90, deg));
+      const basePhase = Math.acos(1 - (2 * (clamped - 30.0) / 60.0)); // [0, PI]
+      if (preferUp) {
+        animPhase = basePhase;
+        animDir = 1;
+      } else {
+        animPhase = 2 * Math.PI - basePhase;
+        animDir = -1;
+      }
+    }
+
+    function toggleAnimation() {
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        lastTimestamp = null;
+        els.animBtn.textContent = '▶ เริ่มยกขึ้น-ลงอัตโนมัติ';
+        els.animBtn.className = 'btn-primary';
+        updateAnimBadge();
+        return;
+      }
+
+      animAngle = parseFloat(els.backAngleSlider.value);
+      const preferUp = animAngle < 89.5;
+      syncPhaseFromAngle(animAngle, preferUp);
+      lastTimestamp = null;
+
+      els.animBtn.textContent = '⏸ หยุดการเคลื่อนไหว';
+      els.animBtn.className = 'btn-danger';
+      updateAnimBadge();
+
+      function step(timestamp) {
+        if (lastTimestamp === null) {
+          lastTimestamp = timestamp;
+        }
+        const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+        lastTimestamp = timestamp;
+        simTime += dt;
+
+        // การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (Smooth Sinusoidal Motion) คาบ 5 วินาทีที่ความเร็ว 1.0x
+        const speed = parseFloat(els.animSpeedSelect.value) || 1.00;
+        const omega = (2 * Math.PI / 5.0) * speed;
+        animPhase = (animPhase + omega * dt) % (2 * Math.PI);
+
+        // θ_back(t) = 30 + 30 * (1 - cos(φ)) อยู่ในช่วง [30°, 90°] อย่างนุ่มนวลและต่อเนื่อง
+        animAngle = 30.0 + 30.0 * (1 - Math.cos(animPhase));
+        const newDir = Math.sin(animPhase) >= 0 ? 1 : -1;
+        if (newDir !== animDir) {
+          animDir = newDir;
+          updateAnimBadge();
+        }
+
+        els.backAngleSlider.value = animAngle.toFixed(1);
+        updateSimulation(true);
+        pushTimeSample(simTime, getParams());
+        drawTimeChart();
+        animId = requestAnimationFrame(step);
+      }
+      animId = requestAnimationFrame(step);
+    }
+
+    function stopAnimIfRunning() {
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        lastTimestamp = null;
+        els.animBtn.textContent = '▶ เริ่มยกขึ้น-ลงอัตโนมัติ';
+        els.animBtn.className = 'btn-primary';
+        updateAnimBadge();
+      }
+    }
+
+    function recordExperiment() {
+      const p = getParams();
+      records.push(p);
+      renderTable();
+    }
+
+    function renderTable() {
+      if (records.length === 0) {
+        els.tableBody.innerHTML =
+          '<tr id="emptyRow">' +
+            '<td colspan="9" class="empty-state">ยังไม่มีข้อมูลการทดลอง — ปรับมุมลำตัวหรือน้ำหนักบาร์เบลด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>' +
+          '</tr>';
+        return;
+      }
+
+      els.tableBody.innerHTML = records.map(function(r, idx) {
+        const ratioStr = r.weightBar > 0 ? (r.ratioToBar.toFixed(1) + 'x') : '—';
+        return '<tr>' +
+          '<td><strong>' + (idx + 1) + '</strong></td>' +
+          '<td>' + r.backAngleDeg.toFixed(1) + '°</td>' +
+          '<td>' + r.barMass.toFixed(1) + '</td>' +
+          '<td>' + (r.deltaXForward * 100).toFixed(1) + '</td>' +
+          '<td>' + (r.xBar * 100).toFixed(1) + '</td>' +
+          '<td><span class="badge-erector">' + r.fMuscle.toFixed(0) + '</span></td>' +
+          '<td><span class="badge-l5s1">' + r.fJoint.toFixed(0) + '</span></td>' +
+          '<td><span class="badge-angle">' + (r.fJoint / G).toFixed(0) + ' kgf</span></td>' +
+          '<td><strong>' + ratioStr + '</strong></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function resetToStandard() {
+      stopAnimIfRunning();
+      els.backAngleSlider.value = 45;
+      animAngle = 45;
+      els.barMassSlider.value = 60.0;
+      els.ubMassSlider.value = 45.0;
+      els.barReachSlider.value = 0.00;
+      els.rMuscleSlider.value = 0.055;
+      els.muscleAngleSlider.value = 12.0;
+      updateSimulation(false);
+    }
+
+    function setStartSetup() {
+      stopAnimIfRunning();
+      els.backAngleSlider.value = 30;
+      animAngle = 30;
+      els.barReachSlider.value = 0.00;
+      updateSimulation(false);
+    }
+
+    function setTopLockout() {
+      stopAnimIfRunning();
+      els.backAngleSlider.value = 90;
+      animAngle = 90;
+      els.barReachSlider.value = 0.00;
+      updateSimulation(false);
+    }
+
+    function setBadFormComparison() {
+      stopAnimIfRunning();
+      els.backAngleSlider.value = 25;
+      animAngle = 25;
+      els.barReachSlider.value = 0.25;
+      updateSimulation(false);
+    }
+
+    function clearAllData() {
+      records = [];
+      renderTable();
+      resetTimeGraph();
+      resetToStandard();
+    }
+
+    function exportCSV() {
+      if (records.length === 0) {
+        alert('กรุณาบันทึกผลการทดลองอย่างน้อย 1 รายการก่อนดาวน์โหลด CSV');
+        return;
+      }
+
+      const headers = ['Trial', 'Back_Angle_deg', 'Barbell_Mass_kg', 'Forward_Reach_cm', 'x_Bar_cm', 'F_Erector_Spinae_N', 'F_L5S1_Compression_N', 'F_L5S1_kgf', 'Ratio_FV_to_Bar'];
+      const rows = records.map(function(r, i) {
+        return [
+          i + 1,
+          r.backAngleDeg.toFixed(1),
+          r.barMass.toFixed(1),
+          (r.deltaXForward * 100).toFixed(1),
+          (r.xBar * 100).toFixed(1),
+          r.fMuscle.toFixed(1),
+          r.fJoint.toFixed(1),
+          (r.fJoint / G).toFixed(1),
+          r.weightBar > 0 ? r.ratioToBar.toFixed(1) : '0'
+        ].join(',');
+      });
+
+      const csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'virtual_lab_deadlift_physics.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    ['backAngleSlider', 'barMassSlider', 'ubMassSlider', 'barReachSlider', 'rMuscleSlider', 'muscleAngleSlider'].forEach(function(id) {
+      const el = document.getElementById(id);
+      el.addEventListener('input', function() {
+        if (id === 'backAngleSlider') {
+          stopAnimIfRunning();
+          animAngle = parseFloat(el.value);
+        }
+        updateSimulation(false);
+      });
+      el.addEventListener('change', function() { updateSimulation(false); });
+    });
+
+    pushTimeSample(0.0, getParams());
+    updateSimulation(true);
+  </script>
+</body>
+</html>

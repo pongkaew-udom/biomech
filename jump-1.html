@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab: แรงและแรงกระแทกจากการกระโดด (ลงพื้นแบบตัวตรง vs งอเข่ารับแรง)</title>
+  <meta name="description" content="ห้องปฏิบัติการฟิสิกส์เสมือนจริง (Biomechanics Virtual Lab) ศึกษาการกระโดดขึ้นในแนวดิ่งแบบต่อเนื่องและแรงปฏิกิริยาจากพื้นเมื่อลงพื้นแบบขาเหยียดตรงเปรียบเทียบกับแบบงอเข่าผ่อนแรง" />
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --normal-force: #059669;
+      --stiff-color: #dc2626;
+      --bend-color: #2563eb;
+      --body-wt: #d97706;
+      --net-force: #7c3aed;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 20px 28px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+
+    header h1 {
+      font-size: 1.48rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 0.92rem;
+      opacity: 0.92;
+    }
+
+    .grid-top {
+      display: grid;
+      grid-template-columns: 1.48fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-top {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+
+    .card-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .diagrams-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .diagrams-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .diagram-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .diagram-box h3 {
+      font-size: 0.93rem;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    svg.sim-svg {
+      width: 100%;
+      height: 360px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      display: block;
+    }
+
+    .chart-box {
+      margin-top: 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 12px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chart-header h3 {
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .chart-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: #475569;
+      flex-wrap: wrap;
+    }
+
+    svg.chart-svg {
+      width: 100%;
+      height: 235px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      display: block;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+      font-size: 0.84rem;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .presets-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .presets-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .preset-card-btn {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+
+    .preset-card-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .preset-card-btn span.sub {
+      font-size: 0.74rem;
+      font-weight: 500;
+      opacity: 0.88;
+    }
+
+    .preset-card-btn.active-stiff {
+      border-color: var(--stiff-color);
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .preset-card-btn.active-bend {
+      border-color: var(--bend-color);
+      background: #eff6ff;
+      color: #1e40af;
+    }
+
+    .control-group {
+      margin-bottom: 12px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      gap: 8px;
+    }
+
+    .control-header span.val {
+      color: var(--primary);
+      font-family: monospace;
+      font-size: 0.95rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .anim-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+      border: 1px solid #cbd5e1;
+    }
+
+    .anim-status {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .anim-status.push { background: #dbeafe; color: #1e40af; }
+    .anim-status.air { background: #fef3c7; color: #92400e; }
+    .anim-status.land { background: #fee2e2; color: #991b1b; }
+    .anim-status.recover { background: #dcfce7; color: #166534; }
+
+    .info-note {
+      background: #eff6ff;
+      border-left: 3px solid var(--primary);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #1e40af;
+      margin-bottom: 12px;
+    }
+
+    .results-panel {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .metric-card {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .metric-card.normal { border-left-color: var(--normal-force); }
+    .metric-card.peak { border-left-color: var(--stiff-color); }
+    .metric-card.impulse { border-left-color: var(--net-force); }
+    .metric-card.ratio { border-left-color: var(--body-wt); }
+
+    .metric-label {
+      font-size: 0.77rem;
+      color: var(--muted);
+    }
+
+    .metric-value {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .equation-box {
+      background: #ffffff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px dashed #94a3b8;
+      font-size: 0.83rem;
+      color: #334155;
+    }
+
+    .equation-box code {
+      display: block;
+      font-family: 'Consolas', monospace;
+      color: #0f172a;
+      margin-top: 4px;
+      background: #f1f5f9;
+      padding: 6px 8px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button {
+      padding: 9px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary { background: #e2e8f0; color: #1e293b; }
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    .btn-danger { background: #fee2e2; color: #b91c1c; }
+    .btn-danger:hover { background: #fecaca; }
+
+    .btn-success { background: #d1fae5; color: #065f46; }
+    .btn-success:hover { background: #a7f3d0; }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .badge-stiff {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-bend {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-force {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Virtual Lab: แรงและการกระโดดลงพื้น (ขาเหยียดตรง vs งอเข่ารับแรง)</h1>
+      <p>เปรียบเทียบแรงปฏิกิริยาตั้งฉากจากพื้น (N) และแรงสุทธิ (ΣF) ขณะกระโดดต่อเนื่องแล้วลงพื้นแบบตัวตรงเลย กับแบบงอเข่าผ่อนแรงก่อนยืนตรง</p>
+    </header>
+
+    <div class="grid-top">
+      <!-- Left: Visual Simulations + Live Time Graph -->
+      <div class="card">
+        <div class="card-title">
+          <span>แบบจำลองท่ากระโดดและแผนภาพวัตถุอิสระ (Free-Body Diagram)</span>
+          <span style="font-size: 0.82rem; font-weight: 500; color: var(--muted);">g = 9.80 m/s² | ระยะกระโดด h = <span id="headerJumpH">0.35 m</span></span>
+        </div>
+
+        <div class="diagrams-wrapper">
+          <div class="diagram-box">
+            <h3>1. ท่าทางและตำแหน่งจุดศูนย์ถ่วง (CG)</h3>
+            <svg id="postureSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+
+          <div class="diagram-box">
+            <h3>2. แผนภาพวัตถุอิสระ (Free-Body Diagram)</h3>
+            <svg id="fbdSvg" class="sim-svg" viewBox="0 0 360 360"></svg>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <h3>3. กราฟความสัมพันธ์ระหว่างแรงกับเวลา (Force vs. Time)</h3>
+            <div class="chart-meta">
+              <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" id="showCompareCurve" checked onchange="drawTimeChart()">
+                <span style="color:#64748b; font-weight:600;">เปรียบเทียบเส้นอีกแบบ (เส้นประ)</span>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" id="showWeightLine" checked onchange="drawTimeChart()">
+                <span style="color:var(--body-wt); font-weight:600;">แสดงเส้นน้ำหนัก mg</span>
+              </label>
+              <span>t = <strong id="simTimeOut" style="font-family:monospace; color:#0f172a;">0.00 s</strong></span>
+            </div>
+          </div>
+          <svg id="timeChartSvg" class="chart-svg" viewBox="0 0 720 235"></svg>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><span class="dot" style="background: var(--normal-force);"></span> <strong>N</strong>: แรงปฏิกิริยาตั้งฉากที่พื้นดันเท้าขึ้น (N = mg + ma<sub>y</sub>)</div>
+          <div class="legend-item"><span class="dot" style="background: var(--body-wt);"></span> <strong>W = mg</strong>: น้ำหนักของร่างกายในแนวดิ่ง</div>
+          <div class="legend-item"><span class="dot" style="background: var(--net-force);"></span> <strong>ΣF<sub>y</sub> = N − mg</strong>: แรงลัพธ์ในแนวดิ่งที่ทำให้จุด CG มีความเร่ง a<sub>y</sub></div>
+        </div>
+      </div>
+
+      <!-- Right: Controls & Real-time Math -->
+      <div class="card">
+        <div class="card-title">
+          <span>แผงควบคุมการทดลอง (Parameters)</span>
+          <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="resetDefaults()">คืนค่าเริ่มต้น</button>
+        </div>
+
+        <div class="info-note">
+          <strong>หลักฟิสิกส์ของการลงพื้น (Impulse-Momentum &amp; Work-Energy):</strong> ขณะเท้าแตะพื้นด้วยความเร็ว <strong>v<sub>land</sub> = √(2gh)</strong> การเปลี่ยนโมเมนตัม <strong>Δp = m·v<sub>land</sub></strong> มีค่าเท่ากันทั้งสองแบบ แต่ <strong>การงอเข่ารับแรง</strong> ช่วยเพิ่มระยะยุบตัว <strong>d<sub>land</sub></strong> และยืดเวลาปะทะ <strong>Δt<sub>land</sub></strong> ให้ยาวขึ้น ตามสมการ <strong>F<sub>avg</sub>·Δt = Δp</strong> และ <strong>(N<sub>avg</sub> − mg)·d<sub>land</sub> = mgh</strong> ทำให้แรงกระแทกสูงสุดลดลงหลายเท่า!
+        </div>
+
+        <div style="font-size: 0.86rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">เลือกรูปแบบการทดลอง (4 กรณีศึกษา):</div>
+        <div class="presets-grid">
+          <button type="button" class="preset-card-btn active-stiff" id="preset_stiff_low" onclick="applyPreset('stiff_low')">
+            <span>1. กระโดดต่ำ 35 cm (ลงตัวตรง)</span>
+            <span class="sub">d<sub>land</sub> = 4 cm → แรงกระแทกสูง</span>
+          </button>
+          <button type="button" class="preset-card-btn" id="preset_bend_low" onclick="applyPreset('bend_low')">
+            <span>2. กระโดดต่ำ 35 cm (งอเข่ารับแรง)</span>
+            <span class="sub">d<sub>land</sub> = 30 cm → ผ่อนแรงกระแทก</span>
+          </button>
+          <button type="button" class="preset-card-btn" id="preset_stiff_med" onclick="applyPreset('stiff_med')">
+            <span>3. กระโดดสูง 60 cm (ลงตัวตรง)</span>
+            <span class="sub">d<sub>land</sub> = 4 cm → แรงกระแทกสูงมาก</span>
+          </button>
+          <button type="button" class="preset-card-btn" id="preset_bend_med" onclick="applyPreset('bend_med')">
+            <span>4. กระโดดสูง 60 cm (งอเข่ารับแรง)</span>
+            <span class="sub">d<sub>land</sub> = 34 cm → ผ่อนแรงกระแทก</span>
+          </button>
+        </div>
+
+        <div class="anim-bar">
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size: 0.84rem; font-weight: 700; color: #334155;">จำลองการกระโดดแบบต่อเนื่อง (ย่อ → ดีดตัว → ลอย → ลงพื้น → ยืนตรง):</span>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span class="anim-status" id="animStatusBadge">สถานะ: กำลังกระโดดต่อเนื่อง</span>
+              <label style="font-size:0.78rem; color:#475569;">ความเร็วภาพ:
+                <select id="animSpeedSelect" style="padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; font-size:0.78rem;">
+                  <option value="0.25">สโลว์โมชัน (0.25x)</option>
+                  <option value="0.50" selected>ช้าชัดเจน (0.5x)</option>
+                  <option value="1.00">เวลาจริง (1.0x)</option>
+                </select>
+              </label>
+              <label style="display:inline-flex; align-items:center; gap:4px; font-size:0.78rem; color:#1e40af; font-weight:600; cursor:pointer;">
+                <input type="checkbox" id="continuousLoopCheck" checked>
+                <span>กระโดดวนต่อเนื่อง</span>
+              </label>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn-danger" id="animBtn" style="padding: 7px 14px; font-size: 0.84rem;" onclick="toggleAnimation()">⏸ หยุดชั่วคราว</button>
+            <button type="button" class="btn-secondary" style="padding: 7px 10px; font-size: 0.84rem;" onclick="restartJump()">↺</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="timeScrubSlider">เลื่อนดูเวลาแต่ละช่วงของรอบการกระโดด (t)</label>
+            <span class="val" id="timeScrubVal">0.00 s / 1.99 s</span>
+          </div>
+          <input type="range" id="timeScrubSlider" min="0" max="1.99" step="0.005" value="0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="massSlider">มวลร่างกาย (m)</label>
+            <span class="val" id="massVal">60.0 kg (W = 588 N)</span>
+          </div>
+          <input type="range" id="massSlider" min="40" max="100" step="1" value="60">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="jumpHeightSlider">ความสูงที่กระโดดลอยพ้นพื้น (h<sub>jump</sub>)</label>
+            <span class="val" id="jumpHeightVal">0.35 m (35 cm | v_land = 2.62 m/s)</span>
+          </div>
+          <input type="range" id="jumpHeightSlider" min="0.25" max="0.80" step="0.01" value="0.35">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="stiffDistSlider">ระยะยุบตัวขณะลงพื้นแบบตัวตรง (d<sub>stiff</sub>)</label>
+            <span class="val" id="stiffDistVal">0.04 m (4.0 cm)</span>
+          </div>
+          <input type="range" id="stiffDistSlider" min="0.02" max="0.08" step="0.005" value="0.04">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <label for="bendDistSlider">ระยะงอเข่ายุบตัวขณะลงพื้น (d<sub>bend</sub>)</label>
+            <span class="val" id="bendDistVal">0.30 m (30.0 cm)</span>
+          </div>
+          <input type="range" id="bendDistSlider" min="0.15" max="0.45" step="0.01" value="0.30">
+        </div>
+
+        <div class="results-panel">
+          <div class="results-grid">
+            <div class="metric-card normal">
+              <div class="metric-label">แรงปฏิกิริยาพื้นขณะนี้ N(t)</div>
+              <div class="metric-value" style="color: var(--normal-force);" id="curNOut">588 N</div>
+            </div>
+            <div class="metric-card peak">
+              <div class="metric-label">แรงกระแทกสูงสุดตอนลงพื้น N<sub>max</sub></div>
+              <div class="metric-value" style="color: var(--stiff-color);" id="peakNOut">6,753 N</div>
+            </div>
+            <div class="metric-card impulse">
+              <div class="metric-label">ช่วงเวลาหยุดการตก Δt<sub>land</sub></div>
+              <div class="metric-value" style="color: var(--net-force);" id="landDtOut">0.031 s</div>
+            </div>
+            <div class="metric-card ratio">
+              <div class="metric-label">อัตราส่วนแรงกระแทก N<sub>max</sub> / mg</div>
+              <div class="metric-value" style="color: var(--body-wt);" id="ratioOut">11.49 เท่า</div>
+            </div>
+          </div>
+
+          <div class="equation-box">
+            <strong>สมการฟิสิกส์ (ΣF<sub>y</sub> = N − mg = ma<sub>y</sub> และงาน-พลังงาน):</strong>
+            <code id="eqText1">v_land = √(2gh) = 2.62 m/s | Δp = m·v_land = 157.2 N·s</code>
+            <code id="eqText2">N_avg = mg + (mgh / d_land) = 588 + 5,145 = 5,733 N (N_max ≈ 6,753 N)</code>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-primary" onclick="recordExperiment()">+ บันทึกผลลงตาราง</button>
+          <button type="button" class="btn-danger" onclick="clearAllData()">ล้างตารางข้อมูล</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Data Table -->
+    <div class="card">
+      <div class="card-title">
+        <span>ตารางเปรียบเทียบผลการทดลอง (Experiment Data Log)</span>
+        <button type="button" class="btn-success" style="padding: 6px 12px; font-size: 0.85rem;" onclick="exportCSV()">ดาวน์โหลด CSV</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ครั้งที่</th>
+              <th>รูปแบบการลงพื้น</th>
+              <th>มวล m (kg)</th>
+              <th>น้ำหนัก mg (N)</th>
+              <th>ความสูงกระโดด h (m)</th>
+              <th>ระยะยุบตัว d<sub>land</sub> (m)</th>
+              <th>เวลาลงพื้น Δt<sub>land</sub> (s)</th>
+              <th>แรงเฉลี่ย N<sub>avg</sub> (N)</th>
+              <th>แรงสูงสุด N<sub>max</sub> (N)</th>
+              <th>อัตราส่วน N<sub>max</sub> / mg</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr id="emptyRow">
+              <td colspan="10" class="empty-state">ยังไม่มีข้อมูลการทดลอง — เลือกรูปแบบการทดลอง 1–4 หรือปรับค่าด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const G = 9.80;
+    let landingMode = 'stiff';
+    let activePresetKey = 'stiff_low';
+    let records = [];
+
+    let animId = null;
+    let lastTimestamp = null;
+    let curTime = 0.0;
+
+    const els = {
+      preset_stiff_low: document.getElementById('preset_stiff_low'),
+      preset_bend_low: document.getElementById('preset_bend_low'),
+      preset_stiff_med: document.getElementById('preset_stiff_med'),
+      preset_bend_med: document.getElementById('preset_bend_med'),
+      massSlider: document.getElementById('massSlider'),
+      jumpHeightSlider: document.getElementById('jumpHeightSlider'),
+      stiffDistSlider: document.getElementById('stiffDistSlider'),
+      bendDistSlider: document.getElementById('bendDistSlider'),
+      timeScrubSlider: document.getElementById('timeScrubSlider'),
+      headerJumpH: document.getElementById('headerJumpH'),
+      massVal: document.getElementById('massVal'),
+      jumpHeightVal: document.getElementById('jumpHeightVal'),
+      stiffDistVal: document.getElementById('stiffDistVal'),
+      bendDistVal: document.getElementById('bendDistVal'),
+      timeScrubVal: document.getElementById('timeScrubVal'),
+      curNOut: document.getElementById('curNOut'),
+      peakNOut: document.getElementById('peakNOut'),
+      landDtOut: document.getElementById('landDtOut'),
+      ratioOut: document.getElementById('ratioOut'),
+      eqText1: document.getElementById('eqText1'),
+      eqText2: document.getElementById('eqText2'),
+      postureSvg: document.getElementById('postureSvg'),
+      fbdSvg: document.getElementById('fbdSvg'),
+      timeChartSvg: document.getElementById('timeChartSvg'),
+      simTimeOut: document.getElementById('simTimeOut'),
+      showCompareCurve: document.getElementById('showCompareCurve'),
+      showWeightLine: document.getElementById('showWeightLine'),
+      tableBody: document.getElementById('tableBody'),
+      animBtn: document.getElementById('animBtn'),
+      animStatusBadge: document.getElementById('animStatusBadge'),
+      animSpeedSelect: document.getElementById('animSpeedSelect'),
+      continuousLoopCheck: document.getElementById('continuousLoopCheck')
+    };
+
+    function buildTrajectory(mode, m, hJump, dStiff, dBend) {
+      const W = m * G;
+      const vTakeoff = Math.sqrt(2 * G * hJump);
+      const dPush = 0.24;
+
+      const tStand1 = 0.14;
+      const tCounterDown = 0.22;
+      const tPushUp = (2 * dPush) / vTakeoff;
+      const tFlight = (2 * vTakeoff) / G;
+
+      const dLand = (mode === 'stiff') ? dStiff : dBend;
+      const dtLand = (2 * dLand) / vTakeoff;
+      const aNetLandPeak = (Math.PI * vTakeoff) / (2 * dtLand);
+      const nLandPeak = W + m * aNetLandPeak;
+      const nLandAvg = W + (m * hJump * G) / dLand;
+
+      const dtRecover = (mode === 'stiff') ? 0.12 : 0.40;
+      const tStand2 = 0.16;
+
+      const t1 = tStand1;
+      const t2 = t1 + tCounterDown;
+      const t3 = t2 + tPushUp;
+      const t4 = t3 + tFlight;
+      const t5 = t4 + dtLand;
+      const t6 = t5 + dtRecover;
+      const tTotal = t6 + tStand2;
+
+      return {
+        mode, m, W, hJump, vTakeoff, dPush, dLand,
+        dtLand, nLandPeak, nLandAvg, dtRecover,
+        t1, t2, t3, t4, t5, t6, tTotal
+      };
+    }
+
+    function evaluateAtTime(traj, t) {
+      const { mode, m, W, vTakeoff, dPush, dLand, dtLand, dtRecover, t1, t2, t3, t4, t5, t6 } = traj;
+      let yCgShift = 0;
+      let footHeight = 0;
+      let vy = 0;
+      let ay = 0;
+      let N = W;
+      let phaseName = 'ยืนเตรียมพร้อม';
+      let phaseCode = 'stand';
+      let kneeBendRatio = 0;
+
+      if (t <= t1) {
+        yCgShift = 0;
+        footHeight = 0;
+        vy = 0;
+        ay = 0;
+        N = W;
+        phaseName = '1. ยืนเตรียมพร้อม';
+        phaseCode = 'stand';
+        kneeBendRatio = 0;
+      } else if (t <= t2) {
+        const tau = t - t1;
+        const T = t2 - t1;
+        const w = (2 * Math.PI) / T;
+        ay = -(dPush * w / T) * Math.sin(w * tau);
+        vy = -(dPush / T) * (1 - Math.cos(w * tau));
+        yCgShift = -(dPush / T) * (tau - Math.sin(w * tau) / w);
+        N = Math.max(0, W + m * ay);
+        footHeight = 0;
+        phaseName = '2. ย่อเข่าเตรียมดีดตัว';
+        phaseCode = 'push';
+        kneeBendRatio = Math.min(1, Math.abs(yCgShift) / 0.30);
+      } else if (t <= t3) {
+        const tau = t - t2;
+        const T = t3 - t2;
+        ay = (Math.PI * vTakeoff / (2 * T)) * Math.sin((Math.PI * tau) / T);
+        vy = 0.5 * vTakeoff * (1 - Math.cos((Math.PI * tau) / T));
+        yCgShift = -dPush + 0.5 * vTakeoff * (tau - (T / Math.PI) * Math.sin((Math.PI * tau) / T));
+        N = W + m * ay;
+        footHeight = 0;
+        phaseName = '3. ถีบพื้นดีดตัวขึ้น';
+        phaseCode = 'push';
+        kneeBendRatio = Math.max(0, Math.abs(yCgShift) / 0.30);
+      } else if (t <= t4) {
+        const tau = t - t3;
+        ay = -G;
+        vy = vTakeoff - G * tau;
+        footHeight = Math.max(0, vTakeoff * tau - 0.5 * G * tau * tau);
+        yCgShift = footHeight;
+        N = 0;
+        phaseName = vy >= 0 ? '4. ลอยตัวขึ้นกลางอากาศ (N = 0)' : '4. กำลังตกลงสู่พื้น (N = 0)';
+        phaseCode = 'air';
+        kneeBendRatio = 0.08;
+      } else if (t <= t5) {
+        const tau = t - t4;
+        const T = dtLand;
+        ay = (Math.PI * vTakeoff / (2 * T)) * Math.sin((Math.PI * tau) / T);
+        vy = -vTakeoff + 0.5 * vTakeoff * (1 - Math.cos((Math.PI * tau) / T));
+        yCgShift = -vTakeoff * tau + 0.5 * vTakeoff * (tau - (T / Math.PI) * Math.sin((Math.PI * tau) / T));
+        N = W + m * ay;
+        footHeight = 0;
+        phaseName = (mode === 'stiff') ? '5. ลงพื้นแบบตัวตรง (แรงกระแทกสูง!)' : '5. ลงพื้นแบบงอเข่าผ่อนแรง';
+        phaseCode = 'land';
+        kneeBendRatio = Math.min(1, Math.abs(yCgShift) / 0.30);
+      } else if (t <= t6) {
+        if (mode === 'stiff') {
+          const tau = t - t5;
+          const T = dtRecover;
+          const remain = -dLand;
+          yCgShift = remain * (1 - tau / T);
+          vy = dLand / T;
+          ay = 0;
+          N = W;
+          footHeight = 0;
+          phaseName = '6. ยืนตัวตรงทันทีหลังลงพื้น';
+          phaseCode = 'recover';
+          kneeBendRatio = Math.max(0, Math.abs(yCgShift) / 0.30);
+        } else {
+          const tau = t - t5;
+          const T = dtRecover;
+          const w = (2 * Math.PI) / T;
+          ay = (dLand * w / T) * Math.sin(w * tau);
+          vy = (dLand / T) * (1 - Math.cos(w * tau));
+          yCgShift = -dLand + (dLand / T) * (tau - Math.sin(w * tau) / w);
+          N = Math.max(0, W + m * ay);
+          footHeight = 0;
+          phaseName = '6. ค่อยๆ ยืดเข่ากลับขึ้นยืนตัวตรง';
+          phaseCode = 'recover';
+          kneeBendRatio = Math.max(0, Math.abs(yCgShift) / 0.30);
+        }
+      } else {
+        yCgShift = 0;
+        footHeight = 0;
+        vy = 0;
+        ay = 0;
+        N = W;
+        phaseName = '7. ยืนท่าปกติ (เตรียมรอบถัดไป)';
+        phaseCode = 'stand';
+        kneeBendRatio = 0;
+      }
+
+      return { yCgShift, footHeight, vy, ay, N, phaseName, phaseCode, kneeBendRatio };
+    }
+
+    function getParams() {
+      const m = parseFloat(els.massSlider.value);
+      const hJump = parseFloat(els.jumpHeightSlider.value);
+      const dStiff = parseFloat(els.stiffDistSlider.value);
+      const dBend = parseFloat(els.bendDistSlider.value);
+
+      const traj = buildTrajectory(landingMode, m, hJump, dStiff, dBend);
+      const otherMode = (landingMode === 'stiff') ? 'bend' : 'stiff';
+      const otherTraj = buildTrajectory(otherMode, m, hJump, dStiff, dBend);
+
+      const maxCycleTime = Math.max(traj.tTotal, otherTraj.tTotal);
+      els.timeScrubSlider.max = maxCycleTime.toFixed(3);
+      if (curTime > maxCycleTime) {
+        curTime = maxCycleTime;
+        els.timeScrubSlider.value = curTime.toFixed(3);
+      }
+
+      const state = evaluateAtTime(traj, Math.min(curTime, traj.tTotal));
+      return { traj, otherTraj, maxCycleTime, state };
+    }
+
+    function highlightPresetButton(key) {
+      activePresetKey = key;
+      const keys = ['stiff_low', 'bend_low', 'stiff_med', 'bend_med'];
+      keys.forEach(function(k) {
+        const btn = els['preset_' + k];
+        if (!btn) return;
+        btn.className = 'preset-card-btn';
+        if (k === key) {
+          btn.className += k.startsWith('stiff') ? ' active-stiff' : ' active-bend';
+        }
+      });
+    }
+
+    function syncPresetHighlightFromValues() {
+      const h = parseFloat(els.jumpHeightSlider.value);
+      let matched = null;
+      if (Math.abs(h - 0.35) < 0.015) {
+        matched = (landingMode === 'stiff') ? 'stiff_low' : 'bend_low';
+      } else if (Math.abs(h - 0.60) < 0.015) {
+        matched = (landingMode === 'stiff') ? 'stiff_med' : 'bend_med';
+      }
+      highlightPresetButton(matched);
+    }
+
+    function updateSimulation() {
+      const { traj, otherTraj, maxCycleTime, state } = getParams();
+
+      els.headerJumpH.textContent = traj.hJump.toFixed(2) + ' m';
+      els.massVal.textContent = traj.m.toFixed(1) + ' kg (W = ' + traj.W.toFixed(0) + ' N)';
+      els.jumpHeightVal.textContent = traj.hJump.toFixed(2) + ' m (' + (traj.hJump * 100).toFixed(0) + ' cm | v_land = ' + traj.vTakeoff.toFixed(2) + ' m/s)';
+      els.stiffDistVal.textContent = (traj.mode === 'stiff' ? traj.dLand : otherTraj.dLand).toFixed(3) + ' m (' + ((traj.mode === 'stiff' ? traj.dLand : otherTraj.dLand) * 100).toFixed(1) + ' cm)';
+      els.bendDistVal.textContent = (traj.mode === 'bend' ? traj.dLand : otherTraj.dLand).toFixed(2) + ' m (' + ((traj.mode === 'bend' ? traj.dLand : otherTraj.dLand) * 100).toFixed(0) + ' cm)';
+
+      els.timeScrubVal.textContent = curTime.toFixed(2) + ' s / ' + traj.tTotal.toFixed(2) + ' s';
+      els.simTimeOut.textContent = curTime.toFixed(2) + ' s';
+
+      els.curNOut.textContent = state.N.toFixed(0) + ' N';
+      els.peakNOut.textContent = traj.nLandPeak.toFixed(0) + ' N';
+      els.peakNOut.style.color = (traj.mode === 'stiff') ? 'var(--stiff-color)' : 'var(--bend-color)';
+      els.landDtOut.textContent = traj.dtLand.toFixed(3) + ' s';
+      els.ratioOut.textContent = (traj.nLandPeak / traj.W).toFixed(2) + ' เท่า';
+
+      const impulse = traj.m * traj.vTakeoff;
+      els.eqText1.textContent =
+        'v_land = √(2×9.8×' + traj.hJump.toFixed(2) + ') = ' + traj.vTakeoff.toFixed(2) +
+        ' m/s | Δp = m·v_land = ' + impulse.toFixed(1) + ' N·s';
+
+      els.eqText2.textContent =
+        'N_avg = mg + (mgh / d_land) = ' + traj.W.toFixed(0) + ' + ' + ((traj.m * G * traj.hJump) / traj.dLand).toFixed(0) +
+        ' = ' + traj.nLandAvg.toFixed(0) + ' N (N_max = ' + traj.nLandPeak.toFixed(0) + ' N)';
+
+      els.animStatusBadge.textContent = state.phaseName;
+      els.animStatusBadge.className = 'anim-status ' + state.phaseCode;
+
+      drawDiagrams(traj, state);
+      drawTimeChart(traj, otherTraj, maxCycleTime, state);
+    }
+
+    function drawTimeChart(traj, otherTraj, maxCycleTime, state) {
+      if (!traj) {
+        const p = getParams();
+        traj = p.traj;
+        otherTraj = p.otherTraj;
+        maxCycleTime = p.maxCycleTime;
+        state = p.state;
+      }
+      const W = 720;
+      const H = 235;
+      const padL = 64;
+      const padR = 24;
+      const padT = 22;
+      const padB = 38;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      const showCompare = els.showCompareCurve.checked;
+      const showWeight = els.showWeightLine.checked;
+
+      let maxForceY = traj.nLandPeak;
+      if (showCompare) {
+        maxForceY = Math.max(traj.nLandPeak, otherTraj.nLandPeak);
+      }
+      maxForceY = Math.max(maxForceY, traj.W * 2.2);
+
+      const stepY = maxForceY <= 2500 ? 500 : (maxForceY <= 6000 ? 1000 : 2000);
+      const yMax = Math.ceil((maxForceY * 1.12) / stepY) * stepY;
+
+      function mapX(t) {
+        return padL + (t / maxCycleTime) * plotW;
+      }
+      function mapY(f) {
+        return padT + plotH - (f / yMax) * plotH;
+      }
+
+      let svg = '';
+      svg += '<rect x="' + padL + '" y="' + padT + '" width="' + plotW + '" height="' + plotH + '" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>';
+
+      const xLandStart = mapX(traj.t4);
+      const xLandEnd = mapX(traj.t5);
+      const zoneColor = (traj.mode === 'stiff') ? 'rgba(220, 38, 38, 0.10)' : 'rgba(37, 99, 235, 0.10)';
+      svg += '<rect x="' + xLandStart.toFixed(1) + '" y="' + padT + '" width="' + Math.max(2, xLandEnd - xLandStart).toFixed(1) + '" height="' + plotH + '" fill="' + zoneColor + '"/>';
+
+      const yTicks = Math.round(yMax / stepY);
+      for (let i = 0; i <= yTicks; i++) {
+        const val = i * stepY;
+        const y = mapY(val);
+        svg += '<line x1="' + padL + '" y1="' + y.toFixed(1) + '" x2="' + (padL + plotW) + '" y2="' + y.toFixed(1) + '" stroke="' + (i === 0 ? '#94a3b8' : '#e2e8f0') + '" stroke-width="1"' + (i > 0 ? ' stroke-dasharray="3,3"' : '') + '/>';
+        svg += '<text x="' + (padL - 8) + '" y="' + (y + 4).toFixed(1) + '" font-size="11" fill="#475569" text-anchor="end" font-family="monospace">' + val.toFixed(0) + '</text>';
+      }
+
+      const dtTick = maxCycleTime <= 2.0 ? 0.2 : 0.4;
+      for (let tTick = 0; tTick <= maxCycleTime + 0.001; tTick += dtTick) {
+        const x = mapX(tTick);
+        svg += '<line x1="' + x.toFixed(1) + '" y1="' + padT + '" x2="' + x.toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>';
+        svg += '<text x="' + x.toFixed(1) + '" y="' + (padT + plotH + 16) + '" font-size="11" fill="#475569" text-anchor="middle" font-family="monospace">' + tTick.toFixed(1) + 's</text>';
+      }
+
+      svg += '<text x="' + (padL + plotW / 2) + '" y="' + (H - 5) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle">เวลา t (วินาที)</text>';
+      svg += '<text x="16" y="' + (padT + plotH / 2) + '" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle" transform="rotate(-90 16 ' + (padT + plotH / 2) + ')">แรงปฏิกิริยาพื้น N (นิวตัน, N)</text>';
+
+      if (showWeight) {
+        const yW = mapY(traj.W);
+        svg += '<line x1="' + padL + '" y1="' + yW.toFixed(1) + '" x2="' + (padL + plotW) + '" y2="' + yW.toFixed(1) + '" stroke="#d97706" stroke-width="1.6" stroke-dasharray="6,4"/>';
+        svg += '<text x="' + (padL + plotW - 6) + '" y="' + (yW - 5).toFixed(1) + '" font-size="10.5" font-weight="bold" fill="#b45309" text-anchor="end">W = mg (' + traj.W.toFixed(0) + ' N)</text>';
+      }
+
+      const SAMPLES = 360;
+      function buildPathForTraj(tr) {
+        let d = '';
+        let area = '';
+        for (let i = 0; i <= SAMPLES; i++) {
+          const ts = (i / SAMPLES) * tr.tTotal;
+          const st = evaluateAtTime(tr, ts);
+          const x = mapX(ts).toFixed(1);
+          const y = mapY(st.N).toFixed(1);
+          if (i === 0) {
+            d += 'M ' + x + ' ' + y;
+            area += 'M ' + x + ' ' + mapY(0).toFixed(1) + ' L ' + x + ' ' + y;
+          } else {
+            d += ' L ' + x + ' ' + y;
+            area += ' L ' + x + ' ' + y;
+          }
+        }
+        area += ' L ' + mapX(tr.tTotal).toFixed(1) + ' ' + mapY(0).toFixed(1) + ' Z';
+        return { d, area };
+      }
+
+      if (showCompare) {
+        const otherPaths = buildPathForTraj(otherTraj);
+        const otherStroke = (otherTraj.mode === 'stiff') ? 'rgba(220, 38, 38, 0.55)' : 'rgba(37, 99, 235, 0.55)';
+        svg += '<path d="' + otherPaths.d + '" fill="none" stroke="' + otherStroke + '" stroke-width="2" stroke-dasharray="5,4"/>';
+      }
+
+      const mainPaths = buildPathForTraj(traj);
+      const mainColor = (traj.mode === 'stiff') ? '#dc2626' : '#2563eb';
+      const fillColor = (traj.mode === 'stiff') ? 'rgba(220, 38, 38, 0.12)' : 'rgba(37, 99, 235, 0.12)';
+
+      svg += '<path d="' + mainPaths.area + '" fill="' + fillColor + '"/>';
+      svg += '<path d="' + mainPaths.d + '" fill="none" stroke="' + mainColor + '" stroke-width="2.8" stroke-linejoin="round"/>';
+
+      const clampedT = Math.min(curTime, traj.tTotal);
+      const curX = mapX(clampedT);
+      const curY = mapY(state.N);
+
+      svg += '<line x1="' + curX.toFixed(1) + '" y1="' + padT + '" x2="' + curX.toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#0f172a" stroke-width="1.3" stroke-dasharray="3,2"/>';
+      svg += '<circle cx="' + curX.toFixed(1) + '" cy="' + curY.toFixed(1) + '" r="5.5" fill="' + mainColor + '" stroke="#ffffff" stroke-width="2"/>';
+
+      const lblX = curX > (padL + plotW - 140) ? (curX - 10) : (curX + 10);
+      const lblAnchor = curX > (padL + plotW - 140) ? 'end' : 'start';
+      const lblY = Math.max(padT + 14, Math.min(padT + plotH - 8, curY - 8));
+      svg += '<text x="' + lblX.toFixed(1) + '" y="' + lblY.toFixed(1) + '" font-size="11" font-weight="bold" fill="' + mainColor + '" text-anchor="' + lblAnchor + '">N = ' + state.N.toFixed(0) + ' N</text>';
+
+      const legW = 245;
+      const legX = padL + plotW - legW - 8;
+      const legY = padT + 8;
+      svg += '<rect x="' + legX + '" y="' + legY + '" width="' + legW + '" height="' + (showCompare ? 42 : 24) + '" rx="6" fill="rgba(255,255,255,0.92)" stroke="#e2e8f0"/>';
+      svg += '<line x1="' + (legX + 8) + '" y1="' + (legY + 12) + '" x2="' + (legX + 28) + '" y2="' + (legY + 12) + '" stroke="' + mainColor + '" stroke-width="2.8"/>';
+      svg += '<text x="' + (legX + 34) + '" y="' + (legY + 16) + '" font-size="10.5" font-weight="bold" fill="' + mainColor + '">' + (traj.mode === 'stiff' ? 'ลงพื้นตัวตรง (N_max=' : 'งอเข่ารับแรง (N_max=') + traj.nLandPeak.toFixed(0) + ' N)</text>';
+
+      if (showCompare) {
+        const otherCol = (otherTraj.mode === 'stiff') ? '#dc2626' : '#2563eb';
+        svg += '<line x1="' + (legX + 8) + '" y1="' + (legY + 30) + '" x2="' + (legX + 28) + '" y2="' + (legY + 30) + '" stroke="' + otherCol + '" stroke-width="2" stroke-dasharray="5,4"/>';
+        svg += '<text x="' + (legX + 34) + '" y="' + (legY + 34) + '" font-size="10.5" font-weight="bold" fill="#475569">' + (otherTraj.mode === 'stiff' ? 'เทียบ: ลงพื้นตัวตรง (' : 'เทียบ: งอเข่ารับแรง (') + otherTraj.nLandPeak.toFixed(0) + ' N)</text>';
+      }
+
+      els.timeChartSvg.innerHTML = svg;
+    }
+
+    function drawDiagrams(traj, state) {
+      const floorY = 326;
+      const centerX = 175;
+      const pxPerMeter = 128;
+
+      const footY = floorY - state.footHeight * pxPerMeter;
+
+      const thighLen = 50;
+      const shinLen = 50;
+      const torsoLen = 72;
+
+      const hipDropMeters = (state.footHeight > 0.001) ? 0.02 : Math.max(0, -state.yCgShift);
+      const hipDropPx = Math.min(62, hipDropMeters * pxPerMeter);
+
+      const standHipY = footY - (thighLen + shinLen);
+      const hipY = standHipY + hipDropPx;
+
+      const halfLegDist = Math.max(17, (footY - hipY) / 2);
+      const kneeForward = Math.sqrt(Math.max(0, thighLen * thighLen - halfLegDist * halfLegDist));
+      const kneeX = centerX + kneeForward;
+      const kneeY = (hipY + footY) / 2;
+
+      const trunkLean = kneeForward * 0.48;
+      const shoulderX = centerX + trunkLean * 0.45;
+      const hipDrawX = centerX - trunkLean * 0.55;
+      const shoulderY = hipY - Math.sqrt(Math.max(1400, torsoLen * torsoLen - trunkLean * trunkLean));
+
+      const headX = shoulderX + 2;
+      const headY = shoulderY - 20;
+
+      const armRaise = state.footHeight > 0.01 ? -28 : (state.kneeBendRatio * 12);
+      const handX = shoulderX + 18;
+      const handY = shoulderY + 42 + armRaise;
+
+      const cgX = centerX;
+      const cgY = hipY - 22;
+
+      const wLen = Math.min(64, Math.max(36, traj.W * 0.07));
+      const nLen = state.N <= 1 ? 0 : Math.min(115, Math.max(14, state.N * 0.022));
+
+      const themeStroke = (traj.mode === 'stiff') ? '#dc2626' : '#2563eb';
+      const maxJumpY = floorY - traj.hJump * pxPerMeter;
+
+      els.postureSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#059669"/></marker>' +
+          '<marker id="arrAmber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#d97706"/></marker>' +
+        '</defs>' +
+
+        '<line x1="25" y1="' + floorY + '" x2="335" y2="' + floorY + '" stroke="#475569" stroke-width="2.5"/>' +
+        '<rect x="25" y="' + floorY + '" width="310" height="10" fill="#e2e8f0"/>' +
+
+        '<line x1="55" y1="' + maxJumpY.toFixed(1) + '" x2="310" y2="' + maxJumpY.toFixed(1) + '" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,4"/>' +
+        '<text x="308" y="' + (maxJumpY - 5).toFixed(1) + '" font-size="10" font-weight="bold" fill="#475569" text-anchor="end">ระดับกระโดดสูงสุด h = ' + (traj.hJump * 100).toFixed(0) + ' cm</text>' +
+
+        (state.footHeight > 0.005
+          ? '<line x1="85" y1="' + floorY + '" x2="85" y2="' + footY.toFixed(1) + '" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,2"/>' +
+            '<text x="80" y="' + ((floorY + footY) / 2 + 4).toFixed(1) + '" font-size="10" font-weight="bold" fill="#b45309" text-anchor="end">ลอย ' + (state.footHeight * 100).toFixed(0) + ' cm</text>'
+          : '') +
+
+        '<rect x="12" y="10" width="248" height="24" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>' +
+        '<text x="20" y="26" font-size="11" font-weight="bold" fill="' + themeStroke + '">' + state.phaseName + '</text>' +
+
+        '<line x1="' + centerX + '" y1="' + (footY - 6) + '" x2="' + kneeX + '" y2="' + kneeY + '" stroke="#64748b" stroke-width="13" stroke-linecap="round"/>' +
+        '<rect x="' + (centerX - 10) + '" y="' + (footY - 8) + '" width="26" height="8" rx="3" fill="#1e293b"/>' +
+
+        '<line x1="' + kneeX + '" y1="' + kneeY + '" x2="' + hipDrawX + '" y2="' + hipY + '" stroke="#94a3b8" stroke-width="15" stroke-linecap="round"/>' +
+
+        '<line x1="' + hipDrawX + '" y1="' + hipY + '" x2="' + shoulderX + '" y2="' + shoulderY + '" stroke="#93c5fd" stroke-width="22" stroke-linecap="round"/>' +
+        '<line x1="' + hipDrawX + '" y1="' + hipY + '" x2="' + shoulderX + '" y2="' + shoulderY + '" stroke="' + themeStroke + '" stroke-width="22" stroke-linecap="round" opacity="0.22"/>' +
+
+        '<line x1="' + shoulderX + '" y1="' + shoulderY + '" x2="' + handX + '" y2="' + handY + '" stroke="#fed7aa" stroke-width="8.5" stroke-linecap="round"/>' +
+
+        '<circle cx="' + headX + '" cy="' + headY + '" r="14" fill="#fed7aa" stroke="#d97706" stroke-width="1.5"/>' +
+
+        '<circle cx="' + cgX + '" cy="' + cgY + '" r="5" fill="#d97706" stroke="#ffffff" stroke-width="1.5"/>' +
+        '<line x1="' + cgX + '" y1="' + cgY + '" x2="' + cgX + '" y2="' + (cgY + wLen) + '" stroke="#d97706" stroke-width="2.6" marker-end="url(#arrAmber)"/>' +
+        '<text x="' + (cgX - 8) + '" y="' + (cgY + wLen) + '" font-size="11" font-weight="bold" fill="#b45309" text-anchor="end">mg</text>' +
+
+        (nLen > 0
+          ? '<line x1="' + (centerX + 4) + '" y1="' + floorY + '" x2="' + (centerX + 4) + '" y2="' + (floorY - nLen) + '" stroke="#059669" stroke-width="3.2" marker-end="url(#arrGreen)"/>' +
+            '<text x="' + (centerX + 12) + '" y="' + Math.max(46, floorY - nLen + 4) + '" font-size="11" font-weight="bold" fill="#059669">N = ' + state.N.toFixed(0) + ' N</text>'
+          : '<text x="' + centerX + '" y="' + (floorY - 12) + '" font-size="11" font-weight="bold" fill="#92400e" text-anchor="middle">ลอยพ้นพื้น (N = 0 N)</text>');
+
+      const fbdCx = 165;
+      const fbdCy = 180;
+      const netForce = state.N - traj.W;
+      const netLen = Math.min(105, Math.abs(netForce) * 0.022);
+
+      els.fbdSvg.innerHTML =
+        '<defs>' +
+          '<marker id="arrGreen2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#059669"/></marker>' +
+          '<marker id="arrAmber2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#d97706"/></marker>' +
+          '<marker id="arrPurple2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker>' +
+        '</defs>' +
+
+        '<line x1="30" y1="' + fbdCy + '" x2="330" y2="' + fbdCy + '" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+        '<line x1="' + fbdCx + '" y1="25" x2="' + fbdCx + '" y2="335" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,4"/>' +
+
+        '<circle cx="' + fbdCx + '" cy="' + fbdCy + '" r="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>' +
+        '<text x="' + fbdCx + '" y="' + (fbdCy + 4) + '" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">m</text>' +
+
+        '<line x1="' + fbdCx + '" y1="' + (fbdCy + 16) + '" x2="' + fbdCx + '" y2="' + (fbdCy + 16 + wLen) + '" stroke="#d97706" stroke-width="3" marker-end="url(#arrAmber2)"/>' +
+        '<text x="' + (fbdCx - 10) + '" y="' + (fbdCy + 20 + wLen) + '" font-size="11" font-weight="bold" fill="#b45309" text-anchor="end">W = mg (' + traj.W.toFixed(0) + ' N)</text>' +
+
+        (nLen > 0
+          ? '<line x1="' + fbdCx + '" y1="' + (fbdCy - 16) + '" x2="' + fbdCx + '" y2="' + (fbdCy - 16 - nLen) + '" stroke="#059669" stroke-width="3.2" marker-end="url(#arrGreen2)"/>' +
+            '<text x="' + (fbdCx - 10) + '" y="' + Math.max(36, fbdCy - 18 - nLen) + '" font-size="11" font-weight="bold" fill="#059669" text-anchor="end">N (' + state.N.toFixed(0) + ' N)</text>'
+          : '<text x="' + (fbdCx - 12) + '" y="' + (fbdCy - 24) + '" font-size="11" font-weight="bold" fill="#64748b" text-anchor="end">N = 0 N (ตกอิสระ)</text>') +
+
+        (netLen > 4
+          ? '<line x1="' + (fbdCx + 75) + '" y1="' + fbdCy + '" x2="' + (fbdCx + 75) + '" y2="' + (netForce > 0 ? (fbdCy - netLen) : (fbdCy + netLen)) + '" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrPurple2)"/>' +
+            '<text x="' + (fbdCx + 83) + '" y="' + (netForce > 0 ? Math.max(40, fbdCy - netLen + 4) : Math.min(325, fbdCy + netLen)) + '" font-size="10.5" font-weight="bold" fill="#6d28d9">ΣF_y = ' + (netForce > 0 ? '+' : '') + netForce.toFixed(0) + ' N</text>' +
+            '<text x="' + (fbdCx + 83) + '" y="' + (netForce > 0 ? Math.max(54, fbdCy - netLen + 18) : Math.min(339, fbdCy + netLen + 14)) + '" font-size="10" fill="#6d28d9">(a_y = ' + (state.ay > 0 ? '+' : '') + state.ay.toFixed(1) + ' m/s²)</text>'
+          : '<text x="' + (fbdCx + 55) + '" y="' + (fbdCy + 4) + '" font-size="10.5" font-weight="bold" fill="#6d28d9">ΣF_y = 0 (a_y = 0)</text>');
+    }
+
+    function startAnimation() {
+      if (animId !== null) return;
+      const { maxCycleTime } = getParams();
+      if (curTime >= maxCycleTime - 0.01) {
+        curTime = 0.0;
+      }
+      lastTimestamp = null;
+      els.animBtn.textContent = '⏸ หยุดชั่วคราว';
+      els.animBtn.className = 'btn-danger';
+
+      function step(timestamp) {
+        if (lastTimestamp === null) {
+          lastTimestamp = timestamp;
+        }
+        const realDt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+        lastTimestamp = timestamp;
+
+        const speed = parseFloat(els.animSpeedSelect.value) || 0.50;
+        const { traj } = getParams();
+
+        curTime += realDt * speed;
+        if (curTime >= traj.tTotal) {
+          if (els.continuousLoopCheck.checked) {
+            curTime = curTime % traj.tTotal;
+          } else {
+            curTime = traj.tTotal;
+            els.timeScrubSlider.value = curTime.toFixed(3);
+            updateSimulation();
+            cancelAnimationFrame(animId);
+            animId = null;
+            lastTimestamp = null;
+            els.animBtn.textContent = '▶ เริ่มกระโดด';
+            els.animBtn.className = 'btn-primary';
+            return;
+          }
+        }
+
+        els.timeScrubSlider.value = curTime.toFixed(3);
+        updateSimulation();
+        animId = requestAnimationFrame(step);
+      }
+
+      animId = requestAnimationFrame(step);
+    }
+
+    function toggleAnimation() {
+      if (animId !== null) {
+        stopAnimIfRunning();
+      } else {
+        startAnimation();
+      }
+    }
+
+    function restartJump() {
+      curTime = 0.0;
+      els.timeScrubSlider.value = 0;
+      updateSimulation();
+      if (animId === null) {
+        startAnimation();
+      }
+    }
+
+    function stopAnimIfRunning() {
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        lastTimestamp = null;
+        els.animBtn.textContent = '▶ เริ่มกระโดด';
+        els.animBtn.className = 'btn-primary';
+      }
+    }
+
+    function recordExperiment() {
+      const { traj } = getParams();
+      records.push(traj);
+      renderTable();
+    }
+
+    function renderTable() {
+      if (records.length === 0) {
+        els.tableBody.innerHTML =
+          '<tr id="emptyRow">' +
+            '<td colspan="10" class="empty-state">ยังไม่มีข้อมูลการทดลอง — เลือกรูปแบบการทดลอง 1–4 หรือปรับค่าด้านบนแล้วกด "+ บันทึกผลลงตาราง"</td>' +
+          '</tr>';
+        return;
+      }
+
+      els.tableBody.innerHTML = records.map(function(r, idx) {
+        const modeBadge = (r.mode === 'stiff')
+          ? '<span class="badge-stiff">ลงพื้นตัวตรง</span>'
+          : '<span class="badge-bend">งอเข่ารับแรง</span>';
+
+        return '<tr>' +
+          '<td><strong>' + (idx + 1) + '</strong></td>' +
+          '<td>' + modeBadge + '</td>' +
+          '<td>' + r.m.toFixed(1) + '</td>' +
+          '<td>' + r.W.toFixed(0) + '</td>' +
+          '<td>' + r.hJump.toFixed(2) + '</td>' +
+          '<td>' + r.dLand.toFixed(3) + '</td>' +
+          '<td>' + r.dtLand.toFixed(3) + '</td>' +
+          '<td>' + r.nLandAvg.toFixed(0) + '</td>' +
+          '<td><span class="badge-force">' + r.nLandPeak.toFixed(0) + '</span></td>' +
+          '<td><strong>' + (r.nLandPeak / r.W).toFixed(2) + 'x</strong></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function applyPreset(key) {
+      highlightPresetButton(key);
+      if (key === 'stiff_low') {
+        landingMode = 'stiff';
+        els.jumpHeightSlider.value = 0.35;
+        els.stiffDistSlider.value = 0.04;
+      } else if (key === 'bend_low') {
+        landingMode = 'bend';
+        els.jumpHeightSlider.value = 0.35;
+        els.bendDistSlider.value = 0.30;
+      } else if (key === 'stiff_med') {
+        landingMode = 'stiff';
+        els.jumpHeightSlider.value = 0.60;
+        els.stiffDistSlider.value = 0.04;
+      } else if (key === 'bend_med') {
+        landingMode = 'bend';
+        els.jumpHeightSlider.value = 0.60;
+        els.bendDistSlider.value = 0.34;
+      }
+      curTime = 0.0;
+      els.timeScrubSlider.value = 0;
+      updateSimulation();
+      if (animId === null) {
+        startAnimation();
+      }
+    }
+
+    function resetDefaults() {
+      els.massSlider.value = 60;
+      els.continuousLoopCheck.checked = true;
+      applyPreset('stiff_low');
+    }
+
+    function clearAllData() {
+      records = [];
+      renderTable();
+    }
+
+    function exportCSV() {
+      if (records.length === 0) {
+        alert('กรุณาบันทึกผลการทดลองอย่างน้อย 1 รายการก่อนดาวน์โหลด CSV');
+        return;
+      }
+
+      const headers = ['Trial', 'Landing_Mode', 'Mass_kg', 'Weight_N', 'Jump_Height_m', 'Landing_Distance_m', 'Landing_Time_s', 'N_Avg_N', 'N_Peak_N', 'Ratio_Nmax_to_Weight'];
+      const rows = records.map(function(r, i) {
+        return [
+          i + 1,
+          r.mode === 'stiff' ? 'Stiff_Leg_Upright' : 'Knee_Bend_Absorption',
+          r.m.toFixed(1),
+          r.W.toFixed(1),
+          r.hJump.toFixed(2),
+          r.dLand.toFixed(3),
+          r.dtLand.toFixed(3),
+          r.nLandAvg.toFixed(1),
+          r.nLandPeak.toFixed(1),
+          (r.nLandPeak / r.W).toFixed(2)
+        ].join(',');
+      });
+
+      const csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'virtual_lab_jump_landing_forces.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    els.timeScrubSlider.addEventListener('input', function() {
+      stopAnimIfRunning();
+      curTime = parseFloat(els.timeScrubSlider.value);
+      updateSimulation();
+    });
+
+    ['massSlider', 'jumpHeightSlider', 'stiffDistSlider', 'bendDistSlider'].forEach(function(id) {
+      const el = document.getElementById(id);
+      el.addEventListener('input', function() {
+        syncPresetHighlightFromValues();
+        updateSimulation();
+      });
+    });
+
+    updateSimulation();
+    startAnimation();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ห้องปฏิบัติการเสมือนจริงชีวกลศาสตร์ (Biomechanics Virtual Lab) — ฟิสิกส์กับการออกกำลังกาย</title>
+    <meta name="description" content="สื่อการเรียนรู้ฟิสิกส์ออนไลน์และห้องปฏิบัติการเสมือนจริง (Biomechanics Virtual Lab) เรื่องฟิสิกส์กับการออกกำลังกาย วิเคราะห์แรง ทอร์ก ระบบคาน 3 ประเภท การยกดัมเบล วิดพื้น เขย่งปลายเท้า กระโดด ก้มตัวหยิบของ และ Deadlift โดย พงษ์แก้ว อุดมสมุทรหิรัญ">
+    <meta name="keywords" content="Biomechanics Virtual Lab, ชีวกลศาสตร์, ฟิสิกส์กับการออกกำลังกาย, ห้องปฏิบัติการเสมือนจริง, ระบบคาน 3 ประเภท, ทอร์ก, แรงกล้ามเนื้อ, Bicep Curl, Push-up, Calf Raise, Deadlift, ฟิสิกส์ ม.ปลาย, พงษ์แก้ว อุดมสมุทรหิรัญ">
+    <meta name="author" content="พงษ์แก้ว อุดมสมุทรหิรัญ">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ห้องปฏิบัติการเสมือนจริงชีวกลศาสตร์ (Biomechanics Virtual Lab) — ฟิสิกส์กับการออกกำลังกาย">
+    <meta property="og:description" content="สำรวจกลศาสตร์ของร่างกายมนุษย์ผ่านห้องปฏิบัติการฟิสิกส์เสมือนจริง วิเคราะห์แรง ทอร์ก ระบบคาน 3 ประเภท และสมดุลของกล้ามเนื้อในทุกท่วงท่าการออกกำลังกาย">
+    <meta property="og:locale" content="th_TH">
+
+    <!-- Structured Data (JSON-LD) สำหรับ Google Search และ AI Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LearningResource",
+      "name": "ห้องปฏิบัติการเสมือนจริงชีวกลศาสตร์ (Biomechanics Virtual Lab) — ฟิสิกส์กับการออกกำลังกาย",
+      "alternateName": ["Biomechanics Virtual Lab", "ฟิสิกส์กับการออกกำลังกาย"],
+      "description": "สื่อการเรียนรู้ฟิสิกส์เสมือนจริงด้านชีวกลศาสตร์ (Biomechanics) สำหรับวิเคราะห์แรง ทอร์ก ระบบคาน 3 ประเภท และสมดุลของกล้ามเนื้อในการออกกำลังกาย",
+      "educationalLevel": "มัธยมศึกษาตอนปลาย / อุดมศึกษา",
+      "learningResourceType": "Virtual Laboratory / Interactive Simulation",
+      "inLanguage": "th",
+      "keywords": "ชีวกลศาสตร์, Biomechanics, ฟิสิกส์กับการออกกำลังกาย, ห้องทดลองฟิสิกส์เสมือนจริง, คาน 3 ประเภท, ทอร์ก, แรงกล้ามเนื้อ, Deadlift, Bicep Curl, Push-up",
+      "author": {
+        "@type": "Person",
+        "name": "พงษ์แก้ว อุดมสมุทรหิรัญ"
+      },
+      "hasPart": [
+        { "@type": "LearningResource", "name": "พื้นฐานคานชนิดที่ 1, 2 และ 3 กับกลไกข้อต่อมนุษย์ (Lever Systems in Human Body)", "url": "type-1.html" },
+        { "@type": "LearningResource", "name": "การยกดัมเบล (Dumbbell Bicep Curl Biomechanics)", "url": "bicep-t-2.html" },
+        { "@type": "LearningResource", "name": "การวิดพื้น (Push-up Biomechanics)", "url": "pushup-sta-1-1-v3.html" },
+        { "@type": "LearningResource", "name": "การเขย่งปลายเท้า (Calf Raise & Achilles Tendon)", "url": "tiptoe-1-v2-1.html" },
+        { "@type": "LearningResource", "name": "การกระโดดและแรงกระแทก (Jump & Landing Mechanics)", "url": "jump-1.html" },
+        { "@type": "LearningResource", "name": "การก้มตัวหยิบของ (Bending & Spinal Torque)", "url": "back-m-1-v2-1.html" },
+        { "@type": "LearningResource", "name": "การยกน้ำหนักท่า Deadlift (Conventional Deadlift Biomechanics)", "url": "deadlift-1-v2-1.html" }
+      ]
+    }
+    </script>
+
+    <!-- นำเข้า Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark-core: #070b14;
+            --bg-dark-card: rgba(18, 25, 45, 0.85);
+            --bg-card-hover: rgba(26, 37, 66, 0.96);
+            --border-glow: rgba(255, 255, 255, 0.09);
+            
+            --text-pure: #ffffff;
+            --text-glow: #f1f5f9;
+            --text-sub: #94a3b8;
+            
+            --accent-orange: #ff6b35;
+            --accent-amber: #f59e0b;
+            --accent-cyan: #00f2fe;
+            --accent-emerald: #10b981;
+            --accent-purple: #a855f7;
+            --accent-rose: #f43f5e;
+            --accent-pink: #ec4899;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark-core);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(255, 107, 53, 0.16) 0%, transparent 40%),
+                radial-gradient(circle at 90% 15%, rgba(0, 242, 254, 0.14) 0%, transparent 42%),
+                radial-gradient(circle at 80% 75%, rgba(236, 72, 153, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 45%);
+            background-attachment: fixed;
+            color: var(--text-glow);
+            min-height: 100vh;
+            line-height: 1.65;
+            overflow-x: hidden;
+        }
+
+        /* ------------------ Hero Header พร้อมภาพโครงสร้างร่างกายมนุษย์แบบอินเทอร์แอคทีฟ ------------------ */
+        .hero-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.8rem 1.5rem 2rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1.25fr 0.85fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            text-align: left;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.2), rgba(236, 72, 153, 0.2));
+            border: 1px solid rgba(255, 107, 53, 0.45);
+            color: #ffb08e;
+            padding: 6px 18px;
+            border-radius: 999px;
+            font-size: 0.86rem;
+            font-weight: 500;
+            margin-bottom: 1.1rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.18);
+        }
+
+        .hero-text h1 {
+            font-family: 'Chakra Petch', 'Kanit', sans-serif;
+            font-size: clamp(2.1rem, 4.2vw, 3.3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            background: linear-gradient(120deg, #ffffff 0%, #ffb08e 35%, #ff6b35 65%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-text p.subtitle {
+            color: #cbd5e1;
+            font-size: 1.08rem;
+            font-weight: 300;
+            margin-bottom: 1.4rem;
+            line-height: 1.7;
+        }
+
+        .hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-pill {
+            font-size: 0.84rem;
+            padding: 5px 13px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .author-tag {
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            background: linear-gradient(90deg, rgba(0, 242, 254, 0.12), rgba(168, 85, 247, 0.12));
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 242, 254, 0.28);
+        }
+
+        /* ------------------ กล่องภาพจำลองร่างกายมนุษย์ (Interactive Body Map) ------------------ */
+        .body-showcase {
+            background: linear-gradient(145deg, rgba(20, 29, 54, 0.85), rgba(10, 15, 28, 0.95));
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 26px;
+            padding: 1.2rem 1.4rem;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 0 30px rgba(0, 242, 254, 0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .showcase-label {
+            font-size: 0.82rem;
+            color: #00f2fe;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .body-svg-wrap {
+            width: 100%;
+            max-width: 280px;
+            position: relative;
+        }
+
+        .body-svg-wrap svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible;
+        }
+
+        /* จุดข้อต่อเรืองแสงบนภาพร่างกายมนุษย์ (คลิกเพื่อกรองหมวดได้!) */
+        .body-hotspot {
+            cursor: pointer;
+            transition: transform 0.25s ease;
+        }
+
+        .body-hotspot:hover .hotspot-ring {
+            r: 14;
+            opacity: 0.95;
+        }
+
+        .hotspot-pulse {
+            animation: pulseGlow 2.4s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.45; }
+            50% { opacity: 1; }
+        }
+
+        .showcase-tip {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 0.3rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem 5rem 1.5rem;
+        }
+
+        /* ------------------ ส่วนเกริ่นนำเรื่องราว (พับเก็บได้) ------------------ */
+        .story-intro {
+            background: linear-gradient(135deg, rgba(28, 38, 68, 0.85), rgba(15, 22, 42, 0.92));
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 107, 53, 0.28);
+            border-radius: 22px;
+            padding: 1.35rem 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-intro summary {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            gap: 12px;
+        }
+
+        .story-intro summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .story-intro-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .story-intro-header i {
+            font-size: 1.4rem;
+            color: var(--accent-orange);
+        }
+
+        .story-intro-header h2 {
+            font-size: 1.18rem;
+            font-weight: 600;
+            color: var(--text-pure);
+        }
+
+        .toggle-hint {
+            font-size: 0.82rem;
+            color: #ffb08e;
+            background: rgba(255, 107, 53, 0.16);
+            padding: 4px 12px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .story-intro-content {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .story-intro-content > p {
+            color: #cbd5e1;
+            font-size: 0.96rem;
+            font-weight: 300;
+            margin-bottom: 1.3rem;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1rem;
+        }
+
+        .concept-box {
+            background: rgba(9, 13, 22, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .concept-box:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 107, 53, 0.4);
+        }
+
+        .concept-box h3 {
+            font-size: 0.96rem;
+            font-weight: 600;
+            color: #ffb08e;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .concept-box p {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        /* ------------------ แถบควบคุม: ค้นหา + กรองหมวดหมู่หลากสี ------------------ */
+        .controls-panel {
+            background: linear-gradient(135deg, rgba(22, 31, 56, 0.78), rgba(14, 20, 38, 0.85));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 1.35rem 1.6rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .top-controls h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-pure);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 260px;
+            flex: 1;
+            max-width: 360px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00f2fe;
+            font-size: 0.9rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: rgba(7, 11, 20, 0.8);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            color: var(--text-pure);
+            padding: 0.58rem 1rem 0.58rem 2.4rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .search-box input:focus {
+            border-color: #00f2fe;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .search-box input::placeholder {
+            color: #64748b;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.45rem 1.1rem;
+            border-radius: 999px;
+            font-size: 0.86rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.active {
+            background: var(--btn-color, linear-gradient(135deg, #ff6b35, #ec4899));
+            color: #ffffff;
+            border-color: transparent;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+        }
+
+        /* ------------------ กริดการ์ดห้องทดลองพร้อมภาพประกอบท่าทาง ------------------ */
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(345px, 1fr));
+            gap: 1.6rem;
+        }
+
+        .chapter-card {
+            background: linear-gradient(160deg, rgba(22, 31, 56, 0.88), rgba(12, 17, 32, 0.94));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 24px;
+            padding: 1.65rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1.15rem;
+            transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            height: 5px;
+            background: var(--card-gradient, var(--card-accent));
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-7px);
+            border-color: var(--card-accent);
+            box-shadow: 0 22px 45px rgba(0, 0, 0, 0.5), 0 0 25px var(--card-glow, rgba(255, 107, 53, 0.18));
+        }
+
+        /* ส่วนบนของการ์ด + ภาพเวกเตอร์ร่างกายประกอบท่าออกกำลังกาย */
+        .card-visual-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(7, 11, 20, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 0.75rem 1rem;
+        }
+
+        .card-meta-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chapter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: 'Chakra Petch', 'Kanit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--card-accent);
+            background: rgba(255, 255, 255, 0.06);
+            padding: 4px 11px;
+            border-radius: 9px;
+            align-self: flex-start;
+        }
+
+        .chapter-tag {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        .pose-illustration {
+            width: 78px;
+            height: 78px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: radial-gradient(circle, var(--card-glow, rgba(255, 107, 53, 0.2)) 0%, rgba(9, 13, 22, 0.8) 75%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+        }
+
+        .pose-illustration svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .chapter-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            flex: 1;
+        }
+
+        .chapter-body h3 {
+            font-size: 1.24rem;
+            font-weight: 600;
+            color: var(--text-pure);
+            line-height: 1.38;
+        }
+
+        .physics-formula {
+            font-family: 'Chakra Petch', monospace;
+            font-size: 0.82rem;
+            color: #e2e8f0;
+            background: rgba(0, 0, 0, 0.36);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 4px 10px;
+            border-radius: 8px;
+            align-self: flex-start;
+        }
+
+        .chapter-story {
+            color: #cbd5e1;
+            font-size: 0.91rem;
+            font-weight: 300;
+            line-height: 1.62;
+        }
+
+        .chapter-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 0.2rem;
+        }
+
+        .highlight-pill {
+            font-size: 0.77rem;
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2px 9px;
+            border-radius: 999px;
+        }
+
+        .chapter-action {
+            margin-top: 0.3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-launch {
+            text-decoration: none;
+            background: var(--card-gradient, var(--card-accent));
+            color: #070b14;
+            font-weight: 600;
+            font-size: 0.96rem;
+            padding: 0.82rem 1.4rem;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-launch.light-text {
+            color: #ffffff;
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.12);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-sub);
+            background: rgba(19, 26, 44, 0.45);
+            border-radius: 20px;
+            border: 1px dashed rgba(255, 255, 255, 0.14);
+        }
+
+        /* ------------------ ส่วนสรุปส่งท้าย ------------------ */
+        .summary-banner {
+            margin-top: 3rem;
+            background: linear-gradient(135deg, rgba(24, 34, 62, 0.8), rgba(15, 21, 38, 0.85));
+            border: 1px solid rgba(245, 158, 11, 0.28);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .summary-banner h3 {
+            font-size: 1.08rem;
+            color: var(--text-pure);
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-banner p {
+            font-size: 0.88rem;
+            color: #cbd5e1;
+            font-weight: 300;
+        }
+
+        @media (max-width: 860px) {
+            .hero-wrapper {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding-top: 2.2rem;
+            }
+            .hero-text {
+                text-align: center;
+            }
+            .hero-pills {
+                justify-content: center;
+            }
+            .body-showcase {
+                max-width: 380px;
+                margin: 0 auto;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .labs-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ส่วนหัวเว็บพร้อมแผนภาพร่างกายมนุษย์แบบอินเทอร์แอคทีฟ -->
+    <header class="hero-wrapper">
+        <div class="hero-text">
+            <div class="hero-badge">
+                <i class="fa-solid fa-person-running" aria-hidden="true"></i> ห้องปฏิบัติการเสมือนจริงชีวกลศาสตร์ (BIOMECHANICS VIRTUAL LAB)
+            </div>
+            <h1>ฟิสิกส์กับการออกกำลังกาย (Biomechanics Virtual Lab)</h1>
+            <p class="subtitle">
+                สื่อการเรียนรู้ฟิสิกส์ออนไลน์และห้องปฏิบัติการเสมือนจริงด้านชีวกลศาสตร์ของร่างกายมนุษย์ — วิเคราะห์แรง ทอร์ก ระบบคาน 3 ประเภท จุดศูนย์ถ่วง และสมดุลของกล้ามเนื้อในทุกท่วงท่าการออกกำลังกาย
+            </p>
+            <div class="hero-pills">
+                <span class="hero-pill"><i class="fa-solid fa-bone" style="color:#00f2fe;" aria-hidden="true"></i> ระบบคาน 3 ประเภท</span>
+                <span class="hero-pill"><i class="fa-solid fa-dumbbell" style="color:#ff6b35;" aria-hidden="true"></i> แรงกล้ามเนื้อและทอร์ก</span>
+                <span class="hero-pill"><i class="fa-solid fa-arrows-up-down" style="color:#10b981;" aria-hidden="true"></i> แรงปฏิกิริยาจากพื้น</span>
+                <span class="hero-pill"><i class="fa-solid fa-weight-hanging" style="color:#c084fc;" aria-hidden="true"></i> แรงอัดหมอนรองกระดูกสันหลัง</span>
+            </div>
+            <div class="author-tag">
+                <i class="fa-solid fa-flask" style="color:#00f2fe;" aria-hidden="true"></i> พัฒนาสื่อการเรียนรู้ฟิสิกส์เสมือนจริง โดย พงษ์แก้ว อุดมสมุทรหิรัญ
+            </div>
+        </div>
+
+        <!-- ภาพจำลองร่างกายมนุษย์และจุดข้อต่อสำคัญ (คลิกเลือกส่วนร่างกายเพื่อกรอง Lab ได้) -->
+        <aside class="body-showcase" aria-label="แผนภาพชีวกลศาสตร์ร่างกายมนุษย์">
+            <div class="showcase-label">
+                <i class="fa-solid fa-crosshairs" aria-hidden="true"></i> แผนภาพชีวกลศาสตร์ร่างกายมนุษย์
+            </div>
+            <div class="body-svg-wrap">
+                <svg viewBox="0 0 260 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="แผนภาพจุดข้อต่อและระบบคานในร่างกายมนุษย์">
+                    <title>แผนภาพชีวกลศาสตร์ร่างกายมนุษย์และจุดข้อต่อสำคัญ</title>
+                    <defs>
+                        <linearGradient id="bodyFill" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.28"/>
+                            <stop offset="50%" stop-color="#a855f7" stop-opacity="0.22"/>
+                            <stop offset="100%" stop-color="#ff6b35" stop-opacity="0.28"/>
+                        </linearGradient>
+                        <linearGradient id="bodyStroke" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#00f2fe"/>
+                            <stop offset="50%" stop-color="#c084fc"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                        <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="3" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- วงแหวนพื้นหลังแนวไซเบอร์ฟิสิกส์ -->
+                    <circle cx="130" cy="160" r="122" fill="none" stroke="rgba(0,242,254,0.12)" stroke-width="1" stroke-dasharray="4 4"/>
+                    <circle cx="130" cy="160" r="95" fill="none" stroke="rgba(255,107,53,0.12)" stroke-width="1"/>
+                    <line x1="130" y1="15" x2="130" y2="305" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 3"/>
+
+                    <!-- เงาร่างกายมนุษย์สไตล์นักกีฬา (Human Silhouette) -->
+                    <g fill="url(#bodyFill)" stroke="url(#bodyStroke)" stroke-width="1.8" stroke-linejoin="round">
+                        <!-- ศีรษะและลำคอ -->
+                        <circle cx="130" cy="38" r="18"/>
+                        <path d="M123 55 L123 68 L137 68 L137 55"/>
+                        <!-- ลำตัวและแขนสองข้าง -->
+                        <path d="M92 75 Q130 65 168 75 L186 125 L196 168 Q198 175 191 176 Q185 176 182 168 L170 130 L162 102 L156 155 L164 225 L166 285 Q166 293 158 293 L148 293 Q143 293 143 285 L138 222 L130 175 L122 222 L117 285 Q117 293 112 293 L102 293 Q94 293 94 285 L96 225 L104 155 L98 102 L90 130 L78 168 Q75 176 69 176 Q62 175 64 168 L74 125 Z"/>
+                    </g>
+
+                    <!-- โครงกระดูกแกนกลางและแนวแรงเวกเตอร์ -->
+                    <g stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round">
+                        <!-- กระดูกสันหลัง -->
+                        <line x1="130" y1="68" x2="130" y2="155" stroke-dasharray="3 3"/>
+                        <!-- แขนซ้าย-ขวา -->
+                        <line x1="95" y1="82" x2="72" y2="165"/>
+                        <line x1="165" y1="82" x2="188" y2="165"/>
+                        <!-- ขาซ้าย-ขวา -->
+                        <line x1="114" y1="158" x2="106" y2="282"/>
+                        <line x1="146" y1="158" x2="154" y2="282"/>
+                    </g>
+
+                    <!-- จุดที่ 1: คอ/ศีรษะ (ปูพื้นฐานคาน) -->
+                    <g class="body-hotspot" onclick="selectCategoryFromBody('foundation')" filter="url(#neonGlow)">
+                        <circle class="hotspot-ring hotspot-pulse" cx="130" cy="58" r="10" fill="rgba(0, 242, 254, 0.25)" stroke="#00f2fe" stroke-width="1.5"/>
+                        <circle cx="130" cy="58" r="4" fill="#00f2fe"/>
+                        <line x1="130" y1="58" x2="195" y2="42" stroke="#00f2fe" stroke-width="1.2"/>
+                        <rect x="195" y="30" width="60" height="22" rx="6" fill="rgba(7,11,20,0.88)" stroke="#00f2fe" stroke-width="1"/>
+                        <text x="225" y="44" fill="#00f2fe" font-size="9.5" font-weight="600" text-anchor="middle">ระบบคาน</text>
+                    </g>
+
+                    <!-- จุดที่ 2: ข้อศอก/แขน (ร่างกายส่วนบน) -->
+                    <g class="body-hotspot" onclick="selectCategoryFromBody('upper')" filter="url(#neonGlow)">
+                        <circle class="hotspot-ring hotspot-pulse" cx="82" cy="124" r="11" fill="rgba(255, 107, 53, 0.28)" stroke="#ff6b35" stroke-width="1.5"/>
+                        <circle cx="82" cy="124" r="4.5" fill="#ff6b35"/>
+                        <line x1="82" y1="124" x2="55" y2="108" stroke="#ff6b35" stroke-width="1.2"/>
+                        <rect x="2" y="96" width="54" height="22" rx="6" fill="rgba(7,11,20,0.88)" stroke="#ff6b35" stroke-width="1"/>
+                        <text x="29" y="110" fill="#ffb08e" font-size="9.5" font-weight="600" text-anchor="middle">ส่วนบน</text>
+                    </g>
+
+                    <!-- จุดที่ 3: กระดูกสันหลัง L5-S1 (แกนกลางและกระดูกสันหลัง) -->
+                    <g class="body-hotspot" onclick="selectCategoryFromBody('spine')" filter="url(#neonGlow)">
+                        <circle class="hotspot-ring hotspot-pulse" cx="130" cy="148" r="11" fill="rgba(168, 85, 247, 0.3)" stroke="#c084fc" stroke-width="1.5"/>
+                        <circle cx="130" cy="148" r="4.5" fill="#c084fc"/>
+                        <line x1="130" y1="148" x2="195" y2="148" stroke="#c084fc" stroke-width="1.2"/>
+                        <rect x="195" y="137" width="62" height="22" rx="6" fill="rgba(7,11,20,0.88)" stroke="#c084fc" stroke-width="1"/>
+                        <text x="226" y="151" fill="#d8b4fe" font-size="9.5" font-weight="600" text-anchor="middle">กระดูกสันหลัง</text>
+                    </g>
+
+                    <!-- จุดที่ 4: ข้อเข่าและข้อเท้า (ร่างกายส่วนล่าง) -->
+                    <g class="body-hotspot" onclick="selectCategoryFromBody('lower')" filter="url(#neonGlow)">
+                        <circle class="hotspot-ring hotspot-pulse" cx="110" cy="222" r="11" fill="rgba(16, 185, 129, 0.28)" stroke="#10b981" stroke-width="1.5"/>
+                        <circle cx="110" cy="222" r="4.5" fill="#10b981"/>
+                        <line x1="110" y1="222" x2="58" y2="236" stroke="#10b981" stroke-width="1.2"/>
+                        <rect x="2" y="225" width="56" height="22" rx="6" fill="rgba(7,11,20,0.88)" stroke="#10b981" stroke-width="1"/>
+                        <text x="30" y="239" fill="#6ee7b7" font-size="9.5" font-weight="600" text-anchor="middle">ส่วนล่าง</text>
+                    </g>
+                </svg>
+            </div>
+            <div class="showcase-tip">คลิกที่จุดข้อต่อบนร่างกายเพื่อกรองห้องทดลองตามส่วนต่างๆ</div>
+        </aside>
+    </header>
+
+    <main class="container">
+
+        <!-- บทนำเรื่องราวชีวกลศาสตร์ (คลิกย่อ/ขยายได้) -->
+        <details class="story-intro" open>
+            <summary>
+                <div class="story-intro-header">
+                    <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                    <h2>บทนำชีวกลศาสตร์: เมื่อร่างกายมนุษย์คือ "เครื่องกลและระบบคานที่มีชีวิต"</h2>
+                </div>
+                <span class="toggle-hint"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i> ย่อ / ขยายบทนำ</span>
+            </summary>
+            <div class="story-intro-content">
+                <p>
+                    เคยสงสัยไหมว่า ทำไมการยกดัมเบลหนักเพียง 10 กิโลกรัม กล้ามเนื้อแขนจึงต้องออกแรงดึงมากถึง 70–80 กิโลกรัม? หรือทำไมการก้มหลังยกของผิดท่าจึงสร้างแรงกดอัดที่หมอนรองกระดูกสันหลังได้มหาศาล? คำตอบทั้งหมดซ่อนอยู่ในวิชา <strong>ชีวกลศาสตร์ (Biomechanics)</strong> ซึ่งนำกฎการเคลื่อนที่ของนิวตัน สมดุลของแรง และสมดุลของทอร์ก (โมเมนต์ของแรง) มาอธิบายการทำงานร่วมกันของกระดูก ข้อต่อ และกล้ามเนื้อ
+                </p>
+                <div class="concept-grid">
+                    <div class="concept-box">
+                        <h3><i class="fa-solid fa-bone" style="color:#00f2fe;" aria-hidden="true"></i> กระดูก = คาน (Lever)</h3>
+                        <p>ท่อนกระดูกแข็งทำหน้าที่เป็นแขนคานส่งผ่านแรง โดยมีข้อต่อต่างๆ เป็นจุดหมุน (Fulcrum)</p>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fa-solid fa-rotate" style="color:#ff6b35;" aria-hidden="true"></i> ทอร์ก (Torque / โมเมนต์ของแรง)</h3>
+                        <p>ยิ่งน้ำหนักอยู่ห่างจากข้อต่อมากเท่าไร แขนโมเมนต์ยิ่งยาว ทำให้กล้ามเนื้อต้องออกแรงต้านมากขึ้นทวีคูณ</p>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fa-solid fa-shield-heart" style="color:#10b981;" aria-hidden="true"></i> ออกกำลังกายอย่างปลอดภัยและมีประสิทธิภาพ</h3>
+                        <p>การเข้าใจมุมการเคลื่อนไหวและจุดศูนย์ถ่วง ช่วยลดแรงเฉือนและแรงอัดที่ข้อต่อ พร้อมกระตุ้นกล้ามเนื้อได้ตรงจุด</p>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- แถบค้นหาและปุ่มกรองหมวดหมู่ -->
+        <section class="controls-panel" id="labs-section" aria-label="ตัวกรองและค้นหาห้องทดลอง">
+            <div class="top-controls">
+                <h2><i class="fa-solid fa-route" style="color: var(--accent-orange);" aria-hidden="true"></i> รายการห้องทดลองฟิสิกส์เสมือนจริง (Virtual Labs)</h2>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="text" id="search-input" aria-label="ค้นหาห้องทดลองฟิสิกส์และท่าออกกำลังกาย" placeholder="ค้นหาท่าออกกำลังกาย เช่น ดัมเบล, วิดพื้น, Deadlift..." oninput="renderLabs()">
+                </div>
+            </div>
+            <div class="filter-bar" id="filter-bar">
+                <!-- สร้างปุ่มกรองอัตโนมัติตามหมวดหมู่ใน labs -->
+            </div>
+        </section>
+
+        <!-- กริดการ์ดห้องทดลอง -->
+        <section class="labs-grid" id="labs-container" aria-label="รายการบทเรียนและการทดลองชีวกลศาสตร์">
+            <!-- สร้างการ์ดด้วย JavaScript -->
+        </section>
+
+        <!-- กล่องสรุปส่งท้าย -->
+        <aside class="summary-banner">
+            <div>
+                <h3><i class="fa-solid fa-lightbulb" style="color: var(--accent-amber);" aria-hidden="true"></i> วิธีใช้งานห้องทดลองเสมือนจริง (Virtual Lab)</h3>
+                <p>ในแต่ละห้องทดลอง ผู้เรียนสามารถปรับเปลี่ยน <strong>ตัวแปรทางฟิสิกส์ที่เกี่ยวข้อง</strong> เพื่อสังเกตกราฟแรงและทอร์กที่เปลี่ยนแปลงแบบเรียลไทม์ รวมถึงบันทึกค่าลงตารางเพื่อวิเคราะห์ผลการทดลองได้ทันที</p>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- เนื้อหาสำรองสำหรับ Search Engine และ AI Crawler ที่ไม่รัน JavaScript -->
+    <noscript>
+        <div class="container">
+            <h2>สารบัญห้องปฏิบัติการเสมือนจริงชีวกลศาสตร์ (Biomechanics Virtual Lab)</h2>
+            <ul>
+                <li><a href="type-1.html">บทที่ 1: พื้นฐานคานชนิดที่ 1, 2 และ 3 กับกลไกข้อต่อมนุษย์ (Lever Systems)</a></li>
+                <li><a href="bicep-t-2.html">บทที่ 2: การยกดัมเบล (Dumbbell Bicep Curl Biomechanics)</a></li>
+                <li><a href="pushup-sta-1-1-v3.html">บทที่ 3: การวิดพื้น (Push-up Biomechanics)</a></li>
+                <li><a href="tiptoe-1-v2-1.html">บทที่ 4: การเขย่งปลายเท้า (Calf Raise & Achilles Tendon)</a></li>
+                <li><a href="jump-1.html">บทที่ 5: การกระโดดและแรงกระแทก (Jump & Landing Mechanics)</a></li>
+                <li><a href="back-m-1-v2-1.html">บทที่ 6: การก้มตัวหยิบของ (Bending & Spinal Torque)</a></li>
+                <li><a href="deadlift-1-v2-1.html">บทที่ 7: การยกน้ำหนักท่า Deadlift (Conventional Deadlift Biomechanics)</a></li>
+            </ul>
+        </div>
+    </noscript>
+
+    <script>
+        // =========================================================================
+        // ข้อมูลห้องทดลองทั้งหมด (เพิ่ม / ลบ / แก้ไขรายการใน Array นี้ได้ทันที)
+        // รูปแบบสั้น (บังคับแค่ 3 ค่า):
+        //   { title: "Lab : ชื่อการทดลอง", url: "ชื่อไฟล์.html", category: "หมวดหมู่" },
+        // หมวดหมู่ (category) ที่มีให้เลือก:
+        //   "foundation" (ปูพื้นฐานคาน), "upper" (ร่างกายส่วนบน),
+        //   "lower" (ร่างกายส่วนล่าง), "spine" (แกนกลางและกระดูกสันหลัง), "mechanics" (กลศาสตร์ทั่วไป)
+        // =========================================================================
+        const labs = [
+            {
+                title: "พื้นฐานคานชนิดที่ 1, 2 และ 3 กับกลไกข้อต่อมนุษย์",
+                category: "foundation",
+                pose: "lever",
+                story: "เริ่มต้นเรื่องราวด้วยการทำความเข้าใจ 'คานทั้ง 3 ประเภท' ในวิชาฟิสิกส์ ซึ่งเป็นต้นแบบการเคลื่อนไหวทั้งหมดของร่างกาย ตั้งแต่การพยักหน้า (คานอันดับ 1) การเขย่งปลายเท้า (คานอันดับ 2) ไปจนถึงการพับแขนยกของ (คานอันดับ 3) ที่ยอมเสียเปรียบเชิงกลเพื่อแลกกับความเร็วและระยะการเคลื่อนไหวที่กว้างขึ้น",
+                highlights: ["คานอันดับ 1 ", "คานอันดับ 2 ", "คานอันดับ 3 "],
+                links: [
+                    { label: "เปิดห้องทดลองคาน 1", url: "type-1.html" },
+                    { label: "เปิดห้องทดลองคาน 2", url: "type-2.html" },
+                    { label: "เปิดห้องทดลองคาน 3", url: "type-3.html" }
+                ]
+            },
+            {
+                title: "การยกดัมเบล (Dumbbell Bicep Curl)",
+                url: "bicep-t-2.html",
+                category: "upper",
+                pose: "curl",
+                story: "เมื่อเราถือดัมเบลไว้ในมือและค่อยๆ พับข้อศอกขึ้น กล้ามเนื้อหน้าแขน (Biceps) ซึ่งเกาะอยู่ห่างจากจุดหมุนข้อศอกเพียงไม่กี่เซนติเมตร ต้องออกแรงดึงมหาศาลเพื่อเอาชนะทอร์กของดัมเบลที่อยู่ปลายแขน ทดลองปรับมุมข้อศอก (0°–135°) และมวลของดัมเบลเพื่อดูว่าจุดใดที่กล้ามเนื้อทำงานหนักที่สุด",
+                highlights: ["แรงดึงกล้ามเนื้อ Biceps", "แรงปฏิกิริยาที่ข้อศอก", "มุมที่เกิดทอร์กสูงสุด (90°)", "คานอันดับ 3"]
+            },
+            {
+                title: "การวิดพื้น (Push-up Biomechanics)",
+                url: "pushup-sta-1-1-v3.html",
+                category: "upper",
+                pose: "pushup",
+                story: "เปลี่ยนจากการยกน้ำหนักภายนอกมาเป็นการใช้น้ำหนักตัวเป็นแรงต้าน (Bodyweight) ในท่าวิดพื้น ร่างกายทั้งลำทำหน้าที่เป็นคานยาวโดยมีปลายเท้าเป็นจุดหมุน มือและกล้ามเนื้อหน้าอก/หัวไหล่ต้องรับภาระน้ำหนักตัวกี่เปอร์เซ็นต์? และจะเกิดอะไรขึ้นเมื่อเรายกตัวขึ้นหรือปรับความสูงของจุดวางมือ",
+                highlights: ["สัดส่วนน้ำหนักตัวที่มือรับ", "จุดศูนย์ถ่วง (Center of Gravity)", "แรงที่ข้อไหล่และหน้าอก", "คานอันดับ 2"]
+            },
+            {
+                title: "การเขย่งปลายเท้า (Calf Raise & Achilles Tendon)",
+                url: "tiptose-1-v2-1.html",
+                category: "lower",
+                pose: "tiptoe",
+                story: "ทุกก้าวที่เราเดิน วิ่ง หรือกระโดด ข้อเท้าต้องรับแรงปฏิกิริยาจากพื้นดินผ่านจมูกเท้าเป็นจุดหมุน ทดลองวิเคราะห์แรงดึงในเอ็นร้อยหวาย (Achilles Tendon) และกล้ามเนื้อน่องขณะเขย่งปลายเท้ารับน้ำหนักตัว ซึ่งเป็นตัวอย่างคลาสสิกของคานชนิดที่ 2 ในร่างกายมนุษย์",
+                highlights: ["แรงดึงในเอ็นร้อยหวาย", "แรงกดที่ข้อเท้า (Tibia)", "จุดหมุนที่ปลายเท้า", "คานอันดับ 2"]
+            },
+            {
+                title: "การกระโดดและแรงกระแทก (Jump & Landing Mechanics)",
+                url: "jump-1.html",
+                category: "lower",
+                pose: "jump",
+                story: "การออกกำลังกายแบบเคลื่อนไหวต่อเนื่อง (เช่น การย่อตัวกระโดด หรือการเปลี่ยนความเร่งในแนวดิ่ง) ทำให้แรงที่พื้นกระทำต่อเท้าไม่ได้เท่ากับน้ำหนักตัวปกติเสมอไป เรียนรู้ความสัมพันธ์ระหว่างความเร่ง แรงปฏิกิริยาตั้งฉาก และจังหวะการย่อเข่าเพื่อลดแรงกระแทกต่อข้อต่อ",
+                highlights: ["กฎข้อที่ 2 ของนิวตัน", "แรงปฏิกิริยาจากพื้น ", "การลดแรงกระแทกเมื่อลงพื้น", "เเรงดล"]
+            },
+            {
+                title: "การก้มตัวหยิบของ (Bending & Spinal Torque)",
+                url: "back-m-1-v2-1.html",
+                category: "spine",
+                pose: "bending",
+                story: "ทำไมแพทย์และนักกายภาพบำบัดจึงเตือนไม่ให้ก้มหลังตรงเพื่อหยิบของหนัก? ในห้องทดลองนี้ คุณจะได้เปรียบเทียบแรงกดอัดที่หมอนรองกระดูกสันหลังข้อ L5-S1 ของ 'การก้มตัวจากเอว'   เพื่อเห็นตัวเลขของเเรงอย่างชัดเจน",
+                highlights: ["หมอนรองกระดูก L5-S1", "กล้ามเนื้อ Erector Spinae", "ก้มหลัง", "แขนโมเมนต์ของลำตัว"]
+            },
+            {
+                title: "การยกน้ำหนักท่า Deadlift (Conventional Deadlift)",
+                url: "deadlift-1-v2-1.html",
+                category: "spine",
+                pose: "deadlift",
+                story: "บทสรุปที่รวมทุกหลักการเข้าด้วยกัน! จำลองการยกบาร์เบลจากพื้นจนยืนตัวตรง (มุม 30° ถึง 90°) เปรียบเทียบท่ายกที่ถูกต้อง (ดึงบาร์ชิดหน้าแข้งและต้นขา) กับท่าที่ผิด (ก้มหลังและยื่นบาร์ห่างตัว) พร้อมกราฟแสดงความสัมพันธ์ระหว่างแรงกล้ามเนื้อหลัง แรงอัดหมอนรองกระดูก และเวลาแบบเรียลไทม์",
+                highlights: ["ดึงบาร์ชิดตัว vs ยื่นห่างตัว", "แรงอัดข้อ L5-S1 ", "กราฟ Force vs Time", "จำลองการยกขึ้น-ลงอัตโนมัติ"]
+            }
+
+            // ตัวอย่างการเพิ่ม Lab ใหม่แบบสั้น (เอาเครื่องหมาย // ด้านหน้าออกเพื่อใช้งาน):
+            // { title: "Lab : ท่าสควอท (Squat Biomechanics)", url: "squat-1.html", category: "lower" },
+            // { title: "Lab : เวกเตอร์แรง", url: "vector-1.html", category: "mechanics" },
+        ];
+
+        // ภาพประกอบท่าทางร่างกายมนุษย์แบบ SVG สำหรับแต่ละท่าและแต่ละหมวดหมู่
+        const poseSVGs = {
+            lever: `<svg viewBox="0 0 80 80" aria-hidden="true">
+                <polygon points="40,46 31,64 49,64" fill="#00f2fe" opacity="0.85"/>
+                <line x1="12" y1="38" x2="68" y2="50" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="15" cy="31" r="6" fill="#ff6b35"/>
+                <circle cx="65" cy="43" r="5" fill="#10b981"/>
+                <path d="M40,22 L40,36" stroke="#00f2fe" stroke-width="2"/>
+            </svg>`,
+            curl: `<svg viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="28" cy="18" r="7" fill="#ffb08e"/>
+                <path d="M28,26 L28,56 L22,74 M28,56 L35,74" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <path d="M28,31 L34,47 L52,38" stroke="#ff6b35" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <line x1="48" y1="34" x2="56" y2="42" stroke="#00f2fe" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="48" cy="34" r="3.5" fill="#00f2fe"/>
+                <circle cx="56" cy="42" r="3.5" fill="#00f2fe"/>
+            </svg>`,
+            pushup: `<svg viewBox="0 0 80 80" aria-hidden="true">
+                <line x1="8" y1="62" x2="72" y2="62" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="62" cy="34" r="6" fill="#ffb08e"/>
+                <path d="M14,60 L36,48 L56,39" stroke="#f59e0b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                <path d="M54,40 L56,60" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <path d="M36,30 L36,43" stroke="#00f2fe" stroke-width="2"/>
+                <polygon points="36,45 32,39 40,39" fill="#00f2fe"/>
+            </svg>`,
+            tiptoe: `<svg viewBox="0 0 80 80" aria-hidden="true">
+                <line x1="12" y1="68" x2="68" y2="68" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="38" cy="14" r="6.5" fill="#6ee7b7"/>
+                <path d="M38,22 L38,44 L36,60 L48,66" stroke="#10b981" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M38,28 L47,40" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                <circle cx="48" cy="66" r="3.5" fill="#f59e0b"/>
+            </svg>`,
+            jump: `<svg viewBox="0 0 80 80" aria-hidden="true">
+                <line x1="14" y1="72" x2="66" y2="72" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="40" cy="14" r="6.5" fill="#7dd3fc"/>
+                <path d="M40,22 L40,39 L31,49 L35,59 M40,39 L49,49 L45,59" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M40,26 L26,17 M40,26 L54,17" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                <path d="M40,70 L40,61" stroke="#f59e0b" stroke-width="2.2"/>
+                <polygon points="40,59 36,65 44,65" fill="#f59e0b"/>
+            </svg>`,
+            bending: `<svg viewBox="0 0 80 80" aria-hidden="true">
+                <line x1="10" y1="68" x2="70" y2="68" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="54" cy="34" r="6" fill="#d8b4fe"/>
+                <path d="M26,66 L28,45 L49,37" stroke="#a855f7" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M47,39 L53,55" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                <rect x="48" y="56" width="12" height="10" rx="2" fill="#f59e0b"/>
+            </svg>`,
+            deadlift: `<svg viewBox="0 0 80 80" aria-hidden="true">
+                <line x1="8" y1="68" x2="72" y2="68" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="52" cy="24" r="6.5" fill="#fda4af"/>
+                <path d="M26,66 L32,49 L25,38 L47,27" stroke="#f43f5e" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M45,29 L45,54" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                <line x1="20" y1="56" x2="64" y2="56" stroke="#94a3b8" stroke-width="2.5"/>
+                <circle cx="45" cy="56" r="9" fill="none" stroke="#00f2fe" stroke-width="3"/>
+            </svg>`
+        };
+
+        // ตั้งค่าธีมสีหลากสีสัน ไอคอน และป้ายกำกับอัตโนมัติตาม category
+        const categoryConfig = {
+            foundation: {
+                label: "ปูพื้นฐานคาน",
+                tag: "ปูพื้นฐานคาน",
+                icon: "fa-scale-balanced",
+                accent: "#00f2fe",
+                gradient: "linear-gradient(135deg, #00f2fe, #3b82f6)",
+                glow: "rgba(0, 242, 254, 0.22)",
+                lightText: false,
+                defaultPose: "lever",
+                defaultStory: "ห้องปฏิบัติการเสมือนจริงสำหรับศึกษาหลักการคานและสมดุลของทอร์กที่เป็นพื้นฐานของการเคลื่อนไหวในร่างกายมนุษย์"
+            },
+            upper: {
+                label: "ร่างกายส่วนบน",
+                tag: "ร่างกายส่วนบน",
+                icon: "fa-dumbbell",
+                accent: "#ff6b35",
+                gradient: "linear-gradient(135deg, #ff6b35, #f59e0b)",
+                glow: "rgba(255, 107, 53, 0.24)",
+                lightText: true,
+                defaultPose: "curl",
+                defaultStory: "วิเคราะห์แรงดึงของกล้ามเนื้อและแรงปฏิกิริยาที่ข้อต่อส่วนบนขณะออกแรงต้านน้ำหนักหรือน้ำหนักตัว"
+            },
+            lower: {
+                label: "ร่างกายส่วนล่าง",
+                tag: "ร่างกายส่วนล่าง",
+                icon: "fa-shoe-prints",
+                accent: "#10b981",
+                gradient: "linear-gradient(135deg, #10b981, #06b6d4)",
+                glow: "rgba(16, 185, 129, 0.24)",
+                lightText: false,
+                defaultPose: "tiptoe",
+                defaultStory: "ศึกษาการทำงานของกล้ามเนื้อขา ข้อเท้า และแรงปฏิกิริยาจากพื้นดินในท่าออกกำลังกายร่างกายส่วนล่าง"
+            },
+            spine: {
+                label: "แกนกลางและกระดูกสันหลัง",
+                tag: "แกนกลางและกระดูกสันหลัง",
+                icon: "fa-weight-hanging",
+                accent: "#c084fc",
+                gradient: "linear-gradient(135deg, #a855f7, #ec4899)",
+                glow: "rgba(168, 85, 247, 0.25)",
+                lightText: true,
+                defaultPose: "deadlift",
+                defaultStory: "เปรียบเทียบทอร์กและแรงกดอัดที่หมอนรองกระดูกสันหลังส่วนล่าง เพื่อเรียนรู้ท่าทางการยกและก้มตัวที่ปลอดภัย"
+            },
+            mechanics: {
+                label: "กลศาสตร์ทั่วไป",
+                tag: "กลศาสตร์ทั่วไป",
+                icon: "fa-compass-drafting",
+                accent: "#38bdf8",
+                gradient: "linear-gradient(135deg, #38bdf8, #818cf8)",
+                glow: "rgba(56, 189, 248, 0.24)",
+                lightText: false,
+                defaultPose: "lever",
+                defaultStory: "ห้องทดลองเสมือนจริงเพื่อทำความเข้าใจหลักการทางกลศาสตร์ เวกเตอร์ และสมดุลของแรงที่เป็นรากฐานของชีวกลศาสตร์"
+            }
+        };
+
+        let currentFilter = 'all';
+
+        // คลิกจุดข้อต่อบนภาพร่างกายมนุษย์เพื่อกรองและเลื่อนลงไปยังรายการทดลอง
+        function selectCategoryFromBody(cat) {
+            const exists = labs.some(l => l.category === cat);
+            currentFilter = exists ? cat : 'all';
+            renderFilters();
+            renderLabs();
+            document.getElementById('labs-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // สร้างปุ่มตัวกรองด้านบนตามหมวดหมู่ที่มีอยู่จริงใน labs
+        function renderFilters() {
+            const filterBar = document.getElementById('filter-bar');
+            filterBar.innerHTML = '';
+
+            const allBtn = document.createElement('button');
+            allBtn.className = `filter-btn ${currentFilter === 'all' ? 'active' : ''}`;
+            allBtn.textContent = `ทั้งหมด (${labs.length} บท)`;
+            allBtn.onclick = () => { currentFilter = 'all'; renderFilters(); renderLabs(); };
+            filterBar.appendChild(allBtn);
+
+            const uniqueCategories = [...new Set(labs.map(l => l.category))];
+            uniqueCategories.forEach(cat => {
+                const cfg = categoryConfig[cat] || { label: cat };
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${currentFilter === cat ? 'active' : ''}`;
+                if (cfg.gradient) {
+                    btn.style.setProperty('--btn-color', cfg.gradient);
+                }
+                btn.textContent = cfg.label;
+                btn.onclick = () => { currentFilter = cat; renderFilters(); renderLabs(); };
+                filterBar.appendChild(btn);
+            });
+        }
+
+        function renderLabs() {
+            const container = document.getElementById('labs-container');
+            const searchTerm = (document.getElementById('search-input').value || '').trim().toLowerCase();
+            container.innerHTML = '';
+
+            // รันเลขบทตามลำดับใน Array labs อัตโนมัติ
+            const indexedLabs = labs.map((item, idx) => ({
+                ...item,
+                autoChapterNum: `บทที่ ${String(idx + 1).padStart(2, '0')}`
+            }));
+
+            const filtered = indexedLabs.filter(item => {
+                const matchCategory = (currentFilter === 'all' || item.category === currentFilter);
+                const matchSearch = !searchTerm || 
+                    (item.title && item.title.toLowerCase().includes(searchTerm)) ||
+                    (item.story && item.story.toLowerCase().includes(searchTerm)) ||
+                    (item.highlights && item.highlights.some(h => h.toLowerCase().includes(searchTerm))) ||
+                    (item.links && item.links.some(l => l.label.toLowerCase().includes(searchTerm)));
+                return matchCategory && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-magnifying-glass" style="font-size:1.5rem; margin-bottom:0.5rem; display:block;" aria-hidden="true"></i>ไม่พบห้องทดลองที่ตรงกับคำค้นหา</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const cfg = categoryConfig[item.category] || {
+                    tag: item.category || "การทดลอง",
+                    icon: "fa-flask",
+                    accent: "#ff6b35",
+                    gradient: "linear-gradient(135deg, #ff6b35, #ec4899)",
+                    glow: "rgba(255, 107, 53, 0.22)",
+                    lightText: true,
+                    defaultPose: "lever",
+                    defaultStory: "ห้องปฏิบัติการเสมือนจริงสำหรับวิเคราะห์แรงและทอร์กในการเคลื่อนไหว"
+                };
+
+                const accent = item.accent || cfg.accent;
+                const gradient = item.gradient || cfg.gradient;
+                const glow = item.glow || cfg.glow;
+                const lightText = item.lightText !== undefined ? item.lightText : cfg.lightText;
+                const icon = item.icon || cfg.icon;
+                const tag = item.tag || cfg.tag;
+                const story = item.story || cfg.defaultStory;
+                const highlights = item.highlights || ["จำลองการเคลื่อนไหวแบบโต้ตอบ", "คำนวณแรงและทอร์กเรียลไทม์"];
+                const poseKey = item.pose || cfg.defaultPose || "lever";
+                const poseSvg = poseSVGs[poseKey] || poseSVGs.lever;
+
+                const formulaHtml = item.formula 
+                    ? `<span class="physics-formula">${item.formula}</span>` 
+                    : '';
+
+                const highlightsHtml = highlights
+                    .map(h => `<span class="highlight-pill"><i class="fa-solid fa-check" style="color:${accent}; margin-right:4px;" aria-hidden="true"></i>${h}</span>`)
+                    .join('');
+
+                // รองรับทั้งรูปแบบ links: [...] และ url: "..."
+                const linkList = Array.isArray(item.links) && item.links.length > 0
+                    ? item.links
+                    : (item.url ? [{ label: "เปิดห้องทดลอง", url: item.url }] : []);
+
+                const buttonsHtml = linkList
+                    .map(lnk => `
+                        <a href="${lnk.url}" class="btn-launch ${lightText ? 'light-text' : ''}" target="_blank" rel="noopener">
+                            ${lnk.label} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                        </a>
+                    `)
+                    .join('');
+
+                const card = document.createElement('article');
+                card.className = 'chapter-card';
+                card.style.setProperty('--card-accent', accent);
+                card.style.setProperty('--card-gradient', gradient);
+                card.style.setProperty('--card-glow', glow);
+
+                card.innerHTML = `
+                    <div class="chapter-body">
+                        <div class="card-visual-header">
+                            <div class="card-meta-stack">
+                                <span class="chapter-badge">
+                                    <i class="fa-solid ${icon}" aria-hidden="true"></i> ${item.autoChapterNum}
+                                </span>
+                                <span class="chapter-tag">${tag}</span>
+                            </div>
+                            <div class="pose-illustration" title="${item.title}">
+                                ${poseSvg}
+                            </div>
+                        </div>
+                        <h3>${item.title}</h3>
+                        ${formulaHtml}
+                        <p class="chapter-story">${story}</p>
+                        <div class="chapter-highlights">${highlightsHtml}</div>
+                    </div>
+                    <div class="chapter-action">
+                        ${buttonsHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // แสดงปุ่มกรองและเนื้อหาทั้งหมดเมื่อเปิดหน้าเว็บ
+        renderFilters();
+        renderLabs();
+    </script>
+</body>
+</html>
